@@ -1,17 +1,31 @@
 import React from 'react';
-import {BrowserRouter, Switch, Route} from 'react-router-dom';
+import {HashRouter, Switch, Route} from 'react-router-dom';
 import {connect } from 'react-redux';
+import "./App.css"
+import AppBar from './components/AppBar/AppBar';
+import HomePage from "./components/HomePage/HomePage";
+import FAQ from "./components/FAQ/FAQ";
+
+
+
 
 
 function App() {
   return (
-    <BrowserRouter>
+    
+    <HashRouter>
+      <AppBar></AppBar>
+     
       <Switch>
+
+        <Route path='/faq'>
+         <FAQ></FAQ>
+        </Route>
         <Route path='/'>
-          <h1>Home page</h1>
+         <HomePage></HomePage>
         </Route>
       </Switch>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
