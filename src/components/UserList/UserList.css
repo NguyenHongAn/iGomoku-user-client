@@ -1,0 +1,74 @@
+.table-pane
+{
+    grid-area: kk;
+    display: block;
+    padding: 0;
+    background: #212229;
+    color: white;
+}
+
+.table-pane tr td
+{
+    padding: 3px 5px;
+}
+
+.side-user-list
+{
+    position: fixed;
+    z-index: 1; 
+    overflow-x: hidden;
+    padding-top: 20px;
+    padding: 8px;
+    font-size: 18px;
+   
+}
+
+.table-flex
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.username{
+    width: 180px;
+    
+}
+
+.username button
+{
+    text-decoration: none!important;
+    color: white!important;
+    width: 100%;
+    text-align: left;   
+}
+
+.username button:hover
+{
+    color: gainsboro!important;
+}
+
+.tabs-header
+{
+    background-color: #32333d;
+    border: none!important;
+}
+
+.active-link
+{
+    border-radius: 0px;
+    background: #212229!important;
+    color: white!important;
+    border: 0px;
+}
+
+
+
+.tabs-header a
+{
+    background: #212242;
+    color: white;
+    border-radius: 0px!important;
+    border-color: transparent!important;
+}
+

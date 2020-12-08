@@ -3,12 +3,13 @@ import {
     Collapse,
     Navbar,
     NavbarToggler,
-    NavbarBrand,
     Nav,
     NavItem,
-    NavLink,
+   
   } from 'reactstrap';
 import './AppBar.css';  
+import {Link} from 'react-router-dom';
+
 
 function AppBar() {
 
@@ -19,18 +20,21 @@ function AppBar() {
     return (
         <div>
         <Navbar className="bar-bg" expand="md">
-          <NavbarBrand href="/">iGomoku</NavbarBrand>
+          <Link className="navbar-brand" to="/">iGomoku</Link>
           <NavbarToggler onClick={toggle}/>
           <Collapse isOpen={isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <NavItem>
-                <NavLink href="/auth/signin">Sign In</NavLink>
+                <Link className="text-light nav-link" to="/auth/signin">Sign In</Link>
               </NavItem>
               <NavItem>
-                <NavLink href="/auth/Signup">Sign Up</NavLink>
+                <Link className="text-light nav-link" to="/auth/Signup">Sign Up</Link>
               </NavItem>
               <NavItem>
-                <NavLink href="/auth/Signup">FAQ</NavLink>
+                <Link className="text-light nav-link" to="/faq">FAQ</Link>
+              </NavItem>
+              <NavItem>
+                <Link className="text-light nav-link" to="/igomoku">Dashboard</Link>
               </NavItem>
             </Nav>
           </Collapse>

@@ -1,0 +1,14 @@
+.main-container
+{
+    display: grid;
+    grid-template-areas:
+        "ad ad kk"
+        "a1 a1 kk"
+        "ax ax kk"
+        "rr rr kk";
+    grid-template-rows: auto auto auto;
+    grid-template-columns: auto auto minmax(100px, 320px);
+    min-height: calc(100vh - 64px);
+    position: relative;
+    z-index: 1;
+}

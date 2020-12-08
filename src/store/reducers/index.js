@@ -1,9 +1,9 @@
 import {combineReducers} from 'redux';
-import socketReducer from './socketReducer';
+import listOnlUserReducer from './listOnlUserReducer';
 
 //combine các reducer lại với nhau 
 const allReducers = combineReducers({
-    socketReducer,
+    listOnlUser: listOnlUserReducer,
 })
 
 export default allReducers;

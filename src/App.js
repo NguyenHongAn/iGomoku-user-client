@@ -1,12 +1,10 @@
 import React from 'react';
 import {HashRouter, Switch, Route} from 'react-router-dom';
-import {connect } from 'react-redux';
 import "./App.css"
 import AppBar from './components/AppBar/AppBar';
 import HomePage from "./components/HomePage/HomePage";
 import FAQ from "./components/FAQ/FAQ";
-
-
+import Dashboard from './components/Dashboard/Dashboard';
 
 
 
@@ -18,6 +16,12 @@ function App() {
      
       <Switch>
 
+      <Route path='/igomoku'>
+      <Dashboard></Dashboard>
+      </Route>
+      <Route path='/faq'>
+         <FAQ></FAQ>
+        </Route>
         <Route path='/faq'>
          <FAQ></FAQ>
         </Route>
@@ -29,15 +33,5 @@ function App() {
   );
 }
 
-const mapState = (state) =>({
-  ...state.socketReducer
-});
 
-const mapDispatch = {
-  log: console.log("dispatch")
-};
-
-export default connect(
-  mapState,
-  mapDispatch
-)(App);
+export default App;
