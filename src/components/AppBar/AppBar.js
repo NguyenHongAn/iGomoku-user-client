@@ -28,7 +28,7 @@ function AppBar() {
                 <Link className="text-light nav-link" to="/auth/signin">Sign In</Link>
               </NavItem>
               <NavItem>
-                <Link className="text-light nav-link" to="/auth/Signup">Sign Up</Link>
+                <Link className="text-light nav-link" to="/auth/signup">Sign Up</Link>
               </NavItem>
               <NavItem>
                 <Link className="text-light nav-link" to="/faq">FAQ</Link>
