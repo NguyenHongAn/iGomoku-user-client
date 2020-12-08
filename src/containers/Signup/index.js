@@ -25,21 +25,29 @@ export default function SignupPage() {
     event.preventDefault();
     setLoading(true);
     axios
-      .post(APIURL + "/users/signup", {
-        fullname: fullname,
+      .post(APIURL + "/auth/signup", {
         username: username,
         password: password,
+        fullname: fullname,
+        permission: 1,  // normal user (0-admin, 1-user)
       })
       .then(function (response) {
         setLoading(false);
-        addToast(response.data.msg, {
-          appearance: "info",
-          autoDismiss: true,
-        });
-        if (response.data.status === 1) window.location.href = "/login";
+        if (response.status === 200) {
+          addToast("Created successfully!", {
+            appearance: "success",
+            autoDismiss: true,
+          });
+          window.location.href = "/#/auth/signin";
+        }
       })
       .catch(function (error) {
+        setLoading(false);
         console.log(error);
+        addToast(error.message, {//
+          appearance: "error",
+          autoDismiss: true,
+        });
       });
   }
 

@@ -27,25 +27,31 @@ export default function LoginPage() {
     event.preventDefault();
     setLoading(true);
     axios
-      .post(APIURL + "/users/login", {
+      .post(APIURL + "/auth/signin", {
         username: username,
         password: password,
+        permission: 1,  // normal user (0-admin, 1-user)
       })
       .then(function (response) {
         setLoading(false);
-        if (response.data.status === 1) {
-          localStorage.setItem("jwtToken", response.data.token);
-          localStorage.setItem("fullname", response.data.fullname);
-          localStorage.setItem("userID", response.data.userID);
-          window.location.href = "/dashboard";
-        } else
-          addToast(response.data.msg, {
-            appearance: "error",
+        if (response.status === 200) {
+          addToast("Login successfully!", {
+            appearance: "success",
             autoDismiss: true,
           });
+          localStorage.setItem("jwtToken", response.data.token);
+          //localStorage.setItem("fullname", response.data.fullname);
+          localStorage.setItem("userID", response.data._id);
+          window.location.href = "/dashboard";
+        }
       })
       .catch(function (error) {
+        setLoading(false);//
         console.log(error);
+        addToast(error.message, {//
+          appearance: "error",
+          autoDismiss: true,
+        });
       });
   }
 
