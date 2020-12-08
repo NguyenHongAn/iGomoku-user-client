@@ -17,6 +17,7 @@ function AppBar() {
     const [isLogin, setIsLogin] = useState(false);
 
     const toggle = () => setIsOpen(!isOpen);
+    let fullname = localStorage.getItem("fullname");
 
     // kiểm tra user đã login chưa để hiển thị app bar
     useEffect(() => {
@@ -30,15 +31,17 @@ function AppBar() {
     function logout(){
       setIsLogin(false);
       localStorage.setItem("jwtToken", "invalid token :))");
+      localStorage.setItem("fullname", "unknown :))");
       localStorage.setItem("userID", 0);
     }
 
   
   
     return (
-        <div>
+        <div className="AppBar" >
         <Navbar className="bar-bg" expand="md">
           <Link className="navbar-brand" to="/">iGomoku</Link>
+          {isLogin ? (<Link className="text-light nav-link welcome"> Welcome, {fullname}</Link>) : null}
           <NavbarToggler onClick={toggle}/>
           <Collapse isOpen={isOpen} navbar>
             <Nav className="ml-auto" navbar>

@@ -40,6 +40,7 @@ export default function LoginPage() {
             autoDismiss: true,
           });
           localStorage.setItem("jwtToken", response.data.token);
+          localStorage.setItem("fullname", response.data.account.fullname);
           localStorage.setItem("userID", response.data.account._id);
           window.location.href = "/dashboard";
         }
@@ -60,26 +61,32 @@ export default function LoginPage() {
     const fullname = response.name;
     const email = response.email;
     axios
-      .post(APIURL + "/users/auth/facebook", {
+      .post(APIURL + "/auth/signinFacebook", {
         username: username,
         fullname: fullname,
         email: email,
+        permission: 1,
       })
       .then(function (response) {
         setLoading(false);
-        if (response.data.status === 1) {
-          localStorage.setItem("jwtToken", response.data.token);
-          localStorage.setItem("fullname", response.data.fullname);
-          localStorage.setItem("userID", response.data.userID);
-          window.location.href = "/dashboard";
-        } else
-          addToast(response.data.msg, {
-            appearance: "error",
+        if (response.status === 200) {
+          addToast("Login successfully!", {
+            appearance: "success",
             autoDismiss: true,
           });
+          localStorage.setItem("jwtToken", response.data.token);
+          localStorage.setItem("fullname", response.data.account.fullname);
+          localStorage.setItem("userID", response.data.account._id);
+          window.location.href = "/dashboard";
+        }
       })
       .catch(function (error) {
+        setLoading(false);//
         console.log(error);
+        addToast(error.message, {//
+          appearance: "error",
+          autoDismiss: true,
+        });
       });
   };
 
@@ -89,26 +96,32 @@ export default function LoginPage() {
     const fullname = response.profileObj.name;
     const email = response.profileObj.email;
     axios
-      .post(APIURL + "/users/auth/google", {
+      .post(APIURL + "/auth/signinGoogle", {
         username: username,
         fullname: fullname,
         email: email,
+        permission: 1,
       })
       .then(function (response) {
         setLoading(false);
-        if (response.data.status === 1) {
-          localStorage.setItem("jwtToken", response.data.token);
-          localStorage.setItem("fullname", response.data.fullname);
-          localStorage.setItem("userID", response.data.userID);
-          window.location.href = "/dashboard";
-        } else
-          addToast(response.data.msg, {
-            appearance: "error",
+        if (response.status === 200) {
+          addToast("Login successfully!", {
+            appearance: "success",
             autoDismiss: true,
           });
+          localStorage.setItem("jwtToken", response.data.token);
+          localStorage.setItem("fullname", response.data.account.fullname);
+          localStorage.setItem("userID", response.data.account._id);
+          window.location.href = "/dashboard";
+        }
       })
       .catch(function (error) {
+        setLoading(false);//
         console.log(error);
+        addToast(error.message, {//
+          appearance: "error",
+          autoDismiss: true,
+        });
       });
   };
 
