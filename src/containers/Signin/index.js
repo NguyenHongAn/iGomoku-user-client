@@ -40,8 +40,7 @@ export default function LoginPage() {
             autoDismiss: true,
           });
           localStorage.setItem("jwtToken", response.data.token);
-          //localStorage.setItem("fullname", response.data.fullname);
-          localStorage.setItem("userID", response.data._id);
+          localStorage.setItem("userID", response.data.account._id);
           window.location.href = "/dashboard";
         }
       })
@@ -121,7 +120,7 @@ export default function LoginPage() {
           <span className="brand-red">Go</span>
           <span className="brand-red">moku</span>
         </h1>
-        <div class="social-login">
+        <div className="social-login">
           <FacebookLogin
             appId={APPID_FB}
             fields="id,name,email"
