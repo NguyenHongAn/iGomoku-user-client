@@ -44,7 +44,7 @@ export default function SignupPage() {
       .catch(function (error) {
         setLoading(false);
         console.log(error);
-        addToast(error.message, {//
+        addToast(error.response.data.message, {//
           appearance: "error",
           autoDismiss: true,
         });

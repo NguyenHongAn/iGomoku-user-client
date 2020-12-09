@@ -48,7 +48,7 @@ export default function LoginPage() {
       .catch(function (error) {
         setLoading(false);//
         console.log(error);
-        addToast(error.message, {//
+        addToast(error.response.data.message, {//
           appearance: "error",
           autoDismiss: true,
         });
@@ -83,7 +83,7 @@ export default function LoginPage() {
       .catch(function (error) {
         setLoading(false);//
         console.log(error);
-        addToast(error.message, {//
+        addToast(error.response.data.message, {//
           appearance: "error",
           autoDismiss: true,
         });
@@ -118,7 +118,7 @@ export default function LoginPage() {
       .catch(function (error) {
         setLoading(false);//
         console.log(error);
-        addToast(error.message, {//
+        addToast(error.response.data.message, {//
           appearance: "error",
           autoDismiss: true,
         });
