@@ -4,9 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignInAlt, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { faFacebookSquare, faGoogle } from "@fortawesome/free-brands-svg-icons";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
-import ReactDOM from 'react-dom';
 import FacebookLogin from "react-facebook-login";
 import GoogleLogin from 'react-google-login';
 const APIURL = process.env.REACT_APP_APIURL;
@@ -18,6 +17,9 @@ export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setLoading] = useState(false);
+
+  //use History để điều hướng URL
+  const history = useHistory();
 
   function validateForm() {
     return username.length > 0 && password.length > 0;
@@ -42,7 +44,7 @@ export default function LoginPage() {
           localStorage.setItem("jwtToken", response.data.token);
           localStorage.setItem("fullname", response.data.account.fullname);
           localStorage.setItem("userID", response.data.account._id);
-          window.location.href = "/dashboard";
+          history.push("/igomoku");
         }
       })
       .catch(function (error) {
@@ -77,7 +79,7 @@ export default function LoginPage() {
           localStorage.setItem("jwtToken", response.data.token);
           localStorage.setItem("fullname", response.data.account.fullname);
           localStorage.setItem("userID", response.data.account._id);
-          window.location.href = "/dashboard";
+         history.push("/igomoku");
         }
       })
       .catch(function (error) {
@@ -112,7 +114,7 @@ export default function LoginPage() {
           localStorage.setItem("jwtToken", response.data.token);
           localStorage.setItem("fullname", response.data.account.fullname);
           localStorage.setItem("userID", response.data.account._id);
-          window.location.href = "/dashboard";
+          history.push("/igomoku");
         }
       })
       .catch(function (error) {

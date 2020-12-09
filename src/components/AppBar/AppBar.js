@@ -1,22 +1,13 @@
 import React, {useState, useEffect} from 'react';
-import {
-    Collapse,
-    Navbar,
-    NavbarToggler,
-    Nav,
-    NavItem,
-   
-  } from 'reactstrap';
+import {Navbar, Nav} from 'react-bootstrap';
 import './AppBar.css';  
 import {Link} from 'react-router-dom';
 
 
 function AppBar() {
 
-    const [isOpen, setIsOpen] = useState(false);
     const [isLogin, setIsLogin] = useState(false);
-
-    const toggle = () => setIsOpen(!isOpen);
+   
     let fullname = localStorage.getItem("fullname");
 
     // kiểm tra user đã login chưa để hiển thị app bar
@@ -40,37 +31,37 @@ function AppBar() {
     return (
         <div className="AppBar" >
         <Navbar className="bar-bg" expand="md">
-          <Link className="navbar-brand" to="/">iGomoku</Link>
+          <Link className="navbar-brand " to="/">iGomoku</Link>
           {isLogin ? (<Link className="text-light nav-link welcome"> Welcome, {fullname}</Link>) : null}
-          <NavbarToggler onClick={toggle}/>
-          <Collapse isOpen={isOpen} navbar>
+          <Navbar.Toggle  aria-controls="responsive-navbar-nav"/>
+          <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="ml-auto" navbar>
               {isLogin ? (
                 <React.Fragment>
-                  <NavItem>
+                  <Nav.Item>
                     <Link className="text-light nav-link" to="/igomoku">Dashboard</Link>
-                  </NavItem>
-                  <NavItem>
+                  </Nav.Item>
+                  <Nav.Item>
                     <Link className="text-light nav-link" to="/auth/signin" onClick={logout}>Sign Out</Link>
-                  </NavItem>
+                  </Nav.Item>
                 </React.Fragment>
               ) : 
               (
                 <React.Fragment>
-                  <NavItem>
+                  <Nav.Item>
                     <Link className="text-light nav-link" to="/auth/signin">Sign In</Link>
-                  </NavItem>
-                  <NavItem>
+                  </Nav.Item>
+                  <Nav.Item>
                     <Link className="text-light nav-link" to="/auth/signup">Sign Up</Link>
-                  </NavItem>
+                  </Nav.Item>
                 </React.Fragment>
               )
               }
-              <NavItem>
+              <Nav.Item>
                 <Link className="text-light nav-link" to="/faq">FAQ</Link>
-              </NavItem>
+              </Nav.Item>
             </Nav>
-          </Collapse>
+          </Navbar.Collapse>
         </Navbar>
       </div>
     )

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Col,Nav,NavItem,NavLink, Button } from "reactstrap";
+import { Col,Nav, Button } from "react-bootstrap";
 //import {connect, useDispatch, useSelector} from 'react-redux';
 //import ListUserActions from '../../store/actions/listOnlUserAction';
 import './UserList.css';
@@ -9,11 +9,14 @@ function UserList() {
     
     //redux map state to props and map dispatch to props
     // const {socket, listUser} = useSelector(state =>({
-    //     listUser: state.listOnlUser.users,
+    //     listUser: state.l    istOnlUser.users,
     //     socket: state.listOnlUser.socket,
     // })
     // ); 
     // const dispatch = useDispatch();
+
+    const END_POINT = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_API_DEPLOY_URL;
+
     const [listUser, setListUser] = useState([
         {
             fullname: "Nguyen Hong",
@@ -32,9 +35,9 @@ function UserList() {
     
     
     useEffect(() =>{
-        const socket = io(process.env.REACT_APP_SERVER);
+        const socket = io(END_POINT);
 
-        socket.emit("user-list", )
+        socket.emit("request-user-list", JSON.stringify({message: "request-user-list"}));
 
         console.log(socket);
     },[]);
@@ -46,18 +49,18 @@ function UserList() {
     }
 
     return (
-        <div className="table-pane ">
-            <Nav color='dark' tabs className="tabs-header">
-                <NavItem>
-                    <NavLink className={activeTab === '1' ? 'active active-link' : ''} onClick={() => toggle('1')}>
+        <div className="table-pane">
+            <Nav color='dark' variant="tabs" className="tabs-header">
+                <Nav.Item>
+                    <Nav.Link className={activeTab === '1' ? 'active active-link' : ''} onClick={() => toggle('1')}>
                    Online  User
-                    </NavLink>
-                </NavItem>
-                <NavItem>
-                    <NavLink className={activeTab === '2' ? 'active active-link' : ''} onClick={() => toggle('2')}>
+                    </Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link className={activeTab === '2' ? 'active active-link' : ''} onClick={() => toggle('2')}>
                         Friends 
-                    </NavLink>
-                </NavItem>
+                    </Nav.Link>
+                </Nav.Item>
             </Nav>
             <div>
             <table >
@@ -67,14 +70,14 @@ function UserList() {
                         return (
                             <tr className="table-flex" key={i}>
                             <td className="username">
-                                <Button color="link">
+                                <Button variant="link">
                                     {user.fullname}
                                 </Button>
                                 
                                 </td>
                             <td># {user.elo}</td>
                             <td>
-                                <Button className="btn-friend-request" size='sm'>Send</Button>
+                                <Button className="btn-friend-request" variant="link" size='sm'>Send</Button>
                             </td>
                             </tr>
                         )

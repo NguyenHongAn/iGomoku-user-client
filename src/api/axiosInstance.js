@@ -1,5 +1,5 @@
 const axios = require('axios');
-const baseURL = "";
+const baseURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_API_DEPLOY_URL;
 
 const axiosInstance = axios.create({
     baseURL: baseURL,
@@ -8,7 +8,6 @@ const axiosInstance = axios.create({
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT,PATCH,DELETE",
         "Access-Control-Allow-Headers":"Origin, X-Requested-With, Content-Type, Accept,Authorization",
-
     }
 });
 

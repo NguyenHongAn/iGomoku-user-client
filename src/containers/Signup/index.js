@@ -3,7 +3,7 @@ import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignInAlt, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 const APIURL = process.env.REACT_APP_APIURL;
 
@@ -14,6 +14,9 @@ export default function SignupPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [repassword, setRepassword] = useState("");
+
+   //use History để điều hướng URL
+   const history = useHistory();
 
   function validateForm() {
     return (
@@ -38,7 +41,7 @@ export default function SignupPage() {
             appearance: "success",
             autoDismiss: true,
           });
-          window.location.href = "/#/auth/signin";
+          history.push("/auth/signin");
         }
       })
       .catch(function (error) {
