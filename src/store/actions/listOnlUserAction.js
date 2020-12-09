@@ -1,11 +1,12 @@
 import { io } from 'socket.io-client';
 
-export const setupSocket = () => {
+const setupSocket = () => {
     return (dispatch) =>{
         const socket = io(process.env.REACT_APP_SERVER, // link tới server
                         {
                             reconnectionDelayMax: 10000,
-                            path: '/igomoku/user-list', //đường dẫn riêng 
+                            //path: '/igomoku/user-list', //đường dẫn riêng 
+                            transports: ['websocket']
                         });
 
         socket.on("user-list", ()=>{
@@ -14,12 +15,14 @@ export const setupSocket = () => {
                 payload: socket,
             });
         });
-
-        return 
     }
 }
 
-export const fetchUserList = () =>{
+const fetchUserList = () =>{
 
 }
-
+const ListUserActions = {
+    fetchUserList,
+    setupSocket
+}
+export default ListUserActions;

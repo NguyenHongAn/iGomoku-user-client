@@ -1,18 +1,42 @@
 import React, {useEffect, useState} from 'react';
 import { Col,Nav,NavItem,NavLink, Button } from "reactstrap";
-import {connect} from 'react-redux';
-import * as UserListActions from '../../store/actions/listOnlUserAction';
+//import {connect, useDispatch, useSelector} from 'react-redux';
+//import ListUserActions from '../../store/actions/listOnlUserAction';
 import './UserList.css';
+import {io} from "socket.io-client";
 
-
-function UserList({listUser,
-                socket,
-                setupSocket}) {
-    //const socket = 
+function UserList() {
     
-    console.log(listUser);
-    useEffect(() =>{
+    //redux map state to props and map dispatch to props
+    // const {socket, listUser} = useSelector(state =>({
+    //     listUser: state.listOnlUser.users,
+    //     socket: state.listOnlUser.socket,
+    // })
+    // ); 
+    // const dispatch = useDispatch();
+    const [listUser, setListUser] = useState([
+        {
+            fullname: "Nguyen Hong",
+            elo: 2000,
+        },
+        {
+            fullname: "Thanh Hao",
+            elo: 2000,
+        },
+        {
+            fullname: "Minh Nguyet",
+            elo: 2000,
+        }
+    ]);
 
+    
+    
+    useEffect(() =>{
+        const socket = io(process.env.REACT_APP_SERVER);
+
+        socket.emit("user-list", )
+
+        console.log(socket);
     },[]);
 
     const [activeTab, setActiveTab] = useState('1');
@@ -66,17 +90,17 @@ function UserList({listUser,
 }
 
 
-const mapState = (state) =>({
-    listUser: Array.from(state.listOnlUser.users),
-    socket: state.listOnlUser.socket,
-  });
+// const mapState = (state) =>({
+//     listUser: Array.from(state.listOnlUser.users),
+//     socket: state.listOnlUser.socket,
+//   });
   
-const mapDispatch = (dispatch) => ({
-    setupSocket: () =>{
-        dispatch(UserListActions.setupSocket());
-    }
+// const mapDispatch = (dispatch) => ({
+//     setupSocket: () =>{
+//         dispatch(UserListActions.setupSocket());
+//     }
     
-});
+// });
 
 
-export default connect(mapState, mapDispatch)(UserList);
+export default UserList;
