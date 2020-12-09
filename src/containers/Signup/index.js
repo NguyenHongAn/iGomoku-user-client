@@ -5,7 +5,7 @@ import { faSignInAlt, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { Link, useHistory } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
-const APIURL = process.env.REACT_APP_APIURL;
+const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_API_DEPLOY_URL;
 
 export default function SignupPage() {
   const { addToast } = useToasts();

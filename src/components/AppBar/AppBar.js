@@ -1,8 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {Navbar, Nav} from 'react-bootstrap';
 import './AppBar.css';  
-import {Link} from 'react-router-dom';
-
+import {Link, useLocation} from 'react-router-dom';
 
 function AppBar() {
 
@@ -10,14 +9,7 @@ function AppBar() {
    
     let fullname = localStorage.getItem("fullname");
 
-    // kiểm tra user đã login chưa để hiển thị app bar
-    useEffect(() => {
-      setIsLogin(isUserLogin());
-    }, []);
-
-    function isUserLogin(){
-      return !(localStorage.getItem("jwtToken") === "invalid token :))");
-    }
+    const location = useLocation();
 
     function logout(){
       setIsLogin(false);
@@ -32,11 +24,11 @@ function AppBar() {
         <div className="AppBar" >
         <Navbar className="bar-bg" expand="md">
           <Link className="navbar-brand " to="/">iGomoku</Link>
-          {isLogin ? (<Link className="text-light nav-link welcome"> Welcome, {fullname}</Link>) : null}
+          {localStorage.getItem('jwtToken') !== "invalid token :))"? (<Link className="text-light nav-link welcome" to="/profile"> Welcome, {fullname}</Link>) : null}
           <Navbar.Toggle  aria-controls="responsive-navbar-nav"/>
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="ml-auto" navbar>
-              {isLogin ? (
+              {localStorage.getItem('jwtToken') !== "invalid token :))"? (
                 <React.Fragment>
                   <Nav.Item>
                     <Link className="text-light nav-link" to="/igomoku">Dashboard</Link>

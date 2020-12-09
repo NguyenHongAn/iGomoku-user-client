@@ -14,11 +14,10 @@ function App() {
   return (
     
     <HashRouter>
+      <ToastProvider>
       <AppBar></AppBar>
      
       <Switch>
-        <ToastProvider>
-
           <Route path='/igomoku'>
             <Dashboard></Dashboard>
           </Route>
@@ -35,8 +34,8 @@ function App() {
             <HomePage></HomePage>
           </Route>
           
-        </ToastProvider>
       </Switch>
+      </ToastProvider>
     </HashRouter>
   );
 }

@@ -36,8 +36,8 @@ function UserList() {
     
     useEffect(() =>{
         const socket = io(END_POINT);
-
-        socket.emit("request-list-online-user", JSON.stringify({message: "request-user-list"}));
+        const userID = localStorage.getItem("userID"); 
+        socket.emit("request-list-online-user", {userID});
 
         console.log(socket);
     },[]);

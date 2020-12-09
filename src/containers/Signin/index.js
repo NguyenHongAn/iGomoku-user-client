@@ -8,7 +8,8 @@ import { Link, useHistory } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import FacebookLogin from "react-facebook-login";
 import GoogleLogin from 'react-google-login';
-const APIURL = process.env.REACT_APP_APIURL;
+
+const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_API_DEPLOY_URL;;
 const APPID_FB = process.env.REACT_APP_APPID_FB;
 const APPID_GG = process.env.REACT_APP_APPID_GG;
 
@@ -28,6 +29,7 @@ export default function LoginPage() {
   function handleSubmit(event) {
     event.preventDefault();
     setLoading(true);
+    console.log(APIURL);
     axios
       .post(APIURL + "/auth/signin", {
         username: username,
