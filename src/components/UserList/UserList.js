@@ -37,7 +37,7 @@ function UserList() {
     useEffect(() =>{
         const socket = io(END_POINT);
 
-        socket.emit("request-user-list", JSON.stringify({message: "request-user-list"}));
+        socket.emit("request-list-online-user", JSON.stringify({message: "request-user-list"}));
 
         console.log(socket);
     },[]);
