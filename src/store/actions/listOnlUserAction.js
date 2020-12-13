@@ -1,21 +1,13 @@
-import { io } from 'socket.io-client';
 
-const setupSocket = () => {
+const updateOnlineUserlist = (onlineUsers) =>{
     return (dispatch) =>{
-        const socket = io(process.env.REACT_APP_SERVER, // link tới server
-                        {
-                            reconnectionDelayMax: 10000,
-                            transports: ['websocket']
-                        });
-
-        socket.on("user-list", ()=>{
-            dispatch({
-                type: "SETUP_USERS_SOCKET",
-                payload: socket,
-            });
+        dispatch({
+            type: "onlineUser/update",
+            payload: onlineUsers,
         });
     }
 }
+
 
 const fetchUserList = () =>{
 
@@ -23,6 +15,6 @@ const fetchUserList = () =>{
 
 const ListUserActions = {
     fetchUserList,
-    setupSocket
+    updateOnlineUserlist,
 }
 export default ListUserActions;

@@ -1,29 +1,14 @@
 
-
 const defaultState  = {
-    socket: null, 
-    users: [
-        {
-            fullname: "Nguyen Hong",
-            elo: 2000,
-        },
-        {
-            fullname: "Thanh Hao",
-            elo: 2000,
-        },
-        {
-            fullname: "Minh Nguyet",
-            elo: 2000,
-        }
-    ],
+    users: [],
 };
 
 const listOnlUserReducer = (state = defaultState, action) =>{
     switch (action.type) {
-        case "SETUP_USERS_SOCKET": 
+        case 'onlineUser/update':
             return {
                 ...state,
-                socket: action.payload,
+                users: action.payload,
             }
         default:
             return state;

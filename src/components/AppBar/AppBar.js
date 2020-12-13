@@ -9,10 +9,14 @@ function AppBar() {
 
     const [isLogin, setIsLogin] = useState(false);
    
-    //let fullname = localStorage.getItem("fullname");
     //redux
-    const fullname = useSelector(state => state.auth.fullname);
-    const jwtToken = useSelector(state => state.auth.jwtToken);
+    const {jwtToken,fullname, userID} = useSelector(state => ({
+          jwtToken: state.auth.jwtToken,
+          fullname: state.auth.fullname,
+          userID: state.auth.userID,
+    }));
+   
+    const socket = useSelector(state => state.socket.socket);
     const dispatch = useDispatch();
     const location = useLocation();
 
@@ -25,9 +29,7 @@ function AppBar() {
       setIsLogin(false);
 
       dispatch(authActions.signOut);
-      // localStorage.setItem("jwtToken", "invalid token :))");
-      // localStorage.setItem("fullname", "unknown :))");
-      // localStorage.setItem("userID", 0);
+      socket.emit("sign-out", {userID});
     }
 
   

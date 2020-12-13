@@ -1,6 +1,7 @@
-const axios = require('axios');
+import axios from 'axios';
 const baseURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_API_DEPLOY_URL;
 
+console.log(baseURL);
 const axiosInstance = axios.create({
     baseURL: baseURL,
     timeout: 10000,

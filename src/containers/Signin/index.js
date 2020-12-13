@@ -35,9 +35,9 @@ export default function LoginPage() {
   function handleSubmit(event) {
     event.preventDefault();
     setLoading(true);
-    console.log(APIURL);
+    //console.log(APIURL);
     axios
-      .post(APIURL + "/auth/signin", {
+    .post(APIURL + "/auth/signin", {
         username: username,
         password: password,
         permission: 1,  // normal user (0-admin, 1-user)
@@ -56,12 +56,8 @@ export default function LoginPage() {
             userID:  response.data.account._id
           }
 
-          console.log(authData);
           dispatch(authActions.signIn(authData));
 
-          // localStorage.setItem("jwtToken", response.data.token);
-          // localStorage.setItem("fullname", response.data.account.fullname);
-          // localStorage.setItem("userID", response.data.account._id);
           history.push("/igomoku");
         }
       })
@@ -101,12 +97,8 @@ export default function LoginPage() {
             userID:  response.data.account._id
           }
 
-          console.log(authData);
           dispatch(authActions.signIn(authData));
 
-          // localStorage.setItem("jwtToken", response.data.token);
-          // localStorage.setItem("fullname", response.data.account.fullname);
-          // localStorage.setItem("userID", response.data.account._id);
          history.push("/igomoku");
         }
       })
@@ -145,12 +137,8 @@ export default function LoginPage() {
             userID:  response.data.account._id
           }
 
-          console.log(authData);
           dispatch(authActions.signIn(authData));
 
-           // localStorage.setItem("jwtToken", response.data.token);
-          // localStorage.setItem("fullname", response.data.account.fullname);
-          // localStorage.setItem("userID", response.data.account._id);
           history.push("/igomoku");
         }
       })

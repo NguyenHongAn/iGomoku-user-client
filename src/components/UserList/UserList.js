@@ -1,55 +1,52 @@
 import React, {useEffect, useState} from 'react';
 import { Col,Nav, Button } from "react-bootstrap";
-//import {connect, useDispatch, useSelector} from 'react-redux';
-//import ListUserActions from '../../store/actions/listOnlUserAction';
-
+import {useDispatch, useSelector} from 'react-redux';
+import ListUserActions from '../../store/actions/listOnlUserAction';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrophy } from "@fortawesome/free-solid-svg-icons";
 
 import './UserList.css';
-import {io} from "socket.io-client";
-
 
 function UserList({handleOpenModal}) {
     
     //redux map state to props and map dispatch to props
-    // const {socket, listUser} = useSelector(state =>({
-    //     listUser: state.l    istOnlUser.users,
-    //     socket: state.listOnlUser.socket,
-    // })
-    // ); 
-    // const dispatch = useDispatch();
+    const {socket, socketID} = useSelector(state =>({
+       socket: state.socket.socket,
+       socketID: state.socket.socketID,
+    })
+    );
 
-    const END_POINT = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_API_DEPLOY_URL;
+    const userID = useSelector(state => state.auth.userID);
 
-    const [listUser, setListUser] = useState([]);
+    const onlineUsers = useSelector(state => state.onlineUsers.users);
+    const dispatch = useDispatch();
 
-    const [notifyMsg, setNotifyMsg] = useState("");
+    
+   
     
     useEffect(() =>{
-        const socket = io(END_POINT,{
-            reconnectionDelayMax: 10000,
-        });
-        const userID = localStorage.getItem("userID"); 
-        if (userID !== "0")
-        {
-            socket.emit("request-list-online-user", {userID});
+      
+        socket.emit("request-list-online-user", {userID});
+           
+        socket.on("response-list-online-user", (listOnlineUser)=>{
+            const newUserList = JSON.parse(listOnlineUser).filter(user => user._id !== userID);
+            console.log('getresponseData');
+            console.log(newUserList);
 
-            socket.on("response-list-online-user", (listOnlineUser)=>{
-                const newUserList = JSON.parse(listOnlineUser).filter(user => user._id !== userID);
-                console.log(newUserList);
-                setListUser(newUserList);
-                if (newUserList.length === 0)
-                {
-                    setNotifyMsg("No Online User");
-                }
-            });
+            dispatch(ListUserActions.updateOnlineUserlist(newUserList));
+
+            if (newUserList.length === 0)
+            {
+                //setNotifyMsg("No Online User");
+            }
+        });
             
-        }
         // disconnect old socket each time re-render
         return () =>{
             // socket.emit("sign-out", {userID});
             socket.off();
         }
-    },[END_POINT]);
+    },[dispatch, socket, userID]);
 
 
     const [activeTab, setActiveTab] = useState('1');
@@ -66,11 +63,12 @@ function UserList({handleOpenModal}) {
                    Online  User
                     </Nav.Link>
                 </Nav.Item>
-                <Nav.Item>
+               {userID !== "0"? <Nav.Item>
                     <Nav.Link className={activeTab === '2' ? 'active active-link' : ''} onClick={() => toggle('2')}>
                         Friends 
                     </Nav.Link>
                 </Nav.Item>
+                :null}
             </Nav>
             <div>
             
@@ -78,7 +76,7 @@ function UserList({handleOpenModal}) {
                     <table>
                     <tbody> 
                         {
-                    listUser.map((user,i) =>{
+                    onlineUsers.map((user,i) =>{
                         return (
                             <tr className="table-flex" key={i}>
                             <td className="username">
@@ -87,7 +85,7 @@ function UserList({handleOpenModal}) {
                                 </Button>
                                 
                                 </td>
-                            <td># {user.elo}</td>
+                            <td><FontAwesomeIcon icon={faTrophy}></FontAwesomeIcon> {user.elo}</td>
                             <td>
                                 <Button className="btn-friend-request" variant="link" size='sm'>Send</Button>
                             </td>

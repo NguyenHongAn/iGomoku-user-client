@@ -2,15 +2,21 @@ import React from 'react';
 import {HashRouter, Switch, Route, Redirect} from 'react-router-dom';
 import "./App.css"
 import AppBar from './components/AppBar/AppBar';
-import HomePage from "./components/HomePage/HomePage";
+import {useDispatch} from 'react-redux';
+
+
 import FAQ from "./components/FAQ/FAQ";
 import Dashboard from './containers/Dashboard/Dashboard';
-
 import LoginPage from './containers/Signin';
 import SignupPage from './containers/Signup';
 import { ToastProvider } from "react-toast-notifications";
+import setupSocket from './store/actions/socketAction';
+
 
 function App() {
+  const dispatch = useDispatch();
+
+  dispatch(setupSocket());
   return (
     
     <HashRouter>

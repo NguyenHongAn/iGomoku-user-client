@@ -1,7 +1,7 @@
 const defaultState ={
     jwtToken: "invalid token :))",
     fullname: 'unknown :))',
-    userID: 0,
+    userID: "0",
 }
 
 const authReducer = (state = defaultState,  action) =>{
