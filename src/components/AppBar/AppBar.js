@@ -2,20 +2,32 @@ import React, {useState, useEffect} from 'react';
 import {Navbar, Nav} from 'react-bootstrap';
 import './AppBar.css';  
 import {Link, useLocation} from 'react-router-dom';
+import {useSelector, useDispatch} from 'react-redux';
+import authActions from "../../store/actions/authAction";
 
 function AppBar() {
 
     const [isLogin, setIsLogin] = useState(false);
    
-    let fullname = localStorage.getItem("fullname");
-
+    //let fullname = localStorage.getItem("fullname");
+    //redux
+    const fullname = useSelector(state => state.auth.fullname);
+    const jwtToken = useSelector(state => state.auth.jwtToken);
+    const dispatch = useDispatch();
     const location = useLocation();
+
+    useEffect(() =>{
+      
+    });
+
 
     function logout(){
       setIsLogin(false);
-      localStorage.setItem("jwtToken", "invalid token :))");
-      localStorage.setItem("fullname", "unknown :))");
-      localStorage.setItem("userID", 0);
+
+      dispatch(authActions.signOut);
+      // localStorage.setItem("jwtToken", "invalid token :))");
+      // localStorage.setItem("fullname", "unknown :))");
+      // localStorage.setItem("userID", 0);
     }
 
   
@@ -24,11 +36,11 @@ function AppBar() {
         <div className="AppBar" >
         <Navbar className="bar-bg" expand="md">
           <Link className="navbar-brand " to="/">iGomoku</Link>
-          {localStorage.getItem('jwtToken') !== "invalid token :))"? (<Link className="text-light nav-link welcome" to="/profile"> Welcome, {fullname}</Link>) : null}
+          {jwtToken !== "invalid token :))"? (<Link className="text-light nav-link welcome" to="/profile"> Welcome, {fullname}</Link>) : null}
           <Navbar.Toggle  aria-controls="responsive-navbar-nav"/>
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="ml-auto" navbar>
-              {localStorage.getItem('jwtToken') !== "invalid token :))"? (
+              {jwtToken !== "invalid token :))"? (
                 <React.Fragment>
                   <Nav.Item>
                     <Link className="text-light nav-link" to="/igomoku">Dashboard</Link>

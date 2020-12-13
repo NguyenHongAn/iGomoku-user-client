@@ -2,10 +2,13 @@ import React, {useEffect, useState} from 'react';
 import { Col,Nav, Button } from "react-bootstrap";
 //import {connect, useDispatch, useSelector} from 'react-redux';
 //import ListUserActions from '../../store/actions/listOnlUserAction';
+
+
 import './UserList.css';
 import {io} from "socket.io-client";
 
-function UserList() {
+
+function UserList({handleOpenModal}) {
     
     //redux map state to props and map dispatch to props
     // const {socket, listUser} = useSelector(state =>({
@@ -17,30 +20,37 @@ function UserList() {
 
     const END_POINT = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_API_DEPLOY_URL;
 
-    const [listUser, setListUser] = useState([
-        {
-            fullname: "Nguyen Hong",
-            elo: 2000,
-        },
-        {
-            fullname: "Thanh Hao",
-            elo: 2000,
-        },
-        {
-            fullname: "Minh Nguyet",
-            elo: 2000,
-        }
-    ]);
+    const [listUser, setListUser] = useState([]);
 
-    
+    const [notifyMsg, setNotifyMsg] = useState("");
     
     useEffect(() =>{
-        const socket = io(END_POINT);
+        const socket = io(END_POINT,{
+            reconnectionDelayMax: 10000,
+        });
         const userID = localStorage.getItem("userID"); 
-        socket.emit("request-list-online-user", {userID});
+        if (userID !== "0")
+        {
+            socket.emit("request-list-online-user", {userID});
 
-        console.log(socket);
-    },[]);
+            socket.on("response-list-online-user", (listOnlineUser)=>{
+                const newUserList = JSON.parse(listOnlineUser).filter(user => user._id !== userID);
+                console.log(newUserList);
+                setListUser(newUserList);
+                if (newUserList.length === 0)
+                {
+                    setNotifyMsg("No Online User");
+                }
+            });
+            
+        }
+        // disconnect old socket each time re-render
+        return () =>{
+            // socket.emit("sign-out", {userID});
+            socket.off();
+        }
+    },[END_POINT]);
+
 
     const [activeTab, setActiveTab] = useState('1');
 
@@ -63,14 +73,16 @@ function UserList() {
                 </Nav.Item>
             </Nav>
             <div>
-            <table >
-                <tbody> 
-                {
+            
+                {/* {notifyMsg === ""? */}
+                    <table>
+                    <tbody> 
+                        {
                     listUser.map((user,i) =>{
                         return (
                             <tr className="table-flex" key={i}>
                             <td className="username">
-                                <Button variant="link">
+                                <Button variant="link" onClick={() =>handleOpenModal(user)}>
                                     {user.fullname}
                                 </Button>
                                 
@@ -82,9 +94,11 @@ function UserList() {
                             </tr>
                         )
                     })
-                }
-                </tbody>
-            </table>
+                        }
+                        </tbody>
+                        </table>
+                {/* :<h3>{notifyMsg}</h3> 
+                }               */}
             </div>
             
             

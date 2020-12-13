@@ -8,6 +8,9 @@ import { Link, useHistory } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import FacebookLogin from "react-facebook-login";
 import GoogleLogin from 'react-google-login';
+import {useSelector, useDispatch} from 'react-redux';
+import authActions from '../../store/actions/authAction';
+
 
 const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_API_DEPLOY_URL;;
 const APPID_FB = process.env.REACT_APP_APPID_FB;
@@ -18,6 +21,9 @@ export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setLoading] = useState(false);
+
+  //redux 
+  const dispatch = useDispatch();
 
   //use History để điều hướng URL
   const history = useHistory();
@@ -43,9 +49,19 @@ export default function LoginPage() {
             appearance: "success",
             autoDismiss: true,
           });
-          localStorage.setItem("jwtToken", response.data.token);
-          localStorage.setItem("fullname", response.data.account.fullname);
-          localStorage.setItem("userID", response.data.account._id);
+          
+          const authData = {
+            jwtToken:  response.data.token,
+            fullname:  response.data.account.fullname,
+            userID:  response.data.account._id
+          }
+
+          console.log(authData);
+          dispatch(authActions.signIn(authData));
+
+          // localStorage.setItem("jwtToken", response.data.token);
+          // localStorage.setItem("fullname", response.data.account.fullname);
+          // localStorage.setItem("userID", response.data.account._id);
           history.push("/igomoku");
         }
       })
@@ -78,9 +94,19 @@ export default function LoginPage() {
             appearance: "success",
             autoDismiss: true,
           });
-          localStorage.setItem("jwtToken", response.data.token);
-          localStorage.setItem("fullname", response.data.account.fullname);
-          localStorage.setItem("userID", response.data.account._id);
+
+          const authData = {
+            jwtToken:  response.data.token,
+            fullname:  response.data.account.fullname,
+            userID:  response.data.account._id
+          }
+
+          console.log(authData);
+          dispatch(authActions.signIn(authData));
+
+          // localStorage.setItem("jwtToken", response.data.token);
+          // localStorage.setItem("fullname", response.data.account.fullname);
+          // localStorage.setItem("userID", response.data.account._id);
          history.push("/igomoku");
         }
       })
@@ -113,9 +139,18 @@ export default function LoginPage() {
             appearance: "success",
             autoDismiss: true,
           });
-          localStorage.setItem("jwtToken", response.data.token);
-          localStorage.setItem("fullname", response.data.account.fullname);
-          localStorage.setItem("userID", response.data.account._id);
+          const authData = {
+            jwtToken:  response.data.token,
+            fullname:  response.data.account.fullname,
+            userID:  response.data.account._id
+          }
+
+          console.log(authData);
+          dispatch(authActions.signIn(authData));
+
+           // localStorage.setItem("jwtToken", response.data.token);
+          // localStorage.setItem("fullname", response.data.account.fullname);
+          // localStorage.setItem("userID", response.data.account._id);
           history.push("/igomoku");
         }
       })

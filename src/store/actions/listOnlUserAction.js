@@ -5,7 +5,6 @@ const setupSocket = () => {
         const socket = io(process.env.REACT_APP_SERVER, // link tới server
                         {
                             reconnectionDelayMax: 10000,
-                            //path: '/igomoku/user-list', //đường dẫn riêng 
                             transports: ['websocket']
                         });
 
@@ -21,6 +20,7 @@ const setupSocket = () => {
 const fetchUserList = () =>{
 
 }
+
 const ListUserActions = {
     fetchUserList,
     setupSocket

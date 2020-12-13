@@ -1,10 +1,10 @@
 import React from 'react';
-import {HashRouter, Switch, Route} from 'react-router-dom';
+import {HashRouter, Switch, Route, Redirect} from 'react-router-dom';
 import "./App.css"
 import AppBar from './components/AppBar/AppBar';
 import HomePage from "./components/HomePage/HomePage";
 import FAQ from "./components/FAQ/FAQ";
-import Dashboard from './components/Dashboard/Dashboard';
+import Dashboard from './containers/Dashboard/Dashboard';
 
 import LoginPage from './containers/Signin';
 import SignupPage from './containers/Signup';
@@ -31,7 +31,7 @@ function App() {
             <SignupPage></SignupPage>
           </Route>
           <Route path='/'>
-            <HomePage></HomePage>
+            <Redirect to="/igomoku"></Redirect>
           </Route>
           
       </Switch>
