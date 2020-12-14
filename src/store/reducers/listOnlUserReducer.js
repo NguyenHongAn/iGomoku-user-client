@@ -1,6 +1,7 @@
 
 const defaultState  = {
     users: [],
+    friends: [],
 };
 
 const listOnlUserReducer = (state = defaultState, action) =>{
@@ -9,6 +10,11 @@ const listOnlUserReducer = (state = defaultState, action) =>{
             return {
                 ...state,
                 users: action.payload,
+            }
+        case 'friends/update':
+            return {
+                ...state,
+                friends: action.payload,
             }
         default:
             return state;

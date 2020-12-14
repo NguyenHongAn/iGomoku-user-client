@@ -21,10 +21,8 @@ const signUp = (authData) =>{
     }
 }   
 
-const authActions ={
+export const authActions ={
     signIn,
     signOut,
     signUp
 }
-
-export default authActions;

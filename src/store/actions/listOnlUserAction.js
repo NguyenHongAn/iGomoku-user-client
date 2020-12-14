@@ -8,13 +8,27 @@ const updateOnlineUserlist = (onlineUsers) =>{
     }
 }
 
-
-const fetchUserList = () =>{
-
+const addNewFriend = (newFriend) =>{
+    return (dispatch) =>{
+        dispatch({
+            type: 'friends/addnew',
+            payload: newFriend,
+        })
+    };
 }
 
+const updateFriendList = (friendList) =>{
+    return (dispatch) =>{
+        dispatch({
+            type: 'friends/update',
+            payload: friendList,
+        })
+    };
+} 
+
 const ListUserActions = {
-    fetchUserList,
     updateOnlineUserlist,
+    addNewFriend,
+    updateFriendList,
 }
 export default ListUserActions;

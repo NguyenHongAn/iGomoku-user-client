@@ -3,7 +3,7 @@ import {Navbar, Nav} from 'react-bootstrap';
 import './AppBar.css';  
 import {Link, useLocation} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
-import authActions from "../../store/actions/authAction";
+import {authActions} from "../../store/actions/authAction";
 
 function AppBar() {
 

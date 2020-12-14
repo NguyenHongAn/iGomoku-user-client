@@ -4,6 +4,9 @@ import {useDispatch, useSelector} from 'react-redux';
 import ListUserActions from '../../store/actions/listOnlUserAction';
 import UserListItem from './UserListItem/UserListItem';
 import './UserList.css';
+import { useToasts } from "react-toast-notifications";
+import axiosInstance from '../../api/axiosInstance';
+const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_API_DEPLOY_URL;
 
 function UserList() {
     
@@ -16,36 +19,57 @@ function UserList() {
 
     const userID = useSelector(state => state.auth.userID);
 
-    const onlineUsers = useSelector(state => state.onlineUsers.users);
+    const {onlineUsers,friends} = useSelector(state => ({
+        onlineUsers: state.onlineUsers.users,
+        friends: state.onlineUsers.friends,
+    }));
+
     const dispatch = useDispatch();
 
-    
+    const { addToast } = useToasts();
    
     
     useEffect(() =>{
-      
-        socket.emit("request-list-online-user", {userID});
+        //get online user list 
+        const fetchData = async () =>{
+             socket.emit("request-list-online-user", {userID});
 
         socket.on("response-list-online-user", (listOnlineUser)=>{
-            const newUserList = JSON.parse(listOnlineUser).filter(user => user._id !== userID);
-            newUserList.sort((a,b) =>{
-                return b.elo - a.elo;
+                const newUserList = JSON.parse(listOnlineUser).filter(user => user._id !== userID);
+                newUserList.sort((a,b) =>{
+                    return b.elo - a.elo;
+                });
+
+                dispatch(ListUserActions.updateOnlineUserlist(newUserList));
+
+                if (newUserList.length === 0)
+                {
+                    addToast("No user online", {
+                        appearance: 'info',
+                        autoDismiss: true,
+                    });
+                }
             });
-
-            dispatch(ListUserActions.updateOnlineUserlist(newUserList));
-
-            if (newUserList.length === 0)
+                
+            // get friend's list with GET method
+            if(userID !== "0")
             {
-                //setNotifyMsg("No Online User");
+                try {
+                    const friendsList = await axiosInstance.get(`${APIURL}/user/list-friend`);
+                    console.log(friendsList);
+                } catch (error) {
+                    
+                }
             }
-        });
-            
+           
+        }
+        fetchData();
         // disconnect old socket each time re-render
         return () =>{
             // socket.emit("sign-out", {userID});
             socket.off();
         }
-    },[dispatch, socket, userID]);
+    },[addToast, dispatch, socket, userID]);
 
 
     const [activeTab, setActiveTab] = useState('1');
@@ -69,22 +93,14 @@ function UserList() {
                 </Nav.Item>
                 :null}
             </Nav>
-            <div>
-            
-                {/* {notifyMsg === ""? */}
-                    <table>
-                    <tbody> 
-                        {
+            <div style={{display: "block"}}>                                               
+                {
                     onlineUsers.map((user) =>{
                         return (
                            <UserListItem user={user}></UserListItem>
                         )
                     })
-                        }
-                        </tbody>
-                        </table>
-                {/* :<h3>{notifyMsg}</h3> 
-                }               */}
+                }                     
             </div>
             
             

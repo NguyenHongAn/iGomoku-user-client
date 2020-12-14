@@ -1,14 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import store from './store/configStore';
+import configStore from './store/configStore';
 import {Provider} from 'react-redux';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { PersistGate } from 'redux-persist/integration/react';
+
+const {store, persistor} = configStore();
 
 ReactDOM.render(
     <Provider store={store}>
-      <App />
+       <PersistGate loading={null} persistor={persistor}>
+         <App />
+        </PersistGate>
+      
     </Provider>,
   document.getElementById('root')
 );
