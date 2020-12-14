@@ -2,12 +2,10 @@ import React, {useEffect, useState} from 'react';
 import { Col,Nav, Button } from "react-bootstrap";
 import {useDispatch, useSelector} from 'react-redux';
 import ListUserActions from '../../store/actions/listOnlUserAction';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrophy } from "@fortawesome/free-solid-svg-icons";
-
+import UserListItem from './UserListItem/UserListItem';
 import './UserList.css';
 
-function UserList({handleOpenModal}) {
+function UserList() {
     
     //redux map state to props and map dispatch to props
     const {socket, socketID} = useSelector(state =>({
@@ -27,11 +25,12 @@ function UserList({handleOpenModal}) {
     useEffect(() =>{
       
         socket.emit("request-list-online-user", {userID});
-           
+
         socket.on("response-list-online-user", (listOnlineUser)=>{
             const newUserList = JSON.parse(listOnlineUser).filter(user => user._id !== userID);
-            console.log('getresponseData');
-            console.log(newUserList);
+            newUserList.sort((a,b) =>{
+                return b.elo - a.elo;
+            });
 
             dispatch(ListUserActions.updateOnlineUserlist(newUserList));
 
@@ -76,20 +75,9 @@ function UserList({handleOpenModal}) {
                     <table>
                     <tbody> 
                         {
-                    onlineUsers.map((user,i) =>{
+                    onlineUsers.map((user) =>{
                         return (
-                            <tr className="table-flex" key={i}>
-                            <td className="username">
-                                <Button variant="link" onClick={() =>handleOpenModal(user)}>
-                                    {user.fullname}
-                                </Button>
-                                
-                                </td>
-                            <td><FontAwesomeIcon icon={faTrophy}></FontAwesomeIcon> {user.elo}</td>
-                            <td>
-                                <Button className="btn-friend-request" variant="link" size='sm'>Send</Button>
-                            </td>
-                            </tr>
+                           <UserListItem user={user}></UserListItem>
                         )
                     })
                         }

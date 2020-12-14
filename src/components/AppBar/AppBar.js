@@ -35,7 +35,7 @@ function AppBar() {
   
   
     return (
-        <div className="AppBar" >
+        <header className="AppBar" >
         <Navbar className="bar-bg" expand="md">
           <Link className="navbar-brand " to="/">iGomoku</Link>
           {jwtToken !== "invalid token :))"? (<Link className="text-light nav-link welcome" to="/profile"> Welcome, {fullname}</Link>) : null}
@@ -69,7 +69,7 @@ function AppBar() {
             </Nav>
           </Navbar.Collapse>
         </Navbar>
-      </div>
+      </header>
     )
 }
 

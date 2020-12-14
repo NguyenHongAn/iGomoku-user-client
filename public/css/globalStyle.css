@@ -135,6 +135,7 @@ header #profile-dropdown {
   background-color: #f3f3f3;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
 }
 
 .loginPage form {
@@ -195,6 +196,7 @@ header #profile-dropdown {
   background-color: #f3f3f3;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
 }
 
 .signupPage form {
@@ -277,4 +279,20 @@ header #profile-dropdown {
 
 .AppBar .welcome {
   margin-left: 40vw;
+}
+
+.overlay
+{
+  position: fixed;
+  background: rgba(0, 0,0, 0.60);
+  top: 60px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+}
+
+
+html,body,.container {
+  height:100%!important;
 }

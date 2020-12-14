@@ -3,6 +3,7 @@
     background-color: #1a1b20!important;
     box-shadow: 2px 0px 3px white;
     padding: 10px!important;
+    position: relative;
 }
 
 .bar-bg a{

@@ -11,9 +11,20 @@ const signOut = {
     type: 'auth/signout',
     payload: "",
 }
+
+const signUp = (authData) =>{
+    return (dispatch) =>{
+        dispatch({
+            type: 'auth/signup',
+            payload: authData,
+        });
+    }
+}   
+
 const authActions ={
     signIn,
-    signOut
+    signOut,
+    signUp
 }
 
 export default authActions;

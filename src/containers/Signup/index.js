@@ -7,6 +7,8 @@ import { Link, useHistory } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_API_DEPLOY_URL;
 
+
+
 export default function SignupPage() {
   const { addToast } = useToasts();
   const [isLoading, setLoading] = useState(false);
@@ -15,8 +17,14 @@ export default function SignupPage() {
   const [password, setPassword] = useState("");
   const [repassword, setRepassword] = useState("");
 
+  //redux 
+  // const {username, password} = useSelector(state => ({
+  //   username: state.auth.username,
+  //   password: state.auth.password,
+  // }))
    //use History để điều hướng URL
-   const history = useHistory();
+  const history = useHistory();
+
 
   function validateForm() {
     return (
@@ -55,6 +63,8 @@ export default function SignupPage() {
   }
 
   return (
+    <>
+    <div class="overlay"></div>
     <div className="signupPage">
       <form onSubmit={handleSubmit}>
         <h1 className="h3 mb-3 font-weight-normal text-center">
@@ -115,5 +125,6 @@ export default function SignupPage() {
         </div>
       </form>
     </div>
+    </>
   );
 }
