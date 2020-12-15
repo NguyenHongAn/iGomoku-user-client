@@ -32,6 +32,9 @@ import work5 from "../../assets/img/examples/clem-onojegaw.jpg";
 
 import styles from "../../assets/jss/material-kit-react/views/profilePage.js";
 
+const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_API_DEPLOY_URL;
+import axios from "axios";
+
 const useStyles = makeStyles(styles);
 
 export default function ProfilePage(props) {
@@ -49,12 +52,10 @@ export default function ProfilePage(props) {
       userId: "5fce53f40bece105d8607b04",
     })
     .then(function (response) {
-      setLoading(false);
       if (response.status === 200) {
       }
     })
     .catch(function (error) {
-      setLoading(false);
       console.log(error);
     });
 
