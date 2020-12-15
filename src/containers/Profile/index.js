@@ -43,6 +43,22 @@ export default function ProfilePage(props) {
     classes.imgFluid
   );
   const navImageClasses = classNames(classes.imgRounded, classes.imgGallery);
+
+  axios
+    .post(APIURL + "/auth/signup", {
+      userId: "5fce53f40bece105d8607b04",
+    })
+    .then(function (response) {
+      setLoading(false);
+      if (response.status === 200) {
+      }
+    })
+    .catch(function (error) {
+      setLoading(false);
+      console.log(error);
+    });
+
+
   return (
     <div>
       <Parallax small filter image={require("../../assets/img/profile-bg.jpg")} />
