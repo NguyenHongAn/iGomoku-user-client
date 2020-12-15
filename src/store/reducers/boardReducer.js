@@ -11,7 +11,7 @@ const defaultState = {
     winner: {},
 }
 
-const boardReducer = (state= defaultState, action) =>{
+const boardReducer = (state = defaultState, action) =>{
     switch(action.type)
     {
         case "board/create":
@@ -36,6 +36,20 @@ const boardReducer = (state= defaultState, action) =>{
             return {
                 ...state,
                 winner: action.payload,
+            }
+        case "board/restore":
+            return {
+            
+                history: [{                 //lịch sử các bước chơi cờ 
+                    squares: Array(16*16).fill(null),
+                    pos:-1,
+                    }],
+                                        //bàn cờ hiện tại
+                stepNumber: 0,          //các bước đã thực hiện     
+                boardID: "",            //Id của ván cờ 
+                user1: {},              //thông tin người tạo
+                user2: {},              //thông tin người chơi
+                winner: {},               
             }
         default: 
         return state;

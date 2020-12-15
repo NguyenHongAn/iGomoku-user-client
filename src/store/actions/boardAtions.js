@@ -32,6 +32,11 @@ const winningDisplay = (winner) =>{
     }
 }
 
+const restoreDefault = {
+    type: "board/restore",
+    payload: "restore"
+}
+
 export const boardActions = {
     createNewBoard,
     saveHistory,

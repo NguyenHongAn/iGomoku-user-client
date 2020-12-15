@@ -29,11 +29,12 @@ import work2 from "../../assets/img/examples/clem-onojeghuo.jpg";
 import work3 from "../../assets/img/examples/cynthia-del-rio.jpg";
 import work4 from "../../assets/img/examples/mariya-georgieva.jpg";
 import work5 from "../../assets/img/examples/clem-onojegaw.jpg";
+import axios from "axios";
 
 import styles from "../../assets/jss/material-kit-react/views/profilePage.js";
 
 const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_API_DEPLOY_URL;
-import axios from "axios";
+
 
 const useStyles = makeStyles(styles);
 
