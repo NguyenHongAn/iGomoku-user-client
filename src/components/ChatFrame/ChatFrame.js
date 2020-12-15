@@ -1,22 +1,38 @@
-import ChatMessageHistory from './ChatMessage/ChatMessage';
+import ChatMessageHistory from './ChatMessageHistory/ChatMessageHistory';
 import React, {useState} from 'react';
 import {useSelector} from "react-redux";
 import {Button} from 'react-bootstrap';
- const MESSAGES = [
-    { message: 'Hi Josh', name: 'Tuesday' },
-    { message: 'How are you?', name: 'Wednesday' }                                    
- ];
-
  
- function ChatFrame() {
+function ChatFrame() {
 
     const {fullname} = useSelector(state => ({
         fullname: state.auth.fullname
     }));
 
     const [messages, setMessages] = useState( [
-        { message: 'Hi Josh', name: 'Tuesday' },
-        { message: 'How are you?', name: 'Wednesday' }                                    
+        { message: 'Hi Josh', fullname: 'Tuesday' },
+        { message: 'How are you?', fullname: 'Wednesday' },    
+        { message: 'How are you?', fullname: 'Wednesday' } ,           
+        { message: 'How are you?', fullname: 'Wednesday' }  ,          
+        { message: 'How are you?', fullname: 'Wednesday' },            
+        { message: 'How are you?', fullname: 'Wednesday' },            
+        { message: 'How are you?', fullname: 'Wednesday' }  ,          
+        { message: 'How are you?', fullname: 'Wednesday' }  ,    
+        { message: 'How are you?', fullname: 'Wednesday' }  ,    
+        { message: 'How are you?', fullname: 'Wednesday' }  ,    
+        { message: 'How are you?', fullname: 'Wednesday' }  ,    
+        { message: 'How are you?', fullname: 'Wednesday' }  ,    
+        { message: 'How are you?', fullname: 'Wednesday' }  ,    
+        { message: 'How are you?', fullname: 'Wednesday' }  ,    
+        { message: 'How are you?', fullname: 'Wednesday' }  ,    
+        { message: 'How are you?', fullname: 'Wednesday' }  ,    
+        { message: 'How are you?', fullname: 'Wednesday' }  ,                                   
+        { message: 'How are you?', fullname: 'Wednesday' }  ,    
+        { message: 'How are you?', fullname: 'Wednesday' }  ,    
+        { message: 'How are you?', fullname: 'Wednesday' }  ,    
+        { message: 'How are you?', fullname: 'Wednesday' }  ,    
+        { message: 'How are you?', fullname: 'Wednesday' }  ,    
+        { message: 'How are you?', fullname: 'Wednesday' }  ,    
      ]);
 
     const [inputText, setinputText] = useState("");
@@ -25,12 +41,13 @@ import {Button} from 'react-bootstrap';
         e.preventDefault();
         const nextMessages = messages.concat([{ message: inputText, fullname }]);
         const nextInputText = '';
-        this.setState({ messages: nextMessages, inputText: nextInputText });
+        console.log(nextMessages);
+        setMessages(nextMessages);
+        setinputText(nextInputText);
      };
 
     const windowStyles = {
-           maxWidth: '40em',
-           margin: '1rem auto'
+           width: '100%',
     };
         
     const formStyles = {
@@ -38,16 +55,23 @@ import {Button} from 'react-bootstrap';
         };
         
     const inputStyles = {
-           flex: '1 auto'
+          flex: '1 auto'
         };
-
+    
+    const scrollDiv ={
+        overflow: "auto",
+        height: "320px",
+    }
     return (
         <div style={windowStyles}>
-           <ChatMessageHistory messages={messages} />
+            <div style={scrollDiv}>
+                <ChatMessageHistory messages={messages} />
+            </div>
+           
            <form style={formStyles} onSubmit={handleSubmit}>
               <input style={inputStyles} type="text" onChange={(e) => setinputText(e.target.value)} 
               value={inputText} />
-              <Button variant="primary">Send</Button>
+              <Button variant="primary" type="submit">Send</Button>
            </form>
         </div>
      );

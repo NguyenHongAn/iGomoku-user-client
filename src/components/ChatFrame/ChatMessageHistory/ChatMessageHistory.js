@@ -1,12 +1,15 @@
 import React from 'react';
 import ChatMessage from '../ChatMessage/ChatMessage';
 
-function ChatMessageHistory({messages}) {
+function ChatMessageHistory({messages}) {   
+    console.log(messages);
+
     const createMessage = (message, index) => {
         const liStyles = {
-           backgroundColor: ( index % 2 == 1 ) ? '#ddd' : '#efefef',
-           padding: '1rem',
-           borderBottom: '1px solid #ddd'
+           backgroundColor: ( index % 2 === 1 ) ? '#ddd' : '#efefef',
+           padding: '2px',
+           borderBottom: '1px solid #ddd',
+           color: 'black'
         };  
         let name = message.fullname;
         if (message.fullname.indexOf(" ")!==-1)
@@ -20,7 +23,8 @@ function ChatMessageHistory({messages}) {
      const ulStyles = {
         listStyle: 'none',
         margin: 0,
-        padding: 0
+        padding: 0,
+        
      };
      
      return <ul style={ulStyles}>{messages.map(createMessage)}</ul>;
