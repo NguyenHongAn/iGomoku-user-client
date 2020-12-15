@@ -1,16 +1,70 @@
 import React, {useState} from 'react'
 import {Button} from "react-bootstrap";
+import {useSelector} from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrophy, faTimes, faCoins } from "@fortawesome/free-solid-svg-icons";
 import '../UserList.css';
+import axios from "axios";
+import {useHistory} from 'react-router-dom';
+import {useToasts} from 'react-toast-notifications';
 
-
+const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_API_DEPLOY_URL;
 
 function UserListItem({user}) {
 
     const [isOpen, setIsOpen] = useState(false);
+    const {jwtToken, userID} = useSelector(state => ({
+        jwtToken: state.auth.jwtToken,
+        userID: state.auth.userID,
+    }));
+
+    const history = useHistory();
+    const addToast = useToasts();
 
     const handleOpenDetail = () => setIsOpen(!isOpen);
+    
+
+
+
+    const sendFriendRequest = async () =>{
+        //đăng nhập để gửi lời mời kết bạn
+        if (userID === "0")
+        {
+            history.push("/auth/signin");
+        }
+        else
+        {
+            try {
+                const data = {
+                    fromUserId: userID,
+                    toUserId: user._id,
+                }
+                
+                console.log(data);
+                const response = await axios.post(`${APIURL}/user/send-friend-invitation`, data, 
+                {
+                    headers:
+                    {
+                        'x-access-token': jwtToken,
+                    }
+                });
+                if (response.status  === 200)
+                {
+                    addToast("Friend request have been sent", {
+                        appearance: 'success',
+                        autoDismiss: true,
+                    });
+                }
+                
+            } catch (error) {
+                addToast(error.response.data.message, {
+                    appearance: 'error',
+                    autoDismiss: true,
+                });
+            }
+           
+        }
+    }
 
     return (
         <>
@@ -47,7 +101,8 @@ function UserListItem({user}) {
                 <p>wins: </p>
             </div>
        <div className="bottom-container"> 
-           <Button variant="success" className="buttom-btn">Add Friend</Button>
+           <Button variant="success" className="buttom-btn"
+            onClick={sendFriendRequest}>Add Friend</Button>
            <Button variant="info" className="bottm-btn">Challenge</Button>
        </div>
         </div>

@@ -1,11 +1,9 @@
-import { faAcquisitionsIncorporated } from "@fortawesome/free-brands-svg-icons"
+
 
 const defaultState ={
     jwtToken: "invalid token :))",
     fullname: 'unknown :))',
     userID: "0",
-    username: "",
-    password: "",
 }
 
 const authReducer = (state = defaultState,  action) =>{
@@ -13,7 +11,7 @@ const authReducer = (state = defaultState,  action) =>{
         case "auth/signin":
             return {
                 ...state,
-                jwtToken: action.payload.jwt,
+                jwtToken: action.payload.jwtToken,
                 fullname: action.payload.fullname,
                 userID: action.payload.userID,
             }
@@ -24,12 +22,6 @@ const authReducer = (state = defaultState,  action) =>{
                 userID: 0,
                 username: "",
                 password: "",
-            }
-        case "auth/signup":
-            return{
-                ...state,
-                username: action.payload.username,
-                password: action.payload.password,
             }
         default:
            return state;

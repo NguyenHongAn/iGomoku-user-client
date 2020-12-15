@@ -1,23 +1,25 @@
 import React, {useEffect, useState} from 'react';
-import { Col,Nav, Button } from "react-bootstrap";
+import {Nav } from "react-bootstrap";
 import {useDispatch, useSelector} from 'react-redux';
 import ListUserActions from '../../store/actions/listOnlUserAction';
 import UserListItem from './UserListItem/UserListItem';
 import './UserList.css';
 import { useToasts } from "react-toast-notifications";
-import axiosInstance from '../../api/axiosInstance';
+import axios from 'axios';
 const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_API_DEPLOY_URL;
 
 function UserList() {
     
     //redux map state to props and map dispatch to props
-    const {socket, socketID} = useSelector(state =>({
+    const {socket} = useSelector(state =>({
        socket: state.socket.socket,
-       socketID: state.socket.socketID,
     })
     );
 
-    const userID = useSelector(state => state.auth.userID);
+    const {jwtToken, userID} = useSelector(state => ({
+        jwtToken: state.auth.jwtToken,
+        userID: state.auth.userID,
+    }));
 
     const {onlineUsers,friends} = useSelector(state => ({
         onlineUsers: state.onlineUsers.users,
@@ -34,31 +36,48 @@ function UserList() {
         const fetchData = async () =>{
              socket.emit("request-list-online-user", {userID});
 
-        socket.on("response-list-online-user", (listOnlineUser)=>{
-                const newUserList = JSON.parse(listOnlineUser).filter(user => user._id !== userID);
-                newUserList.sort((a,b) =>{
-                    return b.elo - a.elo;
-                });
-
-                dispatch(ListUserActions.updateOnlineUserlist(newUserList));
-
-                if (newUserList.length === 0)
-                {
-                    addToast("No user online", {
-                        appearance: 'info',
-                        autoDismiss: true,
+            socket.on("response-list-online-user", (listOnlineUser)=>{
+                    const newUserList = JSON.parse(listOnlineUser).filter(user => user._id !== userID);
+                    newUserList.sort((a,b) =>{
+                        return b.elo - a.elo;
                     });
-                }
-            });
+
+                    dispatch(ListUserActions.updateOnlineUserlist(newUserList));
+
+                    if (newUserList.length === 0)
+                    {
+                        addToast("No user online", {
+                            appearance: 'info',
+                            autoDismiss: true,
+                        });
+                    }
+                });
                 
             // get friend's list with GET method
             if(userID !== "0")
             {
-                try {
-                    const friendsList = await axiosInstance.get(`${APIURL}/user/list-friend`);
-                    console.log(friendsList);
-                } catch (error) {
+                const config = {
+                    headers: {
+                       'x-access-token': jwtToken,
+                    },
                     
+                    params: {
+                        userId: userID
+                        }
+                  }
+                  
+                try {
+                    const response = await axios.get(`${APIURL}/user/list-friend`, config);
+                    if (response.status === 200)
+                    {
+                        dispatch(ListUserActions.updateFriendList(response.data));
+                    } 
+                    
+                } catch (error) {
+                    addToast(error.response.data.message, {
+                        appearance: "error",
+                        autoDismiss: true,
+                      });
                 }
             }
            
@@ -69,7 +88,7 @@ function UserList() {
             // socket.emit("sign-out", {userID});
             socket.off();
         }
-    },[addToast, dispatch, socket, userID]);
+    },[addToast, dispatch, jwtToken, socket, userID]);
 
 
     const [activeTab, setActiveTab] = useState('1');

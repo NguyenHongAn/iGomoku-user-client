@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {Navbar, Nav} from 'react-bootstrap';
 import './AppBar.css';  
 import {Link, useLocation} from 'react-router-dom';
@@ -7,7 +7,6 @@ import {authActions} from "../../store/actions/authAction";
 
 function AppBar() {
 
-    const [isLogin, setIsLogin] = useState(false);
    
     //redux
     const {jwtToken,fullname, userID} = useSelector(state => ({
@@ -26,8 +25,6 @@ function AppBar() {
 
 
     function logout(){
-      setIsLogin(false);
-
       dispatch(authActions.signOut);
       socket.emit("sign-out", {userID});
     }
