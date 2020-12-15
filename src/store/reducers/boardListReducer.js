@@ -1,17 +1,20 @@
 const defaultState ={
-    boardList: [],
-    length: 0,
+  boards: [],
+  length: 0,
 }
 
-const boardsReducer = (state= defaultState, action) =>{
+const boardListReducer = (state= defaultState, action) =>{
     switch (action.type) {
         case "boards/addnew":
+        {
+            const tempArray = Array.from(state.boardList);
+            tempArray.push(action.payload);
             return {
                 ...state,
-                boardList: Array.from(state.boardList.push(action.payload)),
+                boardList: tempArray,
                 length: state.length +1,
             }
-
+        }
         case "boards/update":
             return {
                 boarlist: Array.from(action.payload),
@@ -22,4 +25,4 @@ const boardsReducer = (state= defaultState, action) =>{
     }
 }
 
-export default boardsReducer;
+export default boardListReducer;

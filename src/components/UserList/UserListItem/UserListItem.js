@@ -74,7 +74,7 @@ function UserListItem({user}) {
                 <FontAwesomeIcon icon={faTimes}></FontAwesomeIcon>
             </Button>
             <div className="top-container"> 
-                <img src="" className="img-fluid profile-image" width="70"/>
+                {/* <img src="" className="img-fluid profile-image" width="70"/> */}
                     <div className="ml-3">
                         <h5 className="name">{user.fullname}</h5>
                         <p className="mail">{user.email}</p>

@@ -11,10 +11,10 @@ function Dashboard() {
     });
 
     return (
-        <Container fluid className="h-100 dashboard-container">
+        <Container fluid className="h-100 main-container">
             <Row>
                 <Col sm={9}></Col>
-                <Col sm={3} className="userlist">
+                <Col sm={3} className="tab-list">
                     <UserList></UserList>
                 </Col>
             </Row>

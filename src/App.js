@@ -9,9 +9,10 @@ import FAQ from "./components/FAQ/FAQ";
 import Dashboard from './containers/Dashboard/Dashboard';
 import LoginPage from './containers/Signin';
 import SignupPage from './containers/Signup';
+import BoardContainer from './containers/Board/BoardContainer';
+
 import { ToastProvider } from "react-toast-notifications";
 import setupSocket from './store/actions/socketAction';
-
 
 function App() {
   const dispatch = useDispatch();
@@ -24,6 +25,10 @@ function App() {
       <AppBar></AppBar>
      
       <Switch>
+        <Route path='/igomoku/board/:boardID'>
+            <BoardContainer></BoardContainer>
+          </Route>
+
           <Route path='/igomoku'>
             <Dashboard></Dashboard>
           </Route>

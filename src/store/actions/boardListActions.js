@@ -19,7 +19,7 @@ const updateBoardList = (boardList) =>{
 
 
 
-export const boardActions = {
+export const boardListActions = {
     addNewBoard,
     updateBoardList,
 }
