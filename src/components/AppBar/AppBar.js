@@ -34,7 +34,7 @@ function AppBar() {
     return (
         <header className="AppBar" >
         <Navbar className="bar-bg" expand="md">
-          <Link className="navbar-brand " to="/">iGomoku</Link>
+          <Link className="navbar-brand " to="/"><b style={{color: 'red', marginLeft: "30px", fontSize: "20px"}}>iGomoku</b></Link>
           {jwtToken !== "invalid token :))"? (<Link className="text-light nav-link welcome" to="/profile"> Welcome, {fullname}</Link>) : null}
           <Navbar.Toggle  aria-controls="responsive-navbar-nav"/>
           <Navbar.Collapse id="responsive-navbar-nav">
