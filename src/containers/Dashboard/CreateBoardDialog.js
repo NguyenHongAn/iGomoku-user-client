@@ -49,7 +49,7 @@ function CreateBoardDialog({show, handleClose}) {
                 player: player //response.data.player
             }
 
-            console.log(payload);
+            // console.log(payload);
             //lưu thông tin người tạo ván đấu
             dispatch({
                 type: "match/create",

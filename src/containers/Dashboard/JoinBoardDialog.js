@@ -39,7 +39,7 @@ function JoinBoardDialog({show, handleClose,player}) {
 
     const boardId = payload.boardID;
     
-    console.log(`/board/${payload.boardID}`);
+    //console.log(`/board/${payload.boardID}`);
     socket.emit("accept-invite", ({boardId}));
     history.push(`/igomoku/board/${payload.boardID}`);
   }

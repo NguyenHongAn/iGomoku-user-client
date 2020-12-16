@@ -52,14 +52,14 @@ function Board() {
             });
             return;
         }
-        console.log("pass 1")
+       
          //B2: Kiểm tra xem van đấu đã hết thúc hay chưa
         if (ResultIdentification.calculateWinner(tempBoard,position,boardConst.SIZE_BOARD,boardConst.STEP)
         || tempBoard[i])
         {
             return;
         }
-        console.log("pass 2")
+        
         //B3: Xác định lượt
         // is x turn
         if (isXTurn)
@@ -79,7 +79,7 @@ function Board() {
         if(!isFromPlayer)
         {
             //console.log("sedding from");
-            socket.emit("send_position", JSON.stringify({boardID,i }));
+            socket.emit("send_position", JSON.stringify({boardID,i}));
         }
         
         //B6: Lưu lịch sử các bước của ván đấu
@@ -112,7 +112,7 @@ function Board() {
                 {
                     return;
                 }
-                console.log("pass 2")
+               
                 //B3: Xác định lượt
                 // is x turn
                 if (isXTurn)
@@ -128,7 +128,6 @@ function Board() {
                 setIsXTurn(!isXTurn);
                 setPosition(i);
 
-                console.log(tempBoard);
 
                 const newHistory = {
                     squares: tempBoard,
@@ -136,9 +135,6 @@ function Board() {
                 };
                 dispatch(boardActions.saveHistory(newHistory));
                 });
-
-           
-            
         }
 
     },[currBoard, dispatch, firstStep, isXTurn, position, socket]);
