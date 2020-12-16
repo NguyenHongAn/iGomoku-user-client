@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import {Button} from "react-bootstrap";
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrophy, faTimes, faCoins } from "@fortawesome/free-solid-svg-icons";
 import '../UserList.css';
@@ -18,13 +18,14 @@ function UserListItem({user}) {
         userID: state.auth.userID,
     }));
 
-    const history = useHistory();
-    const addToast = useToasts();
+    const openCreateDialog= useSelector(state => state.match.isOpen);
+    const socket = useSelector(state => state.socket.socket);
 
+    const history = useHistory();
+    const {addToast} = useToasts();
+    const dispatch = useDispatch();
     const handleOpenDetail = () => setIsOpen(!isOpen);
     
-
-
 
     const sendFriendRequest = async () =>{
         //đăng nhập để gửi lời mời kết bạn
@@ -40,7 +41,7 @@ function UserListItem({user}) {
                     toUserId: user._id,
                 }
                 
-                console.log(data);
+
                 const response = await axios.post(`${APIURL}/user/send-friend-invitation`, data, 
                 {
                     headers:
@@ -66,6 +67,14 @@ function UserListItem({user}) {
         }
     }
 
+    const challenge = () =>{
+        dispatch({type: "match/open", payload: true});
+        dispatch({
+            type: "match/storePlayerTemporary",
+            payload:  user
+        });
+    }
+
     return (
         <>
        {isOpen?
@@ -74,7 +83,7 @@ function UserListItem({user}) {
                 <FontAwesomeIcon icon={faTimes}></FontAwesomeIcon>
             </Button>
             <div className="top-container"> 
-                <img src="" className="img-fluid profile-image" width="70"/>
+                {/* <img src="" className="img-fluid profile-image" width="70"/> */}
                     <div className="ml-3">
                         <h5 className="name">{user.fullname}</h5>
                         <p className="mail">{user.email}</p>
@@ -115,7 +124,8 @@ function UserListItem({user}) {
             </div>
         <div className="elo-display"><FontAwesomeIcon color="yellow" icon={faTrophy}></FontAwesomeIcon> {user.elo}</div>
         <div>
-            <Button className="btn-friend-request" variant="info" size='sm'>Challenge</Button>
+            <Button className="btn-friend-request" variant="info" size='sm'
+            onClick={challenge}>Challenge</Button>
         </div>
         </div>}
         </>

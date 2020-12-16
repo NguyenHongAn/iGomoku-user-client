@@ -99,7 +99,7 @@ export default function LoginPage() {
 
           dispatch(authActions.signIn(authData));
 
-         history.push("/igomoku");
+          history.push("/igomoku");
         }
       })
       .catch(function (error) {
@@ -154,7 +154,7 @@ export default function LoginPage() {
 
   return (
     <>
-    
+    <div class="overlay"></div>
     <div className="loginPage">
       <form onSubmit={handleSubmit}>
         <h1 className="h3 mb-3 font-weight-normal text-center">

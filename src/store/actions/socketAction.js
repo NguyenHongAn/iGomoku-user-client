@@ -5,7 +5,7 @@ const setupSocket = () => {
         const socket = io(process.env.REACT_APP_APIURL, // link tới server
                         {
                             reconnectionDelayMax: 10000,
-                            transports: ['websocket']
+                            transports: [ 'websocket' ] 
                         });
        
         dispatch({
