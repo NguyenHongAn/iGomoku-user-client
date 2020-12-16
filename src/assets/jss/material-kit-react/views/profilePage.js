@@ -4,6 +4,14 @@ import imagesStyle from "../imagesStyles.js";
 
 const profilePageStyle = {
   container,
+  containerEdit: {
+    ...container,
+    zIndex: "2",
+    position: "relative",
+    paddingTop: "20vh",
+    color: "#FFFFFF",
+    paddingBottom: "200px"
+  },
   profile: {
     textAlign: "center",
     "& img": {
@@ -18,6 +26,9 @@ const profilePageStyle = {
     maxWidth: "600px",
     color: "#999",
     textAlign: "center !important"
+  },
+  setting: {
+    marginTop: "-70px"
   },
   name: {
     marginTop: "-80px"
@@ -56,6 +67,48 @@ const profilePageStyle = {
   navWrapper: {
     margin: "20px auto 50px auto",
     textAlign: "center"
+  },
+  form: {
+    margin: "0"
+  },
+  cardHeader: {
+    width: "auto",
+    textAlign: "center",
+    marginLeft: "20px",
+    marginRight: "20px",
+    marginTop: "-40px",
+    padding: "20px 0",
+    marginBottom: "15px"
+  },
+  socialIcons: {
+    maxWidth: "24px",
+    marginTop: "0",
+    width: "100%",
+    transform: "none",
+    left: "0",
+    top: "0",
+    height: "100%",
+    lineHeight: "41px",
+    fontSize: "20px"
+  },
+  divider: {
+    marginTop: "30px",
+    marginBottom: "0px",
+    textAlign: "center"
+  },
+  cardFooter: {
+    paddingTop: "0rem",
+    border: "0",
+    borderRadius: "6px",
+    justifyContent: "center !important"
+  },
+  socialLine: {
+    marginTop: "1rem",
+    textAlign: "center",
+    padding: "0"
+  },
+  inputIconsColor: {
+    color: "#495057"
   }
 };
 

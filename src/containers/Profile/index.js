@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector } from 'react-redux';
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // @material-ui/core components
@@ -7,17 +8,20 @@ import { makeStyles } from "@material-ui/core/styles";
 import Payment from '@material-ui/icons/Payment';
 import HistoryMatch from '@material-ui/icons/History';
 import Friend from '@material-ui/icons/PeopleAlt';
+import FacebookIcon from '@material-ui/icons/Facebook';
+import InstagramIcon from '@material-ui/icons/Instagram';
+import TwitterIcon from '@material-ui/icons/Twitter';
+import SettingsIcon from '@material-ui/icons/Settings';
+import KeyIcon from '@material-ui/icons/VpnKey';
 // core components
-import Header from "../../components/Header/Header.js";
 import Footer from "../../components/Footer/Footer.js";
 import Button from "../../components/CustomButtons/Button.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
 import GridItem from "../../components/Grid/GridItem.js";
-import HeaderLinks from "../../components/Header/HeaderLinks.js";
 import NavPills from "../../components/NavPills/NavPills.js";
 import Parallax from "../../components/Parallax/Parallax.js";
 
-import profile from "../../assets/img/faces/christian.jpg";
+import profile from "../../assets/img/faces/male_avatar.png";
 
 import studio1 from "../../assets/img/examples/studio-1.jpg";
 import studio2 from "../../assets/img/examples/studio-2.jpg";
@@ -29,17 +33,20 @@ import work2 from "../../assets/img/examples/clem-onojeghuo.jpg";
 import work3 from "../../assets/img/examples/cynthia-del-rio.jpg";
 import work4 from "../../assets/img/examples/mariya-georgieva.jpg";
 import work5 from "../../assets/img/examples/clem-onojegaw.jpg";
+import axios from "axios";
+
+// subs element
+import ChangePasswordElement from './ChangePassword.js';
+import EditInfoElement from './EditInfo.js';
 
 import styles from "../../assets/jss/material-kit-react/views/profilePage.js";
 
 const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_API_DEPLOY_URL;
-import axios from "axios";
 
 const useStyles = makeStyles(styles);
 
 export default function ProfilePage(props) {
   const classes = useStyles();
-  const { ...rest } = props;
   const imageClasses = classNames(
     classes.imgRaised,
     classes.imgRoundedCircle,
@@ -47,22 +54,36 @@ export default function ProfilePage(props) {
   );
   const navImageClasses = classNames(classes.imgRounded, classes.imgGallery);
 
-  axios
-    .post(APIURL + "/auth/signup", {
-      userId: "5fce53f40bece105d8607b04",
-    })
-    .then(function (response) {
-      if (response.status === 200) {
+
+  // redux
+  const { jwtToken, fullname, userId } = useSelector(state => ({
+    jwtToken: state.auth.jwtToken,
+    fullname: state.auth.fullname,
+    userId: state.auth.userID
+  }));
+
+  const [basicInfo, setBasicInfo] = useState({});
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await axios.post(APIURL + "/auth/profile/", {
+          userId: userId
+        });
+
+        setBasicInfo(response.data);
+      } catch (error) {
+        console.log(error);
       }
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+    }
+
+    fetchData();
+  }, []);
 
 
   return (
     <div>
-      <Parallax small filter image={require("../../assets/img/profile-bg.jpg")} />
+      <Parallax small filter image={require("../../assets/img/faces/male_avatar.png")} />
       <div className={classNames(classes.main, classes.mainRaised)}>
         <div>
           <div className={classes.container}>
@@ -73,16 +94,16 @@ export default function ProfilePage(props) {
                     <img src={profile} alt="..." className={imageClasses} />
                   </div>
                   <div className={classes.name}>
-                    <h3 className={classes.title}>Christian Louboutin</h3>
-                    <h6>DESIGNER</h6>
+                    <h3 className={classes.title}>{basicInfo.fullname}</h3>
+                    <h6>USER</h6>
                     <Button justIcon link className={classes.margin5}>
-                      <i className={"fab fa-twitter"} />
+                      <TwitterIcon />
                     </Button>
                     <Button justIcon link className={classes.margin5}>
-                      <i className={"fab fa-instagram"} />
+                      <InstagramIcon />
                     </Button>
                     <Button justIcon link className={classes.margin5}>
-                      <i className={"fab fa-facebook"} />
+                      <FacebookIcon />
                     </Button>
                   </div>
                 </div>
@@ -103,7 +124,7 @@ export default function ProfilePage(props) {
                   color="info"
                   tabs={[
                     {
-                      tabButton: "Match History",
+                      tabButton: "History",
                       tabIcon: HistoryMatch,
                       tabContent: (
                         <GridContainer justify="center">
@@ -207,6 +228,17 @@ export default function ProfilePage(props) {
                           </GridItem>
                         </GridContainer>
                       )
+                    },
+                    {
+                      tabButton: "Setting",
+                      tabIcon: SettingsIcon,
+                      tabContent: (<EditInfoElement userInfo={basicInfo}> </EditInfoElement>)
+                    },
+                    {
+                      tabButton: "RePassword",
+                      tabIcon: KeyIcon,
+                      tabContent: (<ChangePasswordElement> </ChangePasswordElement>)
+                        
                     }
                   ]}
                 />

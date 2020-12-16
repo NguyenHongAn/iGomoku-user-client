@@ -16,6 +16,7 @@ const useStyles = makeStyles(styles);
 export default function CustomInput(props) {
   const classes = useStyles();
   const {
+    onChange,
     formControlProps,
     labelText,
     id,
@@ -72,6 +73,8 @@ export default function CustomInput(props) {
           underline: underlineClasses
         }}
         id={id}
+        required
+        onChange={onChange}
         {...inputProps}
       />
     </FormControl>
