@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
+import { Button, FormGroup, FormControl, FormLabel, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignInAlt, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
@@ -13,6 +13,7 @@ export default function SignupPage() {
   const { addToast } = useToasts();
   const [isLoading, setLoading] = useState(false);
   const [fullname, setFullname] = useState("");
+  const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [repassword, setRepassword] = useState("");
@@ -40,6 +41,7 @@ export default function SignupPage() {
         username: username,
         password: password,
         fullname: fullname,
+        email: email,
         permission: 1,  // normal user (0-admin, 1-user)
       })
       .then(function (response) {
@@ -80,10 +82,18 @@ export default function SignupPage() {
             onChange={(e) => setFullname(e.target.value)}
           />
         </FormGroup>
+        <FormGroup controlId="email" bsSize="large">
+          <FormLabel>Email</FormLabel>
+          <FormControl
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </FormGroup>
         <FormGroup controlId="username" bsSize="large">
           <FormLabel>Username</FormLabel>
           <FormControl
-            autoFocus
+            required
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
@@ -91,6 +101,7 @@ export default function SignupPage() {
         <FormGroup controlId="password" bsSize="large">
           <FormLabel>Password</FormLabel>
           <FormControl
+            required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             type="password"
