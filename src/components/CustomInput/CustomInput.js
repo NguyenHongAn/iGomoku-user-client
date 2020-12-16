@@ -20,6 +20,7 @@ export default function CustomInput(props) {
     formControlProps,
     labelText,
     id,
+    defaultValue,
     labelProps,
     inputProps,
     error,
@@ -54,6 +55,8 @@ export default function CustomInput(props) {
   } else {
     formControlClasses = classes.formControl;
   }
+
+  
   return (
     <FormControl {...formControlProps} className={formControlClasses}>
       {labelText !== undefined ? (

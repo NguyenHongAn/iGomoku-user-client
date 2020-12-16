@@ -2,10 +2,13 @@ import React, { useState } from "react";
 // nodejs library that concatenates classes
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
+import InputAdornment from "@material-ui/core/InputAdornment";
 // @material-ui/icons
 import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import TwitterIcon from '@material-ui/icons/Twitter';
+import LockIcon from '@material-ui/icons/Lock';
+import LockOpenIcon from '@material-ui/icons/LockOpen';
 // core components
 import Button from "../../components/CustomButtons/Button.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
@@ -23,7 +26,8 @@ const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIUR
 
 const useStyles = makeStyles(styles);
 
-export default function ProfilePage({ userInfo }) {
+export default function ProfilePage(props) {
+    const {userInfo} = props;
     const classes = useStyles();
     const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
 
@@ -42,7 +46,7 @@ export default function ProfilePage({ userInfo }) {
                     <Card className={classes[cardAnimaton]}>
                         <form className={classes.form} method="POST" action={APIURL + '/auth/edit-info'}>
                             <CardHeader color="info" className={classes.cardHeader}>
-                                <h4>Change Password</h4>
+                                <h4>Edit Information</h4>
                                 <div className={classes.socialLine}>
                                     <Button
                                         justIcon
@@ -76,21 +80,21 @@ export default function ProfilePage({ userInfo }) {
                             <CardBody>
                                 <CustomInput
                                     labelText="Fullname"
-                                    id="confirm_new_pass"
+                                    id="fullname"
                                     formControlProps={{
                                         fullWidth: true
                                     }}
+                                    defaultValue={userInfo.fullname}
                                     inputProps={{
                                         type: 'text',
-                                        endAdornment: (<div></div>
-                                        ),
+                                        endAdornment: (<div></div>),
                                         autoComplete: "off"
                                     }}
                                 />
                             </CardBody>
                             <CardFooter className={classes.cardFooter}>
                                 <Button simple color="info" size="lg">
-                                    Get started
+                                    Get Changed
                                   </Button>
                             </CardFooter>
                         </form>

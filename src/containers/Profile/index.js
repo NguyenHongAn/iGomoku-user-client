@@ -11,7 +11,7 @@ import Friend from '@material-ui/icons/PeopleAlt';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import TwitterIcon from '@material-ui/icons/Twitter';
-import SettingsIcon from '@material-ui/icons/Settings';
+import EditIcon from '@material-ui/icons/Edit';
 import KeyIcon from '@material-ui/icons/VpnKey';
 // core components
 import Footer from "../../components/Footer/Footer.js";
@@ -38,6 +38,7 @@ import axios from "axios";
 // subs element
 import ChangePasswordElement from './ChangePassword.js';
 import EditInfoElement from './EditInfo.js';
+import ListFriendElement from './ListFriend.js';
 
 import styles from "../../assets/jss/material-kit-react/views/profilePage.js";
 
@@ -65,6 +66,7 @@ export default function ProfilePage(props) {
 
   const [basicInfo, setBasicInfo] = useState({});
 
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -81,10 +83,9 @@ export default function ProfilePage(props) {
     fetchData();
   }, []);
 
-
   return (
     <div>
-      <Parallax small filter image={require("../../assets/img/faces/male_avatar.png")} />
+      <Parallax small filter />
       <div className={classNames(classes.main, classes.mainRaised)}>
         <div>
           <div className={classes.container}>
@@ -119,7 +120,7 @@ export default function ProfilePage(props) {
               </p>
             </div>
             <GridContainer justify="center">
-              <GridItem xs={12} sm={12} md={8} className={classes.navWrapper}>
+              <GridItem xs={12} sm={12} md={9} className={classes.navWrapper}>
                 <NavPills
                   alignCenter
                   color="info"
@@ -196,43 +197,11 @@ export default function ProfilePage(props) {
                     {
                       tabButton: "Friends",
                       tabIcon: Friend,
-                      tabContent: (
-                        <GridContainer justify="center">
-                          <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src={work4}
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src={studio3}
-                              className={navImageClasses}
-                            />
-                          </GridItem>
-                          <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src={work2}
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src={work1}
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src={studio1}
-                              className={navImageClasses}
-                            />
-                          </GridItem>
-                        </GridContainer>
-                      )
+                      tabContent: (<ListFriendElement></ListFriendElement>)
                     },
                     {
-                      tabButton: "Setting",
-                      tabIcon: SettingsIcon,
+                      tabButton: "Edit",
+                      tabIcon: EditIcon,
                       tabContent: (<EditInfoElement userInfo={basicInfo}> </EditInfoElement>)
                     },
                     {

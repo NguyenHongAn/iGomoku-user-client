@@ -99,7 +99,7 @@ export default function ProfilePage(props) {
                         appearance: "success",
                         autoDismiss: true,
                     });
-                    window.location.reload();
+                    history.push("/profile");
                 }
             })
             .catch(function (error) {
@@ -169,6 +169,7 @@ export default function ProfilePage(props) {
                                 <CustomInput
                                     onChange={onPasswordChange}
                                     labelText="Your Password"
+                                    alt="Your Password"
                                     id="password"
                                     name="password"
                                     formControlProps={{
@@ -191,6 +192,7 @@ export default function ProfilePage(props) {
                                 <CustomInput
                                     onChange={onNewPasswordChange}
                                     labelText="New Password"
+                                    alt="New Password"
                                     id="newPassword"
                                     name="newPassword"
                                     formControlProps={{
@@ -213,6 +215,7 @@ export default function ProfilePage(props) {
                                 <CustomInput
                                     onChange={onConfirmNewPasswordChange}
                                     labelText="Confirm New Password"
+                                    alt="Confirm New Password"
                                     id="confirm_new_pass"
                                     formControlProps={{
                                         fullWidth: true
@@ -233,7 +236,7 @@ export default function ProfilePage(props) {
                             </CardBody>
                             <CardFooter className={classes.cardFooter}>
                                 <Button simple color="info" size="lg" type='submit'>
-                                    Get started
+                                    Get Changed
                                   </Button>
                             </CardFooter>
                         </form>
