@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect,useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import "./Board.css";
 import BoardActions from '../../store/actions/matchAtions';
@@ -9,45 +9,57 @@ import {faCircle} from "@fortawesome/free-regular-svg-icons";
 import {ResultIdentification} from './ResultIdentification';
 import {boardConst} from './board.Cfg';
 import {boardActions} from '../../store/actions/matchAtions';
-
+import {useToasts} from 'react-toast-notifications';
 
 function Board() {
 
-    const {stepNumber, history} = useSelector(state => ({
+    const {stepNumber, history,boardID,owner} = useSelector(state => ({
         stepNumber: state.match.stepNumber,
         history: state.match.history,
+        boardID: state.match.boardID,
+        owner: state.match.owner,
     }));
+
+
+    const userID = useSelector(state => state.auth.userID);
+    const socket = useSelector(state => state.socket.socket);
+
     const dispatch = useDispatch();
 
+    
     const [currBoard,setCurrBoard] = useState(
         stepNumber===0?history[0].squares :history[stepNumber].squares
         );
-    const [isXTurn, setIsXTurn] = useState(stepNumber% 2);
+    //const [isXTurn, setIsXTurn] = useState(stepNumber% 2);
+    const [isXTurn, setIsXTurn] = useState(
+        userID === owner.userID?true:false
+    );
     const [position, setPosition] = useState(-1);
     const [winner,setWinner] = useState({});
-    useEffect(() =>{
-        let tempBoard = Array.from(currBoard).slice();
-        
-        const result = ResultIdentification.calculateWinner(tempBoard,position,boardConst.SIZE_BOARD,boardConst.STEP);
-        //ván đấu kết thúc
-        if (result)
-        {
-            setWinner(result);
-            console.log("Winning");
-        }
+    const [firstStep, setFirstStep] = useState(isXTurn);
 
-    },[currBoard, position]);
+    const {addToast}= useToasts();
 
-    const handleClick = (i) =>{
+    const handleClick = useCallback((i, isFromPlayer) =>{
         //tạo bàn cờ từ bàn cờ hiện tại
         let tempBoard = Array.from(currBoard).slice();
+        //B1: nước đầu tiên do chủ bàn cờ đánh trước
+        if(!firstStep){
+            addToast(`watting for ${owner.fullname} make first move`, 
+            { 
+                appearance: 'success',
+                autoDismiss: true,
+            });
+            return;
+        }
+       
          //B2: Kiểm tra xem van đấu đã hết thúc hay chưa
         if (ResultIdentification.calculateWinner(tempBoard,position,boardConst.SIZE_BOARD,boardConst.STEP)
         || tempBoard[i])
         {
             return;
         }
-
+        
         //B3: Xác định lượt
         // is x turn
         if (isXTurn)
@@ -64,15 +76,70 @@ function Board() {
         setPosition(i);
       
         //B5: realtime lượt đánh 
-
+        if(!isFromPlayer)
+        {
+            //console.log("sedding from");
+            socket.emit("send_position", JSON.stringify({boardID,i}));
+        }
         
         //B6: Lưu lịch sử các bước của ván đấu
         const newHistory = {
-            squares: currBoard,
+            squares: tempBoard,
             pos: i
         };
         dispatch(boardActions.saveHistory(newHistory));
-    }
+    },[addToast, boardID, currBoard, dispatch, firstStep, isXTurn, owner.fullname, position, socket])
+    
+    useEffect(() =>{
+        let tempBoard = Array.from(currBoard).slice();
+        
+        const result = ResultIdentification.calculateWinner(tempBoard,position,boardConst.SIZE_BOARD,boardConst.STEP);
+        //ván đấu kết thúc
+        if (result)
+        {
+            setWinner(result);
+            console.log("Winning");
+        }
+        if (position !==-1 || !firstStep)
+        {
+            socket.on('receive_position', (data)=>{
+                const receive = JSON.parse(data);
+                console.log(`[Step recive]: ${data}`);
+                setFirstStep(true);
+                //handleClick(receive.position, true);
+                const i = receive.i;
+                if (result|| tempBoard[i])
+                {
+                    return;
+                }
+               
+                //B3: Xác định lượt
+                // is x turn
+                if (isXTurn)
+                {
+                    tempBoard[i] = 'X';
+                }
+                else{
+                    tempBoard[i] = "O";
+                }
+            
+                //B4: cập nhật các thông số
+                setCurrBoard(tempBoard);
+                setIsXTurn(!isXTurn);
+                setPosition(i);
+
+
+                const newHistory = {
+                    squares: tempBoard,
+                    pos: i
+                };
+                dispatch(boardActions.saveHistory(newHistory));
+                });
+        }
+
+    },[currBoard, dispatch, firstStep, isXTurn, position, socket]);
+
+    
 
     const setGridDisplay = () =>{
         return {

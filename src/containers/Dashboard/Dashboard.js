@@ -32,7 +32,7 @@ function Dashboard() {
 
         //Lời mời tham gia ván đấu được chấp nhận
         socket.on("start-game", (info)=>{
-            console.log('goto');
+            
             history.push(`/igomoku/board/${info}`);
         });
        
