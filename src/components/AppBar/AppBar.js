@@ -26,6 +26,9 @@ function AppBar() {
 
     function logout(){
       dispatch(authActions.signOut);
+      dispatch({
+        type: "match/restore"
+      });
       socket.emit("sign-out", {userID});
     }
 

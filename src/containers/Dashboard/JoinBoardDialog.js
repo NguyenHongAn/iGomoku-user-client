@@ -29,8 +29,8 @@ function JoinBoardDialog({show, handleClose,player}) {
     const payload = {
       boardID: player.boardID,
       boardName: player.boardName,
-      owner: player.player,
-      player: player.owner //response.data.player
+      owner: player.owner,
+      player: player.player //response.data.player
     }
     dispatch({
       type: "match/create",

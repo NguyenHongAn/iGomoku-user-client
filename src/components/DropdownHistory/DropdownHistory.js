@@ -15,10 +15,10 @@ function DropdownHistory() {
 
     return (
         <Dropdown style={{width: "50%"}} as={ButtonGroup}>
-        <Button variant="dark" >Match History</Button>
-      
-        <Dropdown.Toggle split variant="dark" id="dropdown-split-basic" />
-      
+       
+        <Dropdown.Toggle split variant="dark" id="dropdown-split-basic">
+          Match History
+        </Dropdown.Toggle>
         <Dropdown.Menu>
           {
             history.map((step,i) =>{

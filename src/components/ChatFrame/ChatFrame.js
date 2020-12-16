@@ -1,5 +1,5 @@
 import ChatMessageHistory from './ChatMessageHistory/ChatMessageHistory';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useSelector} from "react-redux";
 import {Button} from 'react-bootstrap';
  
@@ -8,40 +8,34 @@ function ChatFrame() {
     const {fullname} = useSelector(state => ({
         fullname: state.auth.fullname
     }));
+    const socket = useSelector(state => state.socket.socket);
 
-    const [messages, setMessages] = useState( [
-        { message: 'Hi Josh', fullname: 'Tuesday' },
-        { message: 'How are you?', fullname: 'Wednesday' },    
-        { message: 'How are you?', fullname: 'Wednesday' } ,           
-        { message: 'How are you?', fullname: 'Wednesday' }  ,          
-        { message: 'How are you?', fullname: 'Wednesday' },            
-        { message: 'How are you?', fullname: 'Wednesday' },            
-        { message: 'How are you?', fullname: 'Wednesday' }  ,          
-        { message: 'How are you?', fullname: 'Wednesday' }  ,    
-        { message: 'How are you?', fullname: 'Wednesday' }  ,    
-        { message: 'How are you?', fullname: 'Wednesday' }  ,    
-        { message: 'How are you?', fullname: 'Wednesday' }  ,    
-        { message: 'How are you?', fullname: 'Wednesday' }  ,    
-        { message: 'How are you?', fullname: 'Wednesday' }  ,    
-        { message: 'How are you?', fullname: 'Wednesday' }  ,    
-        { message: 'How are you?', fullname: 'Wednesday' }  ,    
-        { message: 'How are you?', fullname: 'Wednesday' }  ,    
-        { message: 'How are you?', fullname: 'Wednesday' }  ,                                   
-        { message: 'How are you?', fullname: 'Wednesday' }  ,    
-        { message: 'How are you?', fullname: 'Wednesday' }  ,    
-        { message: 'How are you?', fullname: 'Wednesday' }  ,    
-        { message: 'How are you?', fullname: 'Wednesday' }  ,    
-        { message: 'How are you?', fullname: 'Wednesday' }  ,    
-        { message: 'How are you?', fullname: 'Wednesday' }  ,    
-     ]);
+    const boardID = useSelector(state=> state.match.boardID);
+
+    const [messages, setMessages] = useState([]);
 
     const [inputText, setinputText] = useState("");
+
+     useEffect(()=>{
+       
+        socket.on("receive_message", (dataReveive)=>{
+
+            const messageRevcive = JSON.parse(dataReveive);
+            //console.log(messageRevcive);
+            const nextMessages = messages.concat({
+                message: messageRevcive.inputText, 
+                fullname: messageRevcive.fullname,
+            });
+            setMessages(nextMessages);
+        })
+     },[messages, socket]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         const nextMessages = messages.concat([{ message: inputText, fullname }]);
         const nextInputText = '';
-        console.log(nextMessages);
+        //real time to another player in board
+        socket.emit("send_message", JSON.stringify({boardID, fullname, inputText}));
         setMessages(nextMessages);
         setinputText(nextInputText);
      };
