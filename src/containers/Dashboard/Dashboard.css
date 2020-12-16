@@ -24,3 +24,16 @@
   display: table-cell;
   float: none;
 }
+
+.modal-style
+{
+    border: 0px!important;
+    margin-top: 50px;
+    
+}
+
+.modal-style div div
+{
+    background-color: #1a1b20!important;    
+    color: white;
+}

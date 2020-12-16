@@ -1,14 +1,23 @@
 
+const openCreateDialog = {
+    type: "match/open",
+    payload: true,
+}
 
-const createNewBoard = (size = 16, boardID, user1, user2) =>{
+const closeCreateDialog = {
+    type: "match/close",
+    payload: false,
+}
+
+const createNewBoard = (size = 16, boardID, owner, player) =>{
     return (dispatch) =>{
         dispatch({
-            type: 'board/create',
+            type: 'match/create',
             payload: {
                 size, 
                 boardID,
-                user1, 
-                user2
+                owner, 
+                player
             },
         });
     }
@@ -17,7 +26,7 @@ const createNewBoard = (size = 16, boardID, user1, user2) =>{
 const saveHistory = (history) =>{
     return (dispatch) =>{
         dispatch({
-            type: 'board/saveHistory',
+            type: 'match/saveHistory',
             payload: history
         });
     }
@@ -26,14 +35,14 @@ const saveHistory = (history) =>{
 const winningDisplay = (winner) =>{
     return (dispatch) =>{
         dispatch({
-            type: 'board/finnishMatch',
+            type: 'match/finnishMatch',
             payload: winner
         });
     }
 }
 
 const restoreDefault = {
-    type: "board/restore",
+    type: "match/restore",
     payload: "restore"
 }
 
@@ -41,4 +50,7 @@ export const boardActions = {
     createNewBoard,
     saveHistory,
     winningDisplay,
+    restoreDefault,
+    openCreateDialog,
+    closeCreateDialog,
 }

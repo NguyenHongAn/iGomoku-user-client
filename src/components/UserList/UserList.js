@@ -41,7 +41,7 @@ function UserList() {
                     newUserList.sort((a,b) =>{
                         return b.elo - a.elo;
                     });
-
+                    console.log(listOnlineUser);
                     dispatch(ListUserActions.updateOnlineUserlist(newUserList));
 
                     if (newUserList.length === 0)

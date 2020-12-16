@@ -2,8 +2,6 @@ import React from 'react';
 import ChatMessage from '../ChatMessage/ChatMessage';
 
 function ChatMessageHistory({messages}) {   
-    console.log(messages);
-
     const createMessage = (message, index) => {
         const liStyles = {
            backgroundColor: ( index % 2 === 1 ) ? '#ddd' : '#efefef',

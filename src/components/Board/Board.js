@@ -1,21 +1,21 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import "./Board.css";
-import BoardActions from '../../store/actions/boardAtions';
+import BoardActions from '../../store/actions/matchAtions';
 import Square from './Square/Square';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import {faCircle} from "@fortawesome/free-regular-svg-icons";
 import {ResultIdentification} from './ResultIdentification';
 import {boardConst} from './board.Cfg';
-import {boardActions} from '../../store/actions/boardAtions';
+import {boardActions} from '../../store/actions/matchAtions';
 
 
 function Board() {
 
     const {stepNumber, history} = useSelector(state => ({
-        stepNumber: state.board.stepNumber,
-        history: state.board.history,
+        stepNumber: state.match.stepNumber,
+        history: state.match.history,
     }));
     const dispatch = useDispatch();
 
@@ -71,7 +71,6 @@ function Board() {
             squares: currBoard,
             pos: i
         };
-        console.log(newHistory);
         dispatch(boardActions.saveHistory(newHistory));
     }
 

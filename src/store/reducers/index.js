@@ -3,7 +3,7 @@ import listOnlUserReducer from './listOnlUserReducer';
 import authReducer from './authReducer';
 import socketReducer from './socketReducer';
 import boardListReducer from './boardListReducer';
-import boardReduecer from './boardReducer';
+import matchReduecer from './matchReducer';
 
 
 
@@ -13,7 +13,7 @@ const allReducers = combineReducers({
     auth: authReducer,
     onlineUsers: listOnlUserReducer,
     boardList: boardListReducer,
-    board: boardReduecer,
+    match: matchReduecer,
 })
 
 export default allReducers;

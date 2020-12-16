@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import {Button} from "react-bootstrap";
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrophy, faTimes, faCoins } from "@fortawesome/free-solid-svg-icons";
 import '../UserList.css';
@@ -18,13 +18,14 @@ function UserListItem({user}) {
         userID: state.auth.userID,
     }));
 
+    const openCreateDialog= useSelector(state => state.match.isOpen);
+    const socket = useSelector(state => state.socket.socket);
+
     const history = useHistory();
     const addToast = useToasts();
-
+    const dispatch = useDispatch();
     const handleOpenDetail = () => setIsOpen(!isOpen);
     
-
-
 
     const sendFriendRequest = async () =>{
         //đăng nhập để gửi lời mời kết bạn
@@ -64,6 +65,11 @@ function UserListItem({user}) {
             }
            
         }
+    }
+
+    const createBoard = () =>{
+        dispatch({type: "match/open", payload: true});
+        console.log(user);
     }
 
     return (
@@ -115,7 +121,8 @@ function UserListItem({user}) {
             </div>
         <div className="elo-display"><FontAwesomeIcon color="yellow" icon={faTrophy}></FontAwesomeIcon> {user.elo}</div>
         <div>
-            <Button className="btn-friend-request" variant="info" size='sm'>Challenge</Button>
+            <Button className="btn-friend-request" variant="info" size='sm'
+            onClick={createBoard}>Challenge</Button>
         </div>
         </div>}
         </>

@@ -6,7 +6,7 @@ import {useSelector} from 'react-redux';
 function DropdownHistory() {
 
     const {history} = useSelector(state => ({
-      history: state.board.history,
+      history: state.match.history,
     }));
 
     const jumpToMove = move =>{

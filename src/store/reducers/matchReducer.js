@@ -6,22 +6,29 @@ const defaultState = {
                             //bàn cờ hiện tại
     stepNumber: 0,          //các bước đã thực hiện     
     boardID: "",            //Id của ván cờ 
-    user1: {},              //thông tin người tạo
-    user2: {},              //thông tin người chơi
+    owner: {},              //thông tin người tạo
+    player: {},              //thông tin người chơi
     winner: {},
+    isOpen: false,
+    status: 0,              //-1:deny, 0: not create, 1:watting 2:palying
 }
 
 const boardReducer = (state = defaultState, action) =>{
     switch(action.type)
     {
-        case "board/create":
+        case "match/open":
+            return {
+                ...state,
+                isOpen: action.payload,
+            }
+        case "match/create":
             return {
                 ...state,
                 boardID: action.payload.boardID,
-                user1: action.payload.user1,
-                user2: action.payload.user2,
+                owner: action.payload.owner,
+                player: action.payload.player,
             }
-        case 'board/saveHistory':
+        case 'match/saveHistory':
           {  
             const tempArray = Array.from(state.history);
             tempArray.push(action.payload);
@@ -32,12 +39,12 @@ const boardReducer = (state = defaultState, action) =>{
             }
         }
         
-        case "board/finnishMatch":
+        case "match/finnishMatch":
             return {
                 ...state,
                 winner: action.payload,
             }
-        case "board/restore":
+        case "match/restore":
             return {
             
                 history: [{                 //lịch sử các bước chơi cờ 
@@ -47,8 +54,8 @@ const boardReducer = (state = defaultState, action) =>{
                                         //bàn cờ hiện tại
                 stepNumber: 0,          //các bước đã thực hiện     
                 boardID: "",            //Id của ván cờ 
-                user1: {},              //thông tin người tạo
-                user2: {},              //thông tin người chơi
+                owner: {},              //thông tin người tạo
+                player: {},              //thông tin người chơi
                 winner: {},               
             }
         default: 
