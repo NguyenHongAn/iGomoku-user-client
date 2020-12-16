@@ -100,7 +100,7 @@ export default function LoginPage() {
 
           dispatch(authActions.signIn(authData));
 
-         history.push("/igomoku");
+          history.push("/igomoku");
         }
       })
       .catch(function (error) {

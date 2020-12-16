@@ -34,19 +34,19 @@ function UserList() {
     useEffect(() =>{
         //get online user list 
         const fetchData = async () =>{
-             socket.emit("request-list-online-user", {userID});
+            socket.emit("request-list-online-user", {userID});
 
             socket.on("response-list-online-user", (listOnlineUser)=>{
                     const newUserList = JSON.parse(listOnlineUser).filter(user => user._id !== userID);
                     newUserList.sort((a,b) =>{
                         return b.elo - a.elo;
                     });
-                    console.log(listOnlineUser);
+        
                     dispatch(ListUserActions.updateOnlineUserlist(newUserList));
 
                     if (newUserList.length === 0)
                     {
-                        addToast("No user online", {
+                        addToast("No other user online", {
                             appearance: 'info',
                             autoDismiss: true,
                         });

@@ -55,13 +55,13 @@ function BoardContainer() {
                 <div className="record-dropdown"> 
                     <div className="username" style={{color: "red", textAlign: "center"}}>
                         <h1>
-                            owner.fullname
+                        {owner.fullname}
                         </h1>
                     </div>
                     <img src={vs} alt="VS"/>
                     <div className="username "style={{textAlign: "center"}}>
                         <h1>
-                            owner.fullname
+                            {player.fullname}
                         </h1>
                     </div>
                     <DropdownHistory></DropdownHistory>

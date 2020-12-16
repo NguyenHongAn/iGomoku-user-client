@@ -6,6 +6,7 @@ const defaultState = {
                             //bàn cờ hiện tại
     stepNumber: 0,          //các bước đã thực hiện     
     boardID: "",            //Id của ván cờ 
+    boardName: "",
     owner: {},              //thông tin người tạo
     player: {},              //thông tin người chơi
     winner: {},
@@ -26,8 +27,20 @@ const boardReducer = (state = defaultState, action) =>{
                 ...state,
                 boardID: action.payload.boardID,
                 owner: action.payload.owner,
+                boardName: action.payload.boardName,
                 player: action.payload.player,
+                status: 1,
             }
+        case "match/storePlayerTemporary":
+        return{
+            ...state,
+            player: action.payload,
+        }
+        case "match/clearPlayer": 
+        return {
+            ...state,
+            player: {},
+        }
         case 'match/saveHistory':
           {  
             const tempArray = Array.from(state.history);

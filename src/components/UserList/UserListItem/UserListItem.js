@@ -22,7 +22,7 @@ function UserListItem({user}) {
     const socket = useSelector(state => state.socket.socket);
 
     const history = useHistory();
-    const addToast = useToasts();
+    const {addToast} = useToasts();
     const dispatch = useDispatch();
     const handleOpenDetail = () => setIsOpen(!isOpen);
     
@@ -41,7 +41,7 @@ function UserListItem({user}) {
                     toUserId: user._id,
                 }
                 
-                console.log(data);
+
                 const response = await axios.post(`${APIURL}/user/send-friend-invitation`, data, 
                 {
                     headers:
@@ -67,9 +67,12 @@ function UserListItem({user}) {
         }
     }
 
-    const createBoard = () =>{
+    const challenge = () =>{
         dispatch({type: "match/open", payload: true});
-        console.log(user);
+        dispatch({
+            type: "match/storePlayerTemporary",
+            payload:  user
+        });
     }
 
     return (
@@ -122,7 +125,7 @@ function UserListItem({user}) {
         <div className="elo-display"><FontAwesomeIcon color="yellow" icon={faTrophy}></FontAwesomeIcon> {user.elo}</div>
         <div>
             <Button className="btn-friend-request" variant="info" size='sm'
-            onClick={createBoard}>Challenge</Button>
+            onClick={challenge}>Challenge</Button>
         </div>
         </div>}
         </>
