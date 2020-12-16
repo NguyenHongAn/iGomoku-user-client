@@ -99,7 +99,10 @@ export default function ProfilePage(props) {
                         appearance: "success",
                         autoDismiss: true,
                     });
-                    history.push("/profile");
+
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
                 }
             })
             .catch(function (error) {

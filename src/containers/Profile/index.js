@@ -25,7 +25,6 @@ import profile from "../../assets/img/faces/male_avatar.png";
 
 import studio1 from "../../assets/img/examples/studio-1.jpg";
 import studio2 from "../../assets/img/examples/studio-2.jpg";
-import studio3 from "../../assets/img/examples/studio-3.jpg";
 import studio4 from "../../assets/img/examples/studio-4.jpg";
 import studio5 from "../../assets/img/examples/studio-5.jpg";
 import work1 from "../../assets/img/examples/olu-eletu.jpg";
@@ -58,7 +57,7 @@ export default function ProfilePage(props) {
 
 
   // redux
-  const { jwtToken, fullname, userId } = useSelector(state => ({
+  const {userId } = useSelector(state => ({
     jwtToken: state.auth.jwtToken,
     fullname: state.auth.fullname,
     userId: state.auth.userID
