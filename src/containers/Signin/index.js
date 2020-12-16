@@ -10,7 +10,6 @@ import FacebookLogin from "react-facebook-login";
 import GoogleLogin from 'react-google-login';
 import {useSelector, useDispatch} from 'react-redux';
 import {authActions} from '../../store/actions/authAction';
-import Header from '../../components/Header/Header.js';
 
 
 const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_API_DEPLOY_URL;
