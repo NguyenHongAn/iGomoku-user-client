@@ -11,7 +11,9 @@ const defaultState = {
     player: {},              //thông tin người chơi
     winner: {},
     isOpen: false,
-    status: 0,              //-1:deny, 0: not create, 1:watting 2:palying
+    status: 0,              //-1:deny, 0:not create, 1:watting, 2:playing
+    eloGot: 0,
+
 }
 
 const boardReducer = (state = defaultState, action) =>{
@@ -29,7 +31,7 @@ const boardReducer = (state = defaultState, action) =>{
                 owner: action.payload.owner,
                 boardName: action.payload.boardName,
                 player: action.payload.player,
-                status: 1,
+                status: action.payload.status,
             }
         case "match/storePlayerTemporary":
         return{
@@ -41,6 +43,13 @@ const boardReducer = (state = defaultState, action) =>{
             ...state,
             player: {},
         }
+        case "match/updateInfo":
+            return {
+                ...state,
+                owner: action.payload.owner,
+                player: action.payload.player,
+                eloGot: action.payload.eloGot,
+            }
         case 'match/saveHistory':
           {  
             const tempArray = Array.from(state.history);
@@ -67,9 +76,13 @@ const boardReducer = (state = defaultState, action) =>{
                                         //bàn cờ hiện tại
                 stepNumber: 0,          //các bước đã thực hiện     
                 boardID: "",            //Id của ván cờ 
+                boardName: "",
                 owner: {},              //thông tin người tạo
                 player: {},              //thông tin người chơi
-                winner: {},               
+                winner: {},   
+                status: 0,              //-1:deny, 0:not create, 1:watting, 2:playing
+                eloGot: 0,        
+                isOpen: false,    
             }
         default: 
         return state;

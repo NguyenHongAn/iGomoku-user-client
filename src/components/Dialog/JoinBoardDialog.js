@@ -3,17 +3,27 @@ import {Modal, Button} from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import {useSelector, useDispatch} from "react-redux";
+import {useToasts} from 'react-toast-notifications';
+import axios from "axios";
 import {useHistory} from 'react-router-dom';
+
+const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_DEPLOY_APIURL;
 
 
 function JoinBoardDialog({show, handleClose,player}) {
 
   const dispatch = useDispatch();
 
+  const {addToast} = useToasts();
   const {socket, socketID} = useSelector(state => ({
     socket: state.socket.socket,
     socketID: state.socket.socketID
   }));
+
+  const {jwtToken, userID} = useSelector(state =>({
+    jwtToken: state.auth.jwtToken,
+    userID: state.auth.userID,
+  }))
 
   const history = useHistory();
   const denyInvite =()=>{
@@ -25,23 +35,50 @@ function JoinBoardDialog({show, handleClose,player}) {
 
   const acceptInvite = async()=>{
     handleClose();
-    //get playerID
-    const payload = {
-      boardID: player.boardID,
-      boardName: player.boardName,
-      owner: player.owner,
-      player: player.player //response.data.player
-    }
-    dispatch({
-      type: "match/create",
-      payload: payload
-    })
+    //send joinboard request
+    try {
+      const boardID = player.boardID;
+      const data = {
+        boardID: boardID,
+        userID: userID,
+      }
 
-    const boardId = payload.boardID;
+      const response = await axios.post(`${APIURL}/board/on-join`, data,
+      {
+         headers:
+         {
+             'Authorization': `Bearer ${jwtToken}`,
+         }
+     });
+
+      const payload = {
+        boardID: player.boardID,
+        boardName: player.boardName,
+        owner: player.ownerID, //id người tạo
+        player: userID,       //id người chập nhận lời mời cũng là người chơi
+        status: 2
+      };
+      
+      dispatch({
+        type: "match/create",
+        payload: payload
+      });
+      
+      if(response.status ===200)
+      { 
+        socket.emit("accept_invite", ({boardID}));
+        history.push(`/board/${boardID}`);
+      }
+     
+    } catch (error) {
+      console.log(error);
+      addToast(error.response.data.message, {
+        appearance: "error",
+        autoDismiss: true,
+      });
+    }
+    //get playerID
     
-    //console.log(`/board/${payload.boardID}`);
-    socket.emit("accept-invite", ({boardId}));
-    history.push(`/igomoku/board/${payload.boardID}`);
   }
 
     return (

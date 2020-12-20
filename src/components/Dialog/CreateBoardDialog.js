@@ -4,7 +4,7 @@ import {Modal, Form, Button} from 'react-bootstrap';
 import axios from "axios";
 import {useSelector, useDispatch} from 'react-redux';
 import {useToasts} from 'react-toast-notifications';
-const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_API_DEPLOY_URL;
+const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_DEPLOY_APIURL;
 
 function CreateBoardDialog({show, handleClose}) {
 
@@ -35,7 +35,7 @@ function CreateBoardDialog({show, handleClose}) {
              {
                 headers:
                 {
-                    'x-access-token': jwtToken,
+                    'Authorization': `Bearer ${jwtToken}`,
                 }
             });
             //tạo payload
@@ -46,7 +46,8 @@ function CreateBoardDialog({show, handleClose}) {
                     fullname,
                     userID
                 },
-                player: player //response.data.player
+                player: player, //response.data.player
+                status: 1,
             }
 
             // console.log(payload);
@@ -58,7 +59,13 @@ function CreateBoardDialog({show, handleClose}) {
 
             //thông báo tới người choi được mời qua socket ID
             
-            socket.emit("invite-player", JSON.stringify(payload));
+            socket.emit("invite_player", {
+                ownerID: userID,                //id người tạo bàn cờ
+                fullname: fullname,
+                boardID: payload.boardID,
+                boardName: payload.boardName,
+                socketID: player.socketID
+            });
             addToast("Create match success, Waitting fo opponent", 
             { 
                 appearance: 'success',

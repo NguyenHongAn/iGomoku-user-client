@@ -6,7 +6,7 @@ import UserListItem from './UserListItem/UserListItem';
 import './UserList.css';
 import { useToasts } from "react-toast-notifications";
 import axios from 'axios';
-const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_API_DEPLOY_URL;
+const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_DEPLOY_APIURL;
 
 function UserList() {
     
@@ -58,7 +58,7 @@ function UserList() {
             {
                 const config = {
                     headers: {
-                       'x-access-token': jwtToken,
+                       'Authorization': `Bearer ${jwtToken}`,
                     },
                     
                     params: {
@@ -74,6 +74,7 @@ function UserList() {
                     } 
                     
                 } catch (error) {
+                    console.log(error);
                     addToast(error.response.data.message, {
                         appearance: "error",
                         autoDismiss: true,
@@ -116,7 +117,7 @@ function UserList() {
                 {
                     onlineUsers.map((user) =>{
                         return (
-                           <UserListItem user={user}></UserListItem>
+                           <UserListItem user={user} ket={user._id}></UserListItem>
                         )
                     })
                 }                     

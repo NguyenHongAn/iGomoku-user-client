@@ -8,7 +8,7 @@ import axios from "axios";
 import {useHistory} from 'react-router-dom';
 import {useToasts} from 'react-toast-notifications';
 
-const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_API_DEPLOY_URL;
+const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_DEPLOY_APIURL;
 
 function UserListItem({user}) {
 
@@ -18,10 +18,10 @@ function UserListItem({user}) {
         userID: state.auth.userID,
     }));
 
-    const openCreateDialog= useSelector(state => state.match.isOpen);
-    const socket = useSelector(state => state.socket.socket);
-
+    // const openCreateDialog= useSelector(state => state.match.isOpen);
+    // const socket = useSelector(state => state.socket.socket);
     const history = useHistory();
+
     const {addToast} = useToasts();
     const dispatch = useDispatch();
     const handleOpenDetail = () => setIsOpen(!isOpen);
@@ -46,7 +46,7 @@ function UserListItem({user}) {
                 {
                     headers:
                     {
-                        'x-access-token': jwtToken,
+                        'Authorization': `Bearer ${jwtToken}`,
                     }
                 });
                 if (response.status  === 200)

@@ -21,7 +21,7 @@ import GridItem from "../../components/Grid/GridItem.js";
 import NavPills from "../../components/NavPills/NavPills.js";
 import Parallax from "../../components/Parallax/Parallax.js";
 
-import profile from "../../assets/img/faces/male_avatar.png";
+//import profile from "../../assets/img/faces/avatar.png";
 
 import studio1 from "../../assets/img/examples/studio-1.jpg";
 import studio2 from "../../assets/img/examples/studio-2.jpg";
@@ -41,7 +41,7 @@ import EditInfoElement from './EditInfo.js';
 
 import styles from "../../assets/jss/material-kit-react/views/profilePage.js";
 
-const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_API_DEPLOY_URL;
+const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_DEPLOY_APIURL;
 
 
 const useStyles = makeStyles(styles);
@@ -84,7 +84,8 @@ export default function ProfilePage(props) {
 
   return (
     <div>
-      <Parallax small filter image={require("../../assets/img/faces/male_avatar.png")} />
+      <Parallax small filter />
+      {/* image={require("../../assets/img/faces/male_avatar.png")} /> */}
       <div className={classNames(classes.main, classes.mainRaised)}>
         <div>
           <div className={classes.container}>
@@ -92,7 +93,7 @@ export default function ProfilePage(props) {
               <GridItem xs={12} sm={12} md={6}>
                 <div className={classes.profile}>
                   <div>
-                    <img src={profile} alt="..." className={imageClasses} />
+                    {/* <img src={profile} alt="..." className={imageClasses} /> */}
                   </div>
                   <div className={classes.name}>
                     <h3 className={classes.title}>{basicInfo.fullname}</h3>

@@ -4,24 +4,35 @@ import './BoardContainer.css';
 import Board from '../../components/Board/Board';
 import DropdownHistory from '../../components/DropdownHistory/DropdownHistory';
 import vs from '../../assets/img/vs-image.png';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import ChatFrame from '../../components/ChatFrame/ChatFrame';
 import Loading from '../../components/Loading';
 import {useHistory} from 'react-router-dom';
+import {useToasts} from 'react-toast-notifications';
+
+import axios from 'axios';
+const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_DEPLOY_APIURL;
 
 function BoardContainer() {
     
-    const {owner, player, winner, status} = useSelector(state => ({
-        owner: state.match.owner,
-        player: state.match.player,
+    const {winner, status, boardID} = useSelector(state => ({
         winner: state.match.winner,
         status: state.match.status,
+        boardID: state.match.boardID,
+        // owner: state.match.owner,
+        // player: state.match.player,
+        eloGot: state.match.eloGot
     }))
     const [isLoading, setisLoading] = useState(true);
+    const [owner,setOwner] = useState({});
+    const [player, setPlayer] = useState({});
+    const {addToast} = useToasts();
+    const dispatch = useDispatch();
 
     const history = useHistory();
 
     useEffect(()=>{
+       const fetchData = async ()=>{ 
         if (status === 1)
         {
             setisLoading(true);
@@ -30,10 +41,35 @@ function BoardContainer() {
         {
             history.push('/igmoku');
         }
-        else{
-            //setisLoading(false);
+        
+        try {
+            const response = await axios.get(`${APIURL}/board/${boardID}`);
+            const dataReceive = response.data;
+            //console.log({dataReceive});
+
+            dispatch({
+                type: "match/updateInfo",
+                payload: {
+                    owner: dataReceive.owner,
+                    player: dataReceive.player,
+                    eloGot: dataReceive.eloGot,
+                    status: dataReceive.boardStatus,
+                }
+            });
+            setOwner(dataReceive.owner);
+            setPlayer(dataReceive.player);
+
+        } catch (error) {
+            console.log({error});
+            addToast(error.response.data.message,{
+                appearance: "error",
+                autoDismiss: true,
+            });           
         }
-    },[history, status]);
+    };
+
+        fetchData();
+    },[addToast, boardID, dispatch, history, status]);
 
     
     return (

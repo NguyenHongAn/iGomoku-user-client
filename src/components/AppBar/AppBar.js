@@ -17,7 +17,7 @@ function AppBar() {
    
     const socket = useSelector(state => state.socket.socket);
     const dispatch = useDispatch();
-    const location = useLocation();
+    //const location = useLocation();
 
     useEffect(() =>{
       

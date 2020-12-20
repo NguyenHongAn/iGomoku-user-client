@@ -8,11 +8,11 @@ import { Link, useHistory } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import FacebookLogin from "react-facebook-login";
 import GoogleLogin from 'react-google-login';
-import {useSelector, useDispatch} from 'react-redux';
+import { useDispatch} from 'react-redux';
 import {authActions} from '../../store/actions/authAction';
 
 
-const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_API_DEPLOY_URL;
+const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_DEPLOY_APIURL;
 const APPID_FB = process.env.REACT_APP_APPID_FB;
 const APPID_GG = process.env.REACT_APP_APPID_GG;
 
@@ -24,10 +24,8 @@ export default function LoginPage() {
 
   //redux 
   const dispatch = useDispatch();
-
-  //use History để điều hướng URL
   const history = useHistory();
-
+  
   function validateForm() {
     return username.length > 0 && password.length > 0;
   }
@@ -154,7 +152,7 @@ export default function LoginPage() {
 
   return (
     <>
-    <div class="overlay"></div>
+    <div className="overlay"></div>
     <div className="loginPage">
       <form onSubmit={handleSubmit}>
         <h1 className="h3 mb-3 font-weight-normal text-center">
@@ -184,7 +182,7 @@ export default function LoginPage() {
         <p className="text-center" style={{ marginTop: "1rem" }}>
           OR
         </p>
-        <FormGroup controlId="username" bsSize="large">
+        <FormGroup controlId="username">
           <FormLabel>Username</FormLabel>
           <FormControl
             autoFocus
@@ -192,7 +190,7 @@ export default function LoginPage() {
             onChange={(e) => setUsername(e.target.value)}
           />
         </FormGroup>
-        <FormGroup controlId="password" bsSize="large">
+        <FormGroup controlId="password">
           <FormLabel>Password</FormLabel>
           <FormControl
             value={password}

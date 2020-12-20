@@ -19,7 +19,7 @@ import CustomInput from "../../components/CustomInput/CustomInput.js";
 
 import styles from "../../assets/jss/material-kit-react/views/profilePage.js";
 
-const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_API_DEPLOY_URL;
+const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_DEPLOY_APIURL;
 
 const useStyles = makeStyles(styles);
 

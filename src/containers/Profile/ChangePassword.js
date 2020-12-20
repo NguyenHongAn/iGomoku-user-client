@@ -29,7 +29,7 @@ import AuthUtils from "../../utils/AuthUtils.js";
 
 import styles from "../../assets/jss/material-kit-react/views/profilePage.js";
 
-const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_API_DEPLOY_URL;
+const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_DEPLOY_APIURL;
 
 const useStyles = makeStyles(styles);
 
@@ -37,9 +37,6 @@ export default function ProfilePage(props) {
     const { addToast } = useToasts();
     const classes = useStyles();
     const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
-
-    //use History để điều hướng URL
-    const history = useHistory();
 
     // redux
     const { jwtToken, fullname, userId } = useSelector(state => ({

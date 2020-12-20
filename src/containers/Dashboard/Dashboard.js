@@ -2,10 +2,12 @@ import React, {useState, useEffect} from 'react';
 import UserList from '../../components/UserList/UserList';
 import './Dashboard.css';
 import {useSelector, useDispatch } from 'react-redux';
-import {useHistory} from "react-router-dom";
+import {useHistory} from 'react-router-dom';
 import {Row, Col, Container} from 'react-bootstrap';
-import JoinBoardDialog from './JoinBoardDialog';
-import CreateBoardDialog from './CreateBoardDialog';
+import JoinBoardDialog from '../../components/Dialog/JoinBoardDialog';
+import CreateBoardDialog from '../../components/Dialog/CreateBoardDialog';
+
+import {useToasts} from 'react-toast-notifications';
 
 
 function Dashboard() {
@@ -17,26 +19,28 @@ function Dashboard() {
     const [player, setPlayer] = useState({});
     const dispatch = useDispatch();
 
+    const history = useHistory();
+
     const handleInviteDialog = () => setOpenInviteDialog(!openInviteDialog);
 
     const handleCreateDialog = () => dispatch({type: "match/open", payload: !openCreateDialog});
+    const {addToast} = useToasts();
 
-    const history = useHistory();
     useEffect(() =>{
         //Nhận lời mời tham gia ván đấu từ người khác
-        socket.on("invite-player", (info)=>{
+        socket.on("invite_player", (info)=>{
             const dataRecive = JSON.parse(info);
             setOpenInviteDialog(!openInviteDialog);
             setPlayer(dataRecive);
         });
 
         //Lời mời tham gia ván đấu được chấp nhận
-        socket.on("start-game", (info)=>{
-            
-            history.push(`/igomoku/board/${info}`);
+        socket.on("start_game", async (info)=>{
+           
+            history.push(`/board/${info}`);
         });
        
-    },[history, openInviteDialog, setPlayer, socket]);
+    },[addToast, dispatch, history, openInviteDialog, setPlayer, socket]);
 
     return (
         
