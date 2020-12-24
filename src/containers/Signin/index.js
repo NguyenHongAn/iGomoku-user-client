@@ -132,7 +132,8 @@ export default function LoginPage() {
           const authData = {
             jwtToken:  response.data.token,
             fullname:  response.data.account.fullname,
-            userID:  response.data.account._id
+            userID:  response.data.account._id,
+            autoMatch: response.data.autoMatch,
           }
 
           dispatch(authActions.signIn(authData));

@@ -1,18 +1,17 @@
 import React, {useEffect} from 'react';
-import {Navbar, Nav} from 'react-bootstrap';
+import {Navbar, Nav, Form} from 'react-bootstrap';
 import './AppBar.css';  
-import {Link, useLocation} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
 import {authActions} from "../../store/actions/authAction";
 
 function AppBar() {
-
-   
     //redux
-    const {jwtToken,fullname, userID} = useSelector(state => ({
+    const {jwtToken,fullname, userID, autoMatch} = useSelector(state => ({
           jwtToken: state.auth.jwtToken,
           fullname: state.auth.fullname,
           userID: state.auth.userID,
+          autoMatch: state.auth.autoMatch,
     }));
    
     const socket = useSelector(state => state.socket.socket);
@@ -37,7 +36,18 @@ function AppBar() {
     return (
         <header className="AppBar" >
         <Navbar className="bar-bg" expand="md">
-          <Link className="navbar-brand " to="/"><b style={{color: 'red', marginLeft: "10px", marginRight: "10px", fontSize: "20px"}}>iGomoku</b></Link>
+          <Link className="navbar-brand " to="/">
+            <b style={{color: 'red', marginLeft: "10px", marginRight: "10px", fontSize: "20px"}}>iGomoku</b>
+          </Link>
+          {jwtToken !== "invalid token :))"? 
+            <Form.Check 
+          type="switch"
+          id="custom-switch"
+          label="Auto find match"
+          className="auto-switch"
+          disabled={autoMatch}
+          />
+          :null}
           {jwtToken !== "invalid token :))"? (<Link className="text-light nav-link welcome" to="/profile"> Welcome, {fullname}</Link>) : null}
           <Navbar.Toggle  aria-controls="responsive-navbar-nav"/>
           <Navbar.Collapse id="responsive-navbar-nav">

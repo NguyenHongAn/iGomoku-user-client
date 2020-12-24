@@ -21,7 +21,7 @@ const signUp = (authData) =>{
     }
 }   
 
-export const authActions ={
+export const authActions = {
     signIn,
     signOut,
     signUp

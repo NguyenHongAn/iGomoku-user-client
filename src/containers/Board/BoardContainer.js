@@ -15,17 +15,17 @@ const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIUR
 
 function BoardContainer() {
     
-    const {winner, status, boardID} = useSelector(state => ({
+    const {winner,owner, player, status, boardID} = useSelector(state => ({
         winner: state.match.winner,
         status: state.match.status,
         boardID: state.match.boardID,
-        // owner: state.match.owner,
-        // player: state.match.player,
+        owner: state.match.owner,
+        player: state.match.player,
         eloGot: state.match.eloGot
     }))
     const [isLoading, setisLoading] = useState(true);
-    const [owner,setOwner] = useState({});
-    const [player, setPlayer] = useState({});
+    // const [owner,setOwner] = useState({});
+    // const [player, setPlayer] = useState({});
     const {addToast} = useToasts();
     const dispatch = useDispatch();
 
@@ -56,8 +56,8 @@ function BoardContainer() {
                     status: dataReceive.boardStatus,
                 }
             });
-            setOwner(dataReceive.owner);
-            setPlayer(dataReceive.player);
+            // setOwner(dataReceive.owner);
+            // setPlayer(dataReceive.player);
 
         } catch (error) {
             console.log({error});
