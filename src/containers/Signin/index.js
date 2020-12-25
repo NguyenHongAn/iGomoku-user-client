@@ -8,7 +8,7 @@ import { Link, useHistory } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import FacebookLogin from "react-facebook-login";
 import GoogleLogin from 'react-google-login';
-import { useDispatch} from 'react-redux';
+import { useSelector, useDispatch} from 'react-redux';
 import {authActions} from '../../store/actions/authAction';
 
 
@@ -23,6 +23,7 @@ export default function LoginPage() {
   const [isLoading, setLoading] = useState(false);
 
   //redux 
+  const socket = useSelector(state => state.socket.socket);
   const dispatch = useDispatch();
   const history = useHistory();
   
@@ -39,19 +40,17 @@ export default function LoginPage() {
         username: username,
         password: password,
         permission: 1,  // normal user (0-admin, 1-user)
+        socketID: socket.id
       })
       .then(function (response) {
         setLoading(false);
         if (response.status === 200) {
-          addToast("Login successfully!", {
-            appearance: "success",
-            autoDismiss: true,
-          });
           
           const authData = {
             jwtToken:  response.data.token,
             fullname:  response.data.account.fullname,
-            userID:  response.data.account._id
+            userID:  response.data.account._id,
+            autoMatch: response.data.account.autoMatch,
           }
 
           dispatch(authActions.signIn(authData));
@@ -80,19 +79,16 @@ export default function LoginPage() {
         fullname: fullname,
         email: email,
         permission: 1,
+        socketID: socket.id
       })
       .then(function (response) {
         setLoading(false);
         if (response.status === 200) {
-          addToast("Login successfully!", {
-            appearance: "success",
-            autoDismiss: true,
-          });
-
           const authData = {
             jwtToken:  response.data.token,
             fullname:  response.data.account.fullname,
-            userID:  response.data.account._id
+            userID:  response.data.account._id,
+            autoMatch: response.data.account.autoMatch,
           }
 
           dispatch(authActions.signIn(authData));
@@ -121,19 +117,16 @@ export default function LoginPage() {
         fullname: fullname,
         email: email,
         permission: 1,
+        socketID: socket.id
       })
       .then(function (response) {
         setLoading(false);
         if (response.status === 200) {
-          addToast("Login successfully!", {
-            appearance: "success",
-            autoDismiss: true,
-          });
           const authData = {
             jwtToken:  response.data.token,
             fullname:  response.data.account.fullname,
             userID:  response.data.account._id,
-            autoMatch: response.data.autoMatch,
+            autoMatch: response.data.account.autoMatch,
           }
 
           dispatch(authActions.signIn(authData));
