@@ -1,21 +1,21 @@
 import React, {useState, useEffect,useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import "./Board.css";
-import BoardActions from '../../store/actions/matchAtions';
+
 import Square from './Square/Square';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import {faCircle} from "@fortawesome/free-regular-svg-icons";
-import {ResultIdentification} from './ResultIdentification';
+import {ResultIdentification} from '../../utils/ResultIdentification';
 import {boardConst} from './board.Cfg';
-import {boardActions} from '../../store/actions/matchAtions';
+
 import {useToasts} from 'react-toast-notifications';
 
 function Board() {
 
-    const {stepNumber, history,boardID,owner} = useSelector(state => ({
+    const {stepNumber, historySteps,boardID,owner} = useSelector(state => ({
         stepNumber: state.match.stepNumber,
-        history: state.match.history,
+        historySteps: state.match.history,
         boardID: state.match.boardID,
         owner: state.match.owner,
     }));
@@ -28,11 +28,11 @@ function Board() {
 
     
     const [currBoard,setCurrBoard] = useState(
-        stepNumber===0?history[0].squares :history[stepNumber].squares
+        stepNumber===0?historySteps[0].squares :historySteps[stepNumber].squares
         );
     //const [isXTurn, setIsXTurn] = useState(stepNumber% 2);
     const [isXTurn, setIsXTurn] = useState(
-        userID === owner.userID?true:false
+        userID === owner._id?true:false
     );
     const [position, setPosition] = useState(-1);
     const [winner,setWinner] = useState({});
@@ -87,7 +87,10 @@ function Board() {
             squares: tempBoard,
             pos: i
         };
-        dispatch(boardActions.saveHistory(newHistory));
+        dispatch({
+            type: 'match/saveHistory',
+            payload: newHistory
+        });
     },[addToast, boardID, currBoard, dispatch, firstStep, isXTurn, owner.fullname, position, socket])
     
     useEffect(() =>{
@@ -133,8 +136,11 @@ function Board() {
                     squares: tempBoard,
                     pos: i
                 };
-                dispatch(boardActions.saveHistory(newHistory));
+                dispatch({
+                    type: 'match/saveHistory',
+                    payload: newHistory
                 });
+            });
         }
 
     },[currBoard, dispatch, firstStep, isXTurn, position, socket]);

@@ -8,11 +8,11 @@ import { Link, useHistory } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import FacebookLogin from "react-facebook-login";
 import GoogleLogin from 'react-google-login';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch} from 'react-redux';
 import {authActions} from '../../store/actions/authAction';
 
 
-const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_API_DEPLOY_URL;
+const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_DEPLOY_APIURL;
 const APPID_FB = process.env.REACT_APP_APPID_FB;
 const APPID_GG = process.env.REACT_APP_APPID_GG;
 
@@ -23,11 +23,10 @@ export default function LoginPage() {
   const [isLoading, setLoading] = useState(false);
 
   //redux 
+  const socket = useSelector(state => state.socket.socket);
   const dispatch = useDispatch();
-
-  //use History để điều hướng URL
   const history = useHistory();
-
+  
   function validateForm() {
     return username.length > 0 && password.length > 0;
   }
@@ -41,19 +40,17 @@ export default function LoginPage() {
         username: username,
         password: password,
         permission: 1,  // normal user (0-admin, 1-user)
+        socketID: socket.id
       })
       .then(function (response) {
         setLoading(false);
         if (response.status === 200) {
-          addToast("Login successfully!", {
-            appearance: "success",
-            autoDismiss: true,
-          });
           
           const authData = {
             jwtToken:  response.data.token,
             fullname:  response.data.account.fullname,
-            userID:  response.data.account._id
+            userID:  response.data.account._id,
+            autoMatch: response.data.account.autoMatch,
           }
 
           dispatch(authActions.signIn(authData));
@@ -82,19 +79,16 @@ export default function LoginPage() {
         fullname: fullname,
         email: email,
         permission: 1,
+        socketID: socket.id
       })
       .then(function (response) {
         setLoading(false);
         if (response.status === 200) {
-          addToast("Login successfully!", {
-            appearance: "success",
-            autoDismiss: true,
-          });
-
           const authData = {
             jwtToken:  response.data.token,
             fullname:  response.data.account.fullname,
-            userID:  response.data.account._id
+            userID:  response.data.account._id,
+            autoMatch: response.data.account.autoMatch,
           }
 
           dispatch(authActions.signIn(authData));
@@ -123,18 +117,16 @@ export default function LoginPage() {
         fullname: fullname,
         email: email,
         permission: 1,
+        socketID: socket.id
       })
       .then(function (response) {
         setLoading(false);
         if (response.status === 200) {
-          addToast("Login successfully!", {
-            appearance: "success",
-            autoDismiss: true,
-          });
           const authData = {
             jwtToken:  response.data.token,
             fullname:  response.data.account.fullname,
-            userID:  response.data.account._id
+            userID:  response.data.account._id,
+            autoMatch: response.data.account.autoMatch,
           }
 
           dispatch(authActions.signIn(authData));
@@ -154,7 +146,7 @@ export default function LoginPage() {
 
   return (
     <>
-    <div class="overlay"></div>
+    <div className="overlay"></div>
     <div className="loginPage">
       <form onSubmit={handleSubmit}>
         <h1 className="h3 mb-3 font-weight-normal text-center">
@@ -184,7 +176,7 @@ export default function LoginPage() {
         <p className="text-center" style={{ marginTop: "1rem" }}>
           OR
         </p>
-        <FormGroup controlId="username" bsSize="large">
+        <FormGroup controlId="username">
           <FormLabel>Username</FormLabel>
           <FormControl
             autoFocus
@@ -192,7 +184,7 @@ export default function LoginPage() {
             onChange={(e) => setUsername(e.target.value)}
           />
         </FormGroup>
-        <FormGroup controlId="password" bsSize="large">
+        <FormGroup controlId="password">
           <FormLabel>Password</FormLabel>
           <FormControl
             value={password}

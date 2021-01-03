@@ -1,12 +1,12 @@
 import React from 'react';
-import {Dropdown,Button, ButtonGroup } from 'react-bootstrap';
+import {Dropdown, ButtonGroup } from 'react-bootstrap';
 import {useSelector} from 'react-redux';
 
 
 function DropdownHistory() {
 
-    const {history} = useSelector(state => ({
-      history: state.match.history,
+    const {historySteps} = useSelector(state => ({
+      historySteps: state.match.history,
     }));
 
     const jumpToMove = move =>{
@@ -17,12 +17,13 @@ function DropdownHistory() {
         <Dropdown style={{width: "50%"}} as={ButtonGroup}>
        
         <Dropdown.Toggle split variant="dark" id="dropdown-split-basic">
-          Match History
+           History Steps
         </Dropdown.Toggle>
         <Dropdown.Menu>
           {
-            history.map((step,i) =>{
-              return <Dropdown.Item onClick={()=>{jumpToMove(i)}}>{`Step ${i}`}</Dropdown.Item>
+            historySteps.map((step,i) =>{
+              return <Dropdown.Item onClick={()=>{jumpToMove(i)}}
+                      key={i}>{`Step ${i}`}</Dropdown.Item>
             })
           }
         </Dropdown.Menu>

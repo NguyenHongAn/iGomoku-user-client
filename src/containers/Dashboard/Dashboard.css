@@ -37,3 +37,16 @@
     background-color: #1a1b20!important;    
     color: white;
 }
+
+.search-bar
+{
+    margin: 0px 5px 0px 0px;
+    width: 68%!important;
+    padding-left: 10px!important;
+}
+
+.search-btn
+{
+    width: 15%!important;
+    margin: 0px 4px 0px 4px;
+}

@@ -1,6 +1,5 @@
 import React from 'react';
 import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom';
-import "./App.css"
 import AppBar from './components/AppBar/AppBar';
 import {useDispatch} from 'react-redux';
 
@@ -19,9 +18,10 @@ function App() {
   const dispatch = useDispatch();
 
   dispatch(setupSocket());
+
   return (
     
-    <BrowserRouter>
+    <BrowserRouter >
       <ToastProvider>
       <AppBar></AppBar>
      
@@ -38,7 +38,7 @@ function App() {
           <Route path='/profile'>
             <ProfilePage></ProfilePage>
           </Route>
-          <Route path='/igomoku/board/:boardID'>
+          <Route path='/board/:boardID'>
             <BoardContainer></BoardContainer>
           </Route>
 

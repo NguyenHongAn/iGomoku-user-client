@@ -11,13 +11,13 @@ const boardListReducer = (state= defaultState, action) =>{
             tempArray.push(action.payload);
             return {
                 ...state,
-                boardList: tempArray,
+                boards: tempArray,
                 length: state.length +1,
             }
         }
         case "boards/update":
             return {
-                boarlist: Array.from(action.payload),
+                boards: Array.from(action.payload),
                 length: action.payload.length,
             }
         default:

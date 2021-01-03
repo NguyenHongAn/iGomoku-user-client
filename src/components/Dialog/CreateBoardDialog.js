@@ -1,17 +1,19 @@
 import React, {useState} from 'react';
 
 import {Modal, Form, Button} from 'react-bootstrap';
-import axios from "axios";
+import axiosInstance from '../../api';
 import {useSelector, useDispatch} from 'react-redux';
 import {useToasts} from 'react-toast-notifications';
-const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_API_DEPLOY_URL;
+
+//const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_DEPLOY_APIURL;
 
 function CreateBoardDialog({show, handleClose}) {
 
     const [boardName, setBoardName] = useState("");
-
-    const {jwtToken,fullname, userID} = useSelector(state => ({
-        jwtToken: state.auth.jwtToken,
+    const [usePass, setUsePassword] = useState(false);
+    const [password, setPassword] = useState("");
+    const {autoMatch,fullname, userID} = useSelector(state => ({
+        autoMatch: state.auth.autoMatch,
         fullname: state.auth.fullname,
         userID: state.auth.userID,
     }));
@@ -30,14 +32,10 @@ function CreateBoardDialog({show, handleClose}) {
             const data = {
                 userID: userID,
                 boardName: boardName,
+                isPrivate: true,
+                password: password,
             }
-            const response = await axios.post(`${APIURL}/board/create`, data,
-             {
-                headers:
-                {
-                    'x-access-token': jwtToken,
-                }
-            });
+            const response = await axiosInstance.post(`/board/create`, data);
             //tạo payload
             const payload = {
                 boardID: response.data._id,
@@ -46,7 +44,8 @@ function CreateBoardDialog({show, handleClose}) {
                     fullname,
                     userID
                 },
-                player: player //response.data.player
+                player: player, //response.data.player
+                status: 1,
             }
 
             // console.log(payload);
@@ -58,7 +57,13 @@ function CreateBoardDialog({show, handleClose}) {
 
             //thông báo tới người choi được mời qua socket ID
             
-            socket.emit("invite-player", JSON.stringify(payload));
+            socket.emit("invite_player", {
+                ownerID: userID,                //id người tạo bàn cờ
+                fullname: fullname,
+                boardID: payload.boardID,
+                boardName: payload.boardName,
+                socketID: player.socketID
+            });
             addToast("Create match success, Waitting fo opponent", 
             { 
                 appearance: 'success',
@@ -94,13 +99,29 @@ function CreateBoardDialog({show, handleClose}) {
 
             <Modal.Body>
             <Form>
-                <Form.Group controlId="formGroupName">
+                <Form.Group controlId="formBoardName">
                     <Form.Label>Board Name</Form.Label>
-                    <Form.Control type="text" placeholder="enter board name ....." 
+                    <Form.Control type="text" placeholder="Enter board name ....." 
                     onChange={(e) => setBoardName(e.target.value)}
                     value={boardName}/>
                 </Form.Group>
-               
+                <Form.Group controlId="formCheckbox">
+                    <Form.Check type="checkbox"
+                    label="use password ?" 
+                    checked={usePass}
+                    onChange={() =>{setUsePassword(!usePass)}}>
+                    </Form.Check>                     
+                </Form.Group>
+                {
+                    usePass?
+                    <Form.Group controlId="fromPassword">
+                        <Form.Label>Password</Form.Label>
+                        <Form.Control type="text" placeholder="Password" 
+                        onChange={(e) => setPassword(e.target.value)}
+                        value={boardName}/>
+                    </Form.Group>
+                    :null
+                }
             </Form>
             </Modal.Body>
 

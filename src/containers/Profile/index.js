@@ -20,28 +20,17 @@ import GridContainer from "../../components/Grid/GridContainer.js";
 import GridItem from "../../components/Grid/GridItem.js";
 import NavPills from "../../components/NavPills/NavPills.js";
 import Parallax from "../../components/Parallax/Parallax.js";
-
 import profile from "../../assets/img/faces/male_avatar.png";
-
-import studio1 from "../../assets/img/examples/studio-1.jpg";
-import studio2 from "../../assets/img/examples/studio-2.jpg";
-import studio4 from "../../assets/img/examples/studio-4.jpg";
-import studio5 from "../../assets/img/examples/studio-5.jpg";
-import work1 from "../../assets/img/examples/olu-eletu.jpg";
-import work2 from "../../assets/img/examples/clem-onojeghuo.jpg";
-import work3 from "../../assets/img/examples/cynthia-del-rio.jpg";
-import work4 from "../../assets/img/examples/mariya-georgieva.jpg";
-import work5 from "../../assets/img/examples/clem-onojegaw.jpg";
-import axios from "axios";
+import axiosInstance from '../../api';
 
 // subs element
-import ChangePasswordElement from './ChangePassword.js';
-import EditInfoElement from './EditInfo.js';
-import ListFriendElement from './ListFriend.js';
+import ChangePasswordElement from './ChangePassword';
+import EditInfoElement from './EditInfo';
+import ListFriendElement from './ListFriend';
+import PaymentElement from './Payment';
+import HistoryMatchElement from './HistoryMatch';
 
 import styles from "../../assets/jss/material-kit-react/views/profilePage.js";
-
-const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_API_DEPLOY_URL;
 
 
 const useStyles = makeStyles(styles);
@@ -53,11 +42,10 @@ export default function ProfilePage(props) {
     classes.imgRoundedCircle,
     classes.imgFluid
   );
-  const navImageClasses = classNames(classes.imgRounded, classes.imgGallery);
 
 
   // redux
-  const {userId } = useSelector(state => ({
+  const { userId } = useSelector(state => ({
     jwtToken: state.auth.jwtToken,
     fullname: state.auth.fullname,
     userId: state.auth.userID
@@ -69,11 +57,14 @@ export default function ProfilePage(props) {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.post(APIURL + "/auth/profile/", {
-          userId: userId
+        const response = await axiosInstance.get("/auth/profile/", {
+          params: {
+            userId: userId
+          }
         });
-
-        setBasicInfo(response.data);
+        if (response.status === 200) {
+          setBasicInfo(response.data);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -96,7 +87,7 @@ export default function ProfilePage(props) {
                   </div>
                   <div className={classes.name}>
                     <h3 className={classes.title}>{basicInfo.fullname}</h3>
-                    <h6>USER</h6>
+                    <h6>{basicInfo.email}</h6>
                     <Button justIcon link className={classes.margin5}>
                       <TwitterIcon />
                     </Button>
@@ -127,71 +118,12 @@ export default function ProfilePage(props) {
                     {
                       tabButton: "History",
                       tabIcon: HistoryMatch,
-                      tabContent: (
-                        <GridContainer justify="center">
-                          <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src={studio1}
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src={studio2}
-                              className={navImageClasses}
-                            />
-                          </GridItem>
-                          <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src={studio5}
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src={studio4}
-                              className={navImageClasses}
-                            />
-                          </GridItem>
-                        </GridContainer>
-                      )
+                      tabContent: (<HistoryMatchElement></HistoryMatchElement>)
                     },
                     {
                       tabButton: "Payment",
                       tabIcon: Payment,
-                      tabContent: (
-                        <GridContainer justify="center">
-                          <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src={work1}
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src={work2}
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src={work3}
-                              className={navImageClasses}
-                            />
-                          </GridItem>
-                          <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src={work4}
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src={work5}
-                              className={navImageClasses}
-                            />
-                          </GridItem>
-                        </GridContainer>
-                      )
+                      tabContent: (<PaymentElement></PaymentElement>)
                     },
                     {
                       tabButton: "Friends",
@@ -207,7 +139,7 @@ export default function ProfilePage(props) {
                       tabButton: "RePassword",
                       tabIcon: KeyIcon,
                       tabContent: (<ChangePasswordElement> </ChangePasswordElement>)
-                        
+
                     }
                   ]}
                 />

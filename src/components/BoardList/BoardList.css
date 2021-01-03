@@ -1,0 +1,36 @@
+.board-list
+{
+    column-count: 2!important;
+    margin-top: 20px;
+}
+
+
+.board-card
+{
+    background-color: #1a1b20!important;
+    border: 2px solid #17a2b8!important;
+    border-radius: 1.25rem!important;
+    padding: 0px!important;
+}
+
+.board-info{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.board-status
+{
+    display: inline-flex;
+    
+}
+
+.board-button{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.board-button button{
+    width: 22%!important;
+    margin: 0px 2px 0px 2px;
+}

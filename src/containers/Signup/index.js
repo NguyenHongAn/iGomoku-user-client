@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Button, FormGroup, FormControl, FormLabel, Form } from "react-bootstrap";
+import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignInAlt, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-import { Link, useHistory } from "react-router-dom";
+import { Link,useHistory } from "react-router-dom";
+
 import { useToasts } from "react-toast-notifications";
-const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_API_DEPLOY_URL;
+const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_DEPLOY_APIURL;
 
 
 
@@ -23,9 +24,8 @@ export default function SignupPage() {
   //   username: state.auth.username,
   //   password: state.auth.password,
   // }))
-   //use History để điều hướng URL
-  const history = useHistory();
 
+  const history = useHistory();
 
   function validateForm() {
     return (
@@ -66,7 +66,7 @@ export default function SignupPage() {
 
   return (
     <>
-    <div class="overlay"></div>
+    <div className="overlay"></div>
     <div className="signupPage">
       <form onSubmit={handleSubmit}>
         <h1 className="h3 mb-3 font-weight-normal text-center">
@@ -74,7 +74,7 @@ export default function SignupPage() {
           <span className="brand-red">Go</span>
           <span className="brand-red">moku</span>
         </h1>
-        <FormGroup controlId="fullname" bsSize="large">
+        <FormGroup controlId="fullname">
           <FormLabel>Fullname</FormLabel>
           <FormControl
             autoFocus
@@ -82,7 +82,7 @@ export default function SignupPage() {
             onChange={(e) => setFullname(e.target.value)}
           />
         </FormGroup>
-        <FormGroup controlId="email" bsSize="large">
+        <FormGroup controlId="email">
           <FormLabel>Email</FormLabel>
           <FormControl
             type="email"
@@ -90,7 +90,7 @@ export default function SignupPage() {
             onChange={(e) => setEmail(e.target.value)}
           />
         </FormGroup>
-        <FormGroup controlId="username" bsSize="large">
+        <FormGroup controlId="username">
           <FormLabel>Username</FormLabel>
           <FormControl
             required
@@ -98,7 +98,7 @@ export default function SignupPage() {
             onChange={(e) => setUsername(e.target.value)}
           />
         </FormGroup>
-        <FormGroup controlId="password" bsSize="large">
+        <FormGroup controlId="password">
           <FormLabel>Password</FormLabel>
           <FormControl
             required

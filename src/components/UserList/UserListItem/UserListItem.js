@@ -8,7 +8,7 @@ import axios from "axios";
 import {useHistory} from 'react-router-dom';
 import {useToasts} from 'react-toast-notifications';
 
-const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_API_DEPLOY_URL;
+const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_DEPLOY_APIURL;
 
 function UserListItem({user}) {
 
@@ -18,10 +18,10 @@ function UserListItem({user}) {
         userID: state.auth.userID,
     }));
 
-    const openCreateDialog= useSelector(state => state.match.isOpen);
-    const socket = useSelector(state => state.socket.socket);
-
+    const createdDate = new Date(user.createdDate);
+    
     const history = useHistory();
+
     const {addToast} = useToasts();
     const dispatch = useDispatch();
     const handleOpenDetail = () => setIsOpen(!isOpen);
@@ -46,7 +46,7 @@ function UserListItem({user}) {
                 {
                     headers:
                     {
-                        'x-access-token': jwtToken,
+                        'Authorization': `Bearer ${jwtToken}`,
                     }
                 });
                 if (response.status  === 200)
@@ -87,6 +87,7 @@ function UserListItem({user}) {
                     <div className="ml-3">
                         <h5 className="name">{user.fullname}</h5>
                         <p className="mail">{user.email}</p>
+                        <p>Join Date: {createdDate.toLocaleDateString()}</p>
                 </div>
             </div>
             <div className="middle-container d-flex justify-content-between align-items-center mt-3 p-2">
@@ -106,8 +107,8 @@ function UserListItem({user}) {
 
             </div>
             <div className="bottom-container">
-                <p>matches: </p>
-                <p>wins: </p>
+                <p>matches: {user.matches.length}</p>
+                <p>wins: {user.winningGame.length}</p>
             </div>
        <div className="bottom-container"> 
            <Button variant="success" className="buttom-btn"

@@ -5,8 +5,7 @@ import ListUserActions from '../../store/actions/listOnlUserAction';
 import UserListItem from './UserListItem/UserListItem';
 import './UserList.css';
 import { useToasts } from "react-toast-notifications";
-import axios from 'axios';
-const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_API_DEPLOY_URL;
+import axiosInstance from '../../api';
 
 function UserList() {
     
@@ -33,47 +32,46 @@ function UserList() {
     
     useEffect(() =>{
         //get online user list 
-        const fetchData = async () =>{
-            socket.emit("request-list-online-user", {userID});
+        socket.emit("request-list-online-user", {userID});
 
-            socket.on("response-list-online-user", (listOnlineUser)=>{
-                    const newUserList = JSON.parse(listOnlineUser).filter(user => user._id !== userID);
-                    newUserList.sort((a,b) =>{
-                        return b.elo - a.elo;
-                    });
-        
-                    dispatch(ListUserActions.updateOnlineUserlist(newUserList));
-
-                    if (newUserList.length === 0)
-                    {
-                        addToast("No other user online", {
-                            appearance: 'info',
-                            autoDismiss: true,
-                        });
-                    }
+        socket.on("response-list-online-user", (listOnlineUser)=>{
+                const newUserList = JSON.parse(listOnlineUser).filter(user => user._id !== userID);
+                //sắp xếp theo thứ tự elo từ cao đến thấp
+                newUserList.sort((a,b) =>{
+                    return b.elo - a.elo;
                 });
                 
+                dispatch(ListUserActions.updateOnlineUserlist(newUserList));
+
+                if (newUserList.length === 0)
+                {
+                    addToast("No other user online", {
+                        appearance: 'info',
+                        autoDismiss: true,
+                    });
+                }
+            });
+        // disconnect old socket each time re-render
+    },[addToast, dispatch, socket, userID]);
+
+    useEffect(()=>{
+        (async () =>{      
             // get friend's list with GET method
             if(userID !== "0")
-            {
-                const config = {
-                    headers: {
-                       'x-access-token': jwtToken,
-                    },
-                    
-                    params: {
-                        userId: userID
-                        }
-                  }
-                  
+            {        
                 try {
-                    const response = await axios.get(`${APIURL}/user/list-friend`, config);
+                    const response = await axiosInstance.get(`/user/list-friend`,{
+                        params: {
+                            userId: userID
+                            }
+                      });
                     if (response.status === 200)
                     {
                         dispatch(ListUserActions.updateFriendList(response.data));
                     } 
                     
                 } catch (error) {
+                    console.log(error);
                     addToast(error.response.data.message, {
                         appearance: "error",
                         autoDismiss: true,
@@ -81,15 +79,8 @@ function UserList() {
                 }
             }
            
-        }
-        fetchData();
-        // disconnect old socket each time re-render
-        return () =>{
-            // socket.emit("sign-out", {userID});
-            socket.off();
-        }
-    },[addToast, dispatch, jwtToken, socket, userID]);
-
+        })();
+    },[addToast, dispatch, jwtToken, userID]);
 
     const [activeTab, setActiveTab] = useState('1');
 
@@ -113,10 +104,13 @@ function UserList() {
                 :null}
             </Nav>
             <div style={{display: "block"}}>                                               
-                {
-                    onlineUsers.map((user) =>{
+                {userID!=="0" && activeTab ==="2" ?
+                friends.map(friend =>{
+                    return <UserListItem user={friend} key={friend._id}></UserListItem>
+                })
+                :onlineUsers.map((user) =>{
                         return (
-                           <UserListItem user={user}></UserListItem>
+                           <UserListItem user={user} key={user._id}></UserListItem>
                         )
                     })
                 }                     
