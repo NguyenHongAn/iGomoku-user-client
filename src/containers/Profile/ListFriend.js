@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import axios from "axios";
 import { useToasts } from "react-toast-notifications";
 import { useHistory } from "react-router-dom";
-import ListUserActions from '../../store/actions/listOnlUserAction';
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // @material-ui/core components

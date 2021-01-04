@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import axios from "axios";
 import { useToasts } from "react-toast-notifications";
 import { useHistory } from "react-router-dom";
-import ListUserActions from '../../store/actions/listOnlUserAction';
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // @material-ui/core components
@@ -12,6 +10,7 @@ import { makeStyles, withStyles } from "@material-ui/core/styles";
 import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import TwitterIcon from '@material-ui/icons/Twitter';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 
 import List from '@material-ui/core/List';
 import MuiListItem from '@material-ui/core/ListItem';
@@ -31,6 +30,7 @@ import CardBody from "../../components/Card/CardBody.js";
 import CardHeader from "../../components/Card/CardHeader.js";
 import CardFooter from "../../components/Card/CardFooter.js";
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import { Typography } from '@material-ui/core';
 
 import profile from "../../assets/img/faces/male_avatar.png";
 import styles from "../../assets/jss/material-kit-react/views/profilePage.js";
@@ -56,7 +56,7 @@ const ListItem = withStyles({
     }
 })(MuiListItem);
 
-const UnFriend = withStyles({
+const DetailIcon = withStyles({
     root: {
         "&$selected": {
             backgroundColor: "white",
@@ -71,7 +71,7 @@ const UnFriend = withStyles({
             color: "red"
         }
     }
-})(UnFriendIcon);
+})(VisibilityIcon);
 
 export default function ProfilePage(props) {
     const { addToast } = useToasts();
@@ -122,6 +122,10 @@ export default function ProfilePage(props) {
         })();
     }, [addToast, dispatch, jwtToken, userID]);
 
+    const onDetailHistoryGame = function (e, index) {
+        history.push('/detail-game/1');
+    };
+
 
     const histories = listHistory.map((item, index) => (
         <ListItem key={item._id} style={{ border: "1px solid black", marginTop: '1px' }}>
@@ -132,8 +136,18 @@ export default function ProfilePage(props) {
                     </div>
                 </Avatar>
             </ListItemAvatar>
-            <ListItemText primary={item.fullname} secondary={'Elo: ' + item.elo} />
+            <ListItemText
+                disableTypography
+                primary={<Typography type="body2" style={{ color: item.result === 1 ? 'blue' : 'red', fontWeight: 'bold' }}>{item.result === 1 ? "Chiến thắng" : "Thất bại"}</Typography>}
+                secondary={
+                    <React.Fragment>
+                        <Typography type="body2" style={{ color: 'black' }}>{"Đối thủ: " + item.enemy_fullname} </Typography>
+                        Thời gian: {item.time}
+                    </React.Fragment>
+                }
+            />
             <ListItemSecondaryAction>
+                <DetailIcon fontSize='default' onClick={(e) => onDetailHistoryGame(e, index)} />
             </ListItemSecondaryAction>
         </ListItem>
     ));

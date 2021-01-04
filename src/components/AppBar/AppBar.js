@@ -4,6 +4,7 @@ import './AppBar.css';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { authActions } from "../../store/actions/authAction";
+import DropdownIcon from '../DropdownIcon/DropdownIcon';
 
 
 function AppBar() {
@@ -55,13 +56,7 @@ function AppBar() {
           <Nav className="ml-auto" navbar>
             {jwtToken !== "invalid token :))" ? (
               <React.Fragment>
-                <Nav.Item>
-                  <DropdownButton id="dropdown-basic-button" title="Friend Requests" variant="secondary" style={{color: "red"}}>
-                    <Dropdown.Item  style={{color: "red"}} href="#/action-1">Action</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                    <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-                  </DropdownButton>
-                </Nav.Item>
+           
                 <Nav.Item>
                   <Link className="text-light nav-link" to="/igomoku">Dashboard</Link>
                 </Nav.Item>
