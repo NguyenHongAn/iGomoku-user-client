@@ -16,6 +16,15 @@ const listOnlUserReducer = (state = defaultState, action) =>{
                 ...state,
                 friends: action.payload,
             }
+        case "onlineUser/addnew":
+            {
+                const newList = Array.from(state.users);
+                newList.push(action.payload);
+                return{
+                    ...state,
+                    users: newList,
+                }
+            }
         default:
             return state;
     }

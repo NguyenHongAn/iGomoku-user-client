@@ -24,7 +24,7 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 import styles from "../../assets/jss/material-kit-react/components/headerLinksStyle.js";
 
 import { useSelector, useDispatch } from 'react-redux';
-import { authActions } from "../../store/actions/authAction";
+import { authActions } from "../../store/actions/authActions";
 import {useLocation} from 'react-router-dom';
 
 const useStyles = makeStyles(styles);

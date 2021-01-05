@@ -46,7 +46,7 @@ const restoreDefault = {
     payload: "restore"
 }
 
-export const boardActions = {
+export const matchActions = {
     createNewBoard,
     saveHistory,
     winningDisplay,

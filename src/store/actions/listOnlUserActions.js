@@ -26,9 +26,19 @@ const updateFriendList = (friendList) =>{
     };
 } 
 
-const ListUserActions = {
+const addNewUserOnline = (user) =>{
+    return (dispatch)=>{
+        dispatch({
+            type: 'onlineUser/addnew',
+            payload: user,
+        })
+    }
+}
+
+export const ListUserActions = {
     updateOnlineUserlist,
     addNewFriend,
     updateFriendList,
+    addNewUserOnline,
 }
-export default ListUserActions;
+

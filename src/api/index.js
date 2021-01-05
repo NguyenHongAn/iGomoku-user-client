@@ -1,7 +1,9 @@
 import axios from 'axios';
-import configStore  from '../store/configStore';
+//import configStore  from '../store/configStore';
+import configStore from '../store/configStore';
 
 const baseURL = process.env.REACT_APP_ENV === "dev"? process.env.REACT_APP_APIURL: process.env.REACT_APP_DEPLOY_APIURL;
+const store = configStore.store;
 
 const axiosInstance = axios.create({
     baseURL: baseURL,
@@ -17,10 +19,9 @@ const axiosInstance = axios.create({
   axiosInstance.interceptors.request.use((config) => {
     //if token is exists, set header
     //redux
-    const store = configStore.store;
+    //const store = configStore.store;
     const state = store.getState();
     const jwtToken = state.auth.jwtToken;
-    console.log({jwtToken});
 
     if (jwtToken !== "invalid token :))")
     {

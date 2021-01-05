@@ -17,7 +17,6 @@ export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [repassword, setRepassword] = useState("");
 
   //redux 
   // const {username, password} = useSelector(state => ({

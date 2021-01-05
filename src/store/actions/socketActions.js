@@ -17,4 +17,6 @@ const setupSocket = () => {
     }
 }
 
-export default setupSocket;
+export const socketActions={
+    setupSocket,
+};

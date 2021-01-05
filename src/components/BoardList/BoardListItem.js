@@ -1,22 +1,13 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {Card, Button} from 'react-bootstrap';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLock, faLockOpen } from "@fortawesome/free-solid-svg-icons";
+import {useSelector, useDispatch} from 'react-redux';
+
 
 function BoardListItem({board}) {
     
-    const configInfo = ()=> {
-        let infoStr = "";
-        switch(board.boardStatus)
-        {
-            case 1:
-                infoStr += "Watting";
-             break;
-             case 2:
-                infoStr+= "Playing";
-                break;
-        }
-        infoStr = `${infoStr}       Require password: ${board.isPrivate}`;
-        return infoStr;
-    }
+   
     return (
         <Card className="board-card">
         <Card.Body>
@@ -24,11 +15,26 @@ function BoardListItem({board}) {
             <Card.Subtitle className="mb-2 text-muted"><b>Board ID: </b>{board._id}</Card.Subtitle>
             <Card.Text className="board-info">
                 <div className="board-status">
-                <p>Status: </p> <p className="text-muted ml-2">{configInfo()}</p>
+                    <p>Status:</p>
+                    {board.boardStatus === 1?
+                    (<p style={{"paddingLeft": "10px"}}>Watting <span className="dot-waitting"></span></p>)
+                    : <p style={{"paddingLeft": "10px"}}>Playing <span className="dot-playing"></span></p>
+                    }
+                    <p style={{"padding": "0px 10px 0px 10px"}} >Password:</p>
+                    <FontAwesomeIcon style={{"color": '#ffc107'}}
+                    icon={ board.isPrivate? faLock: faLockOpen }>
+                    </FontAwesomeIcon>
                 </div> 
+                <div className="board-players">
+                    <p style={{"paddingRight": "10px"}}>Owner: </p> {board.owner.fullname}
+                    {board.player?
+                    <p style={{"padding": "0px 10px 0px 10px"}}>Player: {board.player.fullname}</p>
+                    :null
+                    }
+                     <p style={{"padding": "0px 10px 0px 10px"}}>Watchers: {board.watchers.length}</p> 
+                </div>
             </Card.Text>
             <div className="board-button">
-                <Button variant="success">Details</Button>
                 <Button variant="info">Join Board</Button>
             </div>
            

@@ -3,7 +3,7 @@ import { Navbar, Nav, Form, DropdownButton, Dropdown } from 'react-bootstrap';
 import './AppBar.css';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { authActions } from "../../store/actions/authAction";
+import ReduxAction from "../../store/actions";
 import DropdownIcon from '../DropdownIcon/DropdownIcon';
 
 
