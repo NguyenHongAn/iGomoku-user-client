@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from 'react-redux';
-import { Link, useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // @material-ui/core components
@@ -22,12 +22,24 @@ import axiosInstance from '../../api';
 import BoardShow from './BoardShow';
 
 
+// core components
+import Card from "../../components/Card/Card.js";
+import CardBody from "../../components/Card/CardBody.js";
+import CardHeader from "../../components/Card/CardHeader.js";
+import CardFooter from "../../components/Card/CardFooter.js";
+import List from '@material-ui/core/List';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItem from '@material-ui/core/ListItem';
+
+
+
 import styles from "../../assets/jss/material-kit-react/views/profilePage.js";
 
 
 const useStyles = makeStyles(styles);
 
 export default function DetailHistoryGame(props) {
+    const params = useParams();
     const classes = useStyles();
     const imageClasses = classNames(
         classes.imgRaised,
@@ -44,19 +56,20 @@ export default function DetailHistoryGame(props) {
         userId: state.auth.userID
     }));
 
-    const [basicInfo, setBasicInfo] = useState({});
+    const [data, setData] = useState({});
+    const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
 
 
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await axiosInstance.get("/auth/profile/", {
+                const response = await axiosInstance.get("/user/history/", {
                     params: {
-                        userId: userId
+                        historyID: params.gameID
                     }
                 });
                 if (response.status === 200) {
-                    setBasicInfo(response.data);
+                    setData(response.data);
                 }
             } catch (error) {
                 console.log(error);
@@ -65,6 +78,8 @@ export default function DetailHistoryGame(props) {
 
         fetchData();
     }, []);
+
+    // console.log("data ne: " + JSON.stringify(data));
 
     return (
         <div>
@@ -95,25 +110,131 @@ export default function DetailHistoryGame(props) {
                             </GridItem>
                         </GridContainer>
                         <div className={classes.description}>
-                            <p>
-                                An artist of considerable range, Chet Faker — the name taken by
-                                Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs
-                                and records all of his own music, giving it a warm, intimate
-                                feel with a solid groove structure.{" "}
-                            </p>
+
                         </div>
-                        <GridContainer justify="left">
-                            <GridItem xs={8} sm={8} md={8} className={classes.navWrapper}>
-                                dsdas
+                        <GridContainer justify="flex-start">
+                            <GridItem xs={7} sm={7} md={7} className={classes.navWrapper} style={{ border: "2px solid #5bc0de", borderRight: 'none', borderBottom: 'none' }}>
+                                <h5>Thông tin cơ bản trận đấu</h5>
+                                <h6>-------------</h6>
+                                <ul style={{ textAlign: 'left', marginTop: '15px', marginLeft: '50px' }}>
+                                    <li><b>Trận đấu giữa:  &nbsp; &nbsp;<span style={{ color: 'blue' }}>{data.me_fullname}</span> &nbsp;&nbsp;- &nbsp;&nbsp; <span style={{ color: 'red' }}>{data.enemy_fullname}</span></b></li>
+                                    <li><b>Tên phòng: &nbsp;&nbsp;</b> {data.boardName}</li>
+                                    <li><b>Thời gian: &nbsp;&nbsp;</b>{data.time}</li>
+                                    <li><b>Người thắng: &nbsp;&nbsp;<span style={{ color: data.result === 1 ? 'blue' : 'red' }}>{data.result === 1 ? data.me_fullname : data.enemy_fullname}</span></b></li>
+                                    <li><b>Elo của bạn dành được: &nbsp;&nbsp;</b>{data.eloGot}</li>
+                                </ul>
                             </GridItem>
-                            <GridItem xs={4} sm={4} md={4} className={classes.navWrapper}>
-                                aaaaa
+                            <GridItem xs={5} sm={5} md={5} className={classes.navWrapper} style={{ border: "2px solid #5bc0de", borderBottom: 'none' }}>
+                                <div className={classes.container}>
+                                    <GridContainer justify="center" style={{ marginTop: "30px" }}>
+                                        <GridItem xs={12} sm={12} md={12}>
+                                            <Card className={classes[cardAnimaton]}>
+                                                <form className={classes.form}>
+                                                    <CardHeader color="info" className={classes.cardHeader}>
+                                                        <h4>Lịch sử trò chuyện</h4>
+                                                        <div className={classes.socialLine}>
+
+                                                        </div>
+                                                    </CardHeader>
+                                                    <CardBody>
+                                                        <List className={classes.root} style={{ maxHeight: '383px', overflow: 'auto' }}>
+                                                            <ListItem>
+                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
+                                                            </ListItem>
+                                                            <ListItem>
+                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
+                                                            </ListItem>
+                                                            <ListItem>
+                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
+                                                            </ListItem>
+                                                            <ListItem>
+                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
+                                                            </ListItem>
+                                                            <ListItem>
+                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
+                                                            </ListItem>
+                                                            <ListItem>
+                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
+                                                            </ListItem>
+                                                            <ListItem>
+                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
+                                                            </ListItem>
+                                                            <ListItem>
+                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
+                                                            </ListItem>
+                                                            <ListItem>
+                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
+                                                            </ListItem>
+                                                        </List>
+                                                    </CardBody>
+                                                    <CardFooter className={classes.cardFooter}>
+
+                                                    </CardFooter>
+                                                </form>
+                                            </Card>
+                                        </GridItem>
+                                    </GridContainer>
+                                </div>
                             </GridItem>
-                            <GridItem xs={7} sm={7} md={7} className={classes.navWrapper}>
+                            {/* <GridItem xs={12} sm={12} md={9} className={classes.navWrapper}  style={{border: "2px solid black"}}>
+                                <h4>Chi tiết bàn cờ</h4>
+                            </GridItem> */}
+                            <GridItem xs={8} sm={8} md={8} className={classes.navWrapper} style={{ border: "2px solid #5bc0de", marginTop: '-50px', borderRight: "none" }}>
+                                <h5>Bàn cờ</h5>,
                                 <BoardShow></BoardShow>
+                                <h1></h1>
                             </GridItem>
-                            <GridItem xs={4} sm={4} md={4} className={classes.navWrapper}>
-                                aaaaa
+                            <GridItem xs={4} sm={4} md={4} className={classes.navWrapper} style={{ border: "2px solid #5bc0de", marginTop: '-50px' }}>
+                            <div className={classes.container}>
+                                    <GridContainer justify="center" style={{ marginTop: "30px" }}>
+                                        <GridItem xs={12} sm={12} md={12}>
+                                            <Card className={classes[cardAnimaton]}>
+                                                <form className={classes.form}>
+                                                    <CardHeader color="info" className={classes.cardHeader}>
+                                                        <h4>Lịch sử bước đi</h4>
+                                                        <div className={classes.socialLine}>
+
+                                                        </div>
+                                                    </CardHeader>
+                                                    <CardBody>
+                                                        <List className={classes.root} style={{ maxHeight: '383px', overflow: 'auto' }}>
+                                                            <ListItem>
+                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
+                                                            </ListItem>
+                                                            <ListItem>
+                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
+                                                            </ListItem>
+                                                            <ListItem>
+                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
+                                                            </ListItem>
+                                                            <ListItem>
+                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
+                                                            </ListItem>
+                                                            <ListItem>
+                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
+                                                            </ListItem>
+                                                            <ListItem>
+                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
+                                                            </ListItem>
+                                                            <ListItem>
+                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
+                                                            </ListItem>
+                                                            <ListItem>
+                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
+                                                            </ListItem>
+                                                            <ListItem>
+                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
+                                                            </ListItem>
+                                                        </List>
+                                                    </CardBody>
+                                                    <CardFooter className={classes.cardFooter}>
+
+                                                    </CardFooter>
+                                                </form>
+                                            </Card>
+                                        </GridItem>
+                                    </GridContainer>
+                                </div>
                             </GridItem>
                         </GridContainer>
                     </div>
