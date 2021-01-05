@@ -11,8 +11,8 @@ function BoardListItem({board}) {
     return (
         <Card className="board-card">
         <Card.Body>
-            <Card.Title><b>Board ID: </b> {board._id}</Card.Title>
-            <Card.Subtitle className="mb-2"><b>Board Name: </b>{board.boardName}</Card.Subtitle>
+            <Card.Title><b>Board Name: </b> {board.boardName}</Card.Title>
+            <Card.Subtitle className="mb-2 text-muted"><b>Board ID: </b>{board._id}</Card.Subtitle>
             <Card.Text className="board-info">
                 <div className="board-status">
                     <p>Status:</p>

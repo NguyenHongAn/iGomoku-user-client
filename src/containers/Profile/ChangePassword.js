@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useSelector } from 'react-redux';
-import {useHistory } from "react-router-dom";
 import axios from "axios";
 import { useToasts } from "react-toast-notifications";
 // nodejs library that concatenates classes
@@ -25,12 +24,8 @@ import CustomInput from "../../components/CustomInput/CustomInput.js";
 
 // utils
 import AuthUtils from "../../utils/AuthUtils.js";
-
-
 import styles from "../../assets/jss/material-kit-react/views/profilePage.js";
-
 const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_DEPLOY_APIURL;
-
 const useStyles = makeStyles(styles);
 
 export default function ProfilePage(props) {
@@ -96,7 +91,10 @@ export default function ProfilePage(props) {
                         appearance: "success",
                         autoDismiss: true,
                     });
-                    window.location.reload();
+
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
                 }
             })
             .catch(function (error) {
@@ -106,7 +104,7 @@ export default function ProfilePage(props) {
                     autoDismiss: true,
                 });
             });
-    }
+    };
 
     var onVisibilityPasswordClick = function () {
         setIsVisibilyPassword(!isVisibilyPassword);
@@ -166,6 +164,7 @@ export default function ProfilePage(props) {
                                 <CustomInput
                                     onChange={onPasswordChange}
                                     labelText="Your Password"
+                                    alt="Your Password"
                                     id="password"
                                     name="password"
                                     formControlProps={{
@@ -188,6 +187,7 @@ export default function ProfilePage(props) {
                                 <CustomInput
                                     onChange={onNewPasswordChange}
                                     labelText="New Password"
+                                    alt="New Password"
                                     id="newPassword"
                                     name="newPassword"
                                     formControlProps={{
@@ -210,6 +210,7 @@ export default function ProfilePage(props) {
                                 <CustomInput
                                     onChange={onConfirmNewPasswordChange}
                                     labelText="Confirm New Password"
+                                    alt="Confirm New Password"
                                     id="confirm_new_pass"
                                     formControlProps={{
                                         fullWidth: true
@@ -230,7 +231,7 @@ export default function ProfilePage(props) {
                             </CardBody>
                             <CardFooter className={classes.cardFooter}>
                                 <Button simple color="info" size="lg" type='submit'>
-                                    Get started
+                                    Get Changed
                                   </Button>
                             </CardFooter>
                         </form>

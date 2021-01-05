@@ -21,8 +21,18 @@ const signUp = (authData) =>{
     }
 }   
 
+const editInfo = (authData) =>{
+    return (dispatch) =>{
+        dispatch({
+            type: 'auth/edit-info',
+            payload: authData,
+        });
+    }
+}   
+
 export const authActions = {
     signIn,
     signOut,
-    signUp
+    signUp,
+    editInfo
 }

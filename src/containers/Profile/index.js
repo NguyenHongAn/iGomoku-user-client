@@ -11,7 +11,7 @@ import Friend from '@material-ui/icons/PeopleAlt';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import TwitterIcon from '@material-ui/icons/Twitter';
-import SettingsIcon from '@material-ui/icons/Settings';
+import EditIcon from '@material-ui/icons/Edit';
 import KeyIcon from '@material-ui/icons/VpnKey';
 // core components
 import Footer from "../../components/Footer/Footer.js";
@@ -20,28 +20,17 @@ import GridContainer from "../../components/Grid/GridContainer.js";
 import GridItem from "../../components/Grid/GridItem.js";
 import NavPills from "../../components/NavPills/NavPills.js";
 import Parallax from "../../components/Parallax/Parallax.js";
-
-//import profile from "../../assets/img/faces/avatar.png";
-
-import studio1 from "../../assets/img/examples/studio-1.jpg";
-import studio2 from "../../assets/img/examples/studio-2.jpg";
-import studio3 from "../../assets/img/examples/studio-3.jpg";
-import studio4 from "../../assets/img/examples/studio-4.jpg";
-import studio5 from "../../assets/img/examples/studio-5.jpg";
-import work1 from "../../assets/img/examples/olu-eletu.jpg";
-import work2 from "../../assets/img/examples/clem-onojeghuo.jpg";
-import work3 from "../../assets/img/examples/cynthia-del-rio.jpg";
-import work4 from "../../assets/img/examples/mariya-georgieva.jpg";
-import work5 from "../../assets/img/examples/clem-onojegaw.jpg";
-import axios from "axios";
+import profile from "../../assets/img/faces/male_avatar.png";
+import axiosInstance from '../../api';
 
 // subs element
-import ChangePasswordElement from './ChangePassword.js';
-import EditInfoElement from './EditInfo.js';
+import ChangePasswordElement from './ChangePassword';
+import EditInfoElement from './EditInfo';
+import ListFriendElement from './ListFriend';
+import PaymentElement from './Payment';
+import HistoryMatchElement from './HistoryMatch';
 
 import styles from "../../assets/jss/material-kit-react/views/profilePage.js";
-
-const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_DEPLOY_APIURL;
 
 
 const useStyles = makeStyles(styles);
@@ -53,11 +42,10 @@ export default function ProfilePage(props) {
     classes.imgRoundedCircle,
     classes.imgFluid
   );
-  const navImageClasses = classNames(classes.imgRounded, classes.imgGallery);
 
 
   // redux
-  const { jwtToken, fullname, userId } = useSelector(state => ({
+  const { userId } = useSelector(state => ({
     jwtToken: state.auth.jwtToken,
     fullname: state.auth.fullname,
     userId: state.auth.userID
@@ -65,14 +53,18 @@ export default function ProfilePage(props) {
 
   const [basicInfo, setBasicInfo] = useState({});
 
+
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.post(APIURL + "/auth/profile/", {
-          userId: userId
+        const response = await axiosInstance.get("/auth/profile/", {
+          params: {
+            userId: userId
+          }
         });
-
-        setBasicInfo(response.data);
+        if (response.status === 200) {
+          setBasicInfo(response.data);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -81,11 +73,9 @@ export default function ProfilePage(props) {
     fetchData();
   }, []);
 
-
   return (
     <div>
       <Parallax small filter />
-      {/* image={require("../../assets/img/faces/male_avatar.png")} /> */}
       <div className={classNames(classes.main, classes.mainRaised)}>
         <div>
           <div className={classes.container}>
@@ -93,11 +83,11 @@ export default function ProfilePage(props) {
               <GridItem xs={12} sm={12} md={6}>
                 <div className={classes.profile}>
                   <div>
-                    {/* <img src={profile} alt="..." className={imageClasses} /> */}
+                    <img src={profile} alt="..." className={imageClasses} />
                   </div>
                   <div className={classes.name}>
                     <h3 className={classes.title}>{basicInfo.fullname}</h3>
-                    <h6>USER</h6>
+                    <h6>{basicInfo.email}</h6>
                     <Button justIcon link className={classes.margin5}>
                       <TwitterIcon />
                     </Button>
@@ -120,7 +110,7 @@ export default function ProfilePage(props) {
               </p>
             </div>
             <GridContainer justify="center">
-              <GridItem xs={12} sm={12} md={8} className={classes.navWrapper}>
+              <GridItem xs={12} sm={12} md={9} className={classes.navWrapper}>
                 <NavPills
                   alignCenter
                   color="info"
@@ -128,119 +118,28 @@ export default function ProfilePage(props) {
                     {
                       tabButton: "History",
                       tabIcon: HistoryMatch,
-                      tabContent: (
-                        <GridContainer justify="center">
-                          <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src={studio1}
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src={studio2}
-                              className={navImageClasses}
-                            />
-                          </GridItem>
-                          <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src={studio5}
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src={studio4}
-                              className={navImageClasses}
-                            />
-                          </GridItem>
-                        </GridContainer>
-                      )
+                      tabContent: (<HistoryMatchElement></HistoryMatchElement>)
                     },
                     {
                       tabButton: "Payment",
                       tabIcon: Payment,
-                      tabContent: (
-                        <GridContainer justify="center">
-                          <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src={work1}
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src={work2}
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src={work3}
-                              className={navImageClasses}
-                            />
-                          </GridItem>
-                          <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src={work4}
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src={work5}
-                              className={navImageClasses}
-                            />
-                          </GridItem>
-                        </GridContainer>
-                      )
+                      tabContent: (<PaymentElement></PaymentElement>)
                     },
                     {
                       tabButton: "Friends",
                       tabIcon: Friend,
-                      tabContent: (
-                        <GridContainer justify="center">
-                          <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src={work4}
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src={studio3}
-                              className={navImageClasses}
-                            />
-                          </GridItem>
-                          <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src={work2}
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src={work1}
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src={studio1}
-                              className={navImageClasses}
-                            />
-                          </GridItem>
-                        </GridContainer>
-                      )
+                      tabContent: (<ListFriendElement></ListFriendElement>)
                     },
                     {
-                      tabButton: "Setting",
-                      tabIcon: SettingsIcon,
+                      tabButton: "Edit",
+                      tabIcon: EditIcon,
                       tabContent: (<EditInfoElement userInfo={basicInfo}> </EditInfoElement>)
                     },
                     {
                       tabButton: "RePassword",
                       tabIcon: KeyIcon,
                       tabContent: (<ChangePasswordElement> </ChangePasswordElement>)
-                        
+
                     }
                   ]}
                 />

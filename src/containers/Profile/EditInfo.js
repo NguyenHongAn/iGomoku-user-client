@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from 'react-redux';
+import { useToasts } from "react-toast-notifications";
 // nodejs library that concatenates classes
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
+import axiosInstance from '../../api';
 // @material-ui/icons
 import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
@@ -15,24 +18,81 @@ import CardBody from "../../components/Card/CardBody.js";
 import CardHeader from "../../components/Card/CardHeader.js";
 import CardFooter from "../../components/Card/CardFooter.js";
 import CustomInput from "../../components/CustomInput/CustomInput.js";
-
-
 import styles from "../../assets/jss/material-kit-react/views/profilePage.js";
+import {authActions} from '../../store/actions/authAction';
 
 const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_DEPLOY_APIURL;
 
 const useStyles = makeStyles(styles);
 
-export default function ProfilePage({ userInfo }) {
+export default function ProfilePage(props) {
+    const {userInfo} = props;
+    const dispatch = useDispatch();
+    const { addToast } = useToasts();
     const classes = useStyles();
     const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
 
+    const { userId, jwtToken, fullname, autoMatch } = useSelector(state => ({
+        jwtToken: state.auth.jwtToken,
+        fullname: state.auth.fullname,
+        userId: state.auth.userID,
+        autoMatch:  state.auth.autoMatch,
+      }));
+
     // element
     const [disabledField, setDisabledField] = useState(false);
+    const [newFullname, setNewFullname] = useState('');
+    const [currFullname, setCurrFullname] = useState(fullname);
 
     var onSetDisabledField = function () {
         setDisabledField(!disabledField);
     }
+
+    const onNewFullnameChange = (e) => {
+        setNewFullname(e.target.value);
+    };
+
+    const handleSubmit = function (e) {
+        e.preventDefault();
+
+        if (!window.confirm('Are you sure you wish to change your information?')) {
+            return;
+        }
+  
+        axiosInstance
+            .post("/auth/edit-profile", {
+                userId: userId,
+                fullname: newFullname
+            })
+            .then(function (response) {
+                if (response.status === 200) {
+                    addToast("Edit Your Profile Successfully!", {
+                        appearance: "success",
+                        autoDismiss: true,
+                    });
+
+                    const authData = {
+                        jwtToken:  jwtToken,
+                        fullname:  newFullname,
+                        userID:  userId,
+                        autoMatch: autoMatch
+                    };
+                    dispatch(authActions.editInfo(authData));
+                    setCurrFullname(newFullname);
+
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+                addToast(error.response.data.message, {
+                    appearance: "error",
+                    autoDismiss: true,
+                });
+            });
+    };
 
     var isDisabled = disabledField ? true : false;
     return (
@@ -40,9 +100,9 @@ export default function ProfilePage({ userInfo }) {
             <GridContainer justify="center">
                 <GridItem xs={8} sm={8} md={8}>
                     <Card className={classes[cardAnimaton]}>
-                        <form className={classes.form} method="POST" action={APIURL + '/auth/edit-info'}>
+                        <form className={classes.form} method="POST" onSubmit={handleSubmit}>
                             <CardHeader color="info" className={classes.cardHeader}>
-                                <h4>Change Password</h4>
+                                <h4>Edit Information</h4>
                                 <div className={classes.socialLine}>
                                     <Button
                                         justIcon
@@ -76,21 +136,23 @@ export default function ProfilePage({ userInfo }) {
                             <CardBody>
                                 <CustomInput
                                     labelText="Fullname"
-                                    id="confirm_new_pass"
+                                    id="fullname"
                                     formControlProps={{
                                         fullWidth: true
                                     }}
+                                    onChange={onNewFullnameChange}
+                                    disabled={isDisabled}
+                                    defaultValue={currFullname}
                                     inputProps={{
                                         type: 'text',
-                                        endAdornment: (<div></div>
-                                        ),
+                                        endAdornment: (<div></div>),
                                         autoComplete: "off"
                                     }}
                                 />
                             </CardBody>
                             <CardFooter className={classes.cardFooter}>
-                                <Button simple color="info" size="lg">
-                                    Get started
+                                <Button simple color="info" size="lg" type="submit">
+                                    Get Changed
                                   </Button>
                             </CardFooter>
                         </form>

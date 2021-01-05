@@ -8,6 +8,7 @@ import FAQ from "./components/FAQ/FAQ";
 import Dashboard from './containers/Dashboard/Dashboard';
 import LoginPage from './containers/Signin';
 import SignupPage from './containers/Signup';
+import DetailGamePage from './containers/DetailHistoryGame';
 
 import BoardContainer from './containers/Board/BoardContainer';
 import ProfilePage from './containers/Profile';
@@ -40,6 +41,9 @@ function App() {
           </Route>
           <Route path='/board/:boardID'>
             <BoardContainer></BoardContainer>
+          </Route>
+          <Route path='/detail-game/:gameID'>
+            <DetailGamePage></DetailGamePage>
           </Route>
 
           <Route exact path='/igomoku'>

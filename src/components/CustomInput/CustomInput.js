@@ -20,6 +20,8 @@ export default function CustomInput(props) {
     formControlProps,
     labelText,
     id,
+    disabled,
+    defaultValue,
     labelProps,
     inputProps,
     error,
@@ -54,6 +56,8 @@ export default function CustomInput(props) {
   } else {
     formControlClasses = classes.formControl;
   }
+
+  
   return (
     <FormControl {...formControlProps} className={formControlClasses}>
       {labelText !== undefined ? (
@@ -73,6 +77,8 @@ export default function CustomInput(props) {
           underline: underlineClasses
         }}
         id={id}
+        disabled={disabled}
+        defaultValue={defaultValue ? defaultValue : null}
         required
         onChange={onChange}
         {...inputProps}
