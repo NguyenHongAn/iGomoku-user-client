@@ -19,7 +19,7 @@ import CardHeader from "../../components/Card/CardHeader.js";
 import CardFooter from "../../components/Card/CardFooter.js";
 import CustomInput from "../../components/CustomInput/CustomInput.js";
 import styles from "../../assets/jss/material-kit-react/views/profilePage.js";
-import {authActions} from '../../store/actions/authAction';
+import ReduxAction from '../../store/actions';
 
 const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_DEPLOY_APIURL;
 
@@ -77,7 +77,7 @@ export default function ProfilePage(props) {
                         userID:  userId,
                         autoMatch: autoMatch
                     };
-                    dispatch(authActions.editInfo(authData));
+                    dispatch(ReduxAction.auth.editInfo(authData));
                     setCurrFullname(newFullname);
 
                     setTimeout(() => {

@@ -6,7 +6,6 @@ import UserListItem from './UserListItem/UserListItem';
 import './UserList.css';
 import { useToasts } from "react-toast-notifications";
 import axiosInstance from '../../api';
-import { socketActions } from '../../store/actions/socketActions';
 
 function UserList() {
     
