@@ -5,11 +5,10 @@ import axiosInstance from '../../api';
 import {useSelector, useDispatch} from 'react-redux';
 import {useToasts} from 'react-toast-notifications';
 
-//const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_DEPLOY_APIURL;
 
 function CreateBoardDialog({show, handleClose}) {
 
-    const [boardName, setBoardName] = useState("");
+    const [boardName, setBoardName] = useState("Caro Room");
     const [usePass, setUsePassword] = useState(false);
     const [password, setPassword] = useState("");
     const {autoMatch,fullname, userID} = useSelector(state => ({
@@ -32,9 +31,15 @@ function CreateBoardDialog({show, handleClose}) {
             const data = {
                 userID: userID,
                 boardName: boardName,
-                isPrivate: true,
+                isPrivate: usePass,
                 password: password,
             }
+
+            if (typeof player._id !== 'undefined')
+            {
+                data.player = player;
+            }
+
             const response = await axiosInstance.post(`/board/create`, data);
             //tạo payload
             const payload = {
@@ -44,26 +49,18 @@ function CreateBoardDialog({show, handleClose}) {
                     fullname,
                     userID
                 },
-                player: player, //response.data.player
+                player: player, 
                 status: 1,
             }
 
-            // console.log(payload);
             //lưu thông tin người tạo ván đấu
             dispatch({
                 type: "match/create",
                 payload: payload
             })
-
-            //thông báo tới người choi được mời qua socket ID
             
-            socket.emit("invite_player", {
-                ownerID: userID,                //id người tạo bàn cờ
-                fullname: fullname,
-                boardID: payload.boardID,
-                boardName: payload.boardName,
-                socketID: player.socketID
-            });
+            //thông báo tới người chơi nếu được mời qua socket ID
+            
             addToast("Create match success, Waitting fo opponent", 
             { 
                 appearance: 'success',
@@ -105,9 +102,10 @@ function CreateBoardDialog({show, handleClose}) {
                     onChange={(e) => setBoardName(e.target.value)}
                     value={boardName}/>
                 </Form.Group>
-                <Form.Group controlId="formCheckbox">
+                <Form.Group controlId="formCheckbox" >
                     <Form.Check type="checkbox"
-                    label="use password ?" 
+                    className="form-checkbox"
+                    label="Use password ?" 
                     checked={usePass}
                     onChange={() =>{setUsePassword(!usePass)}}>
                     </Form.Check>                     
@@ -116,9 +114,9 @@ function CreateBoardDialog({show, handleClose}) {
                     usePass?
                     <Form.Group controlId="fromPassword">
                         <Form.Label>Password</Form.Label>
-                        <Form.Control type="text" placeholder="Password" 
+                        <Form.Control type="password" placeholder="Password" 
                         onChange={(e) => setPassword(e.target.value)}
-                        value={boardName}/>
+                        value={password}/>
                     </Form.Group>
                     :null
                 }

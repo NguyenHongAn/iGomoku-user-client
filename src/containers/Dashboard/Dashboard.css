@@ -17,7 +17,6 @@
 .tab-list
 {
     padding: 0px!important;
-    height: 100%;
 }
 
 .row .no-float {
@@ -49,4 +48,10 @@
 {
     width: 15%!important;
     margin: 0px 4px 0px 4px;
+}
+
+.form-checkbox
+{
+    display: flex!important;
+    align-items: center;
 }

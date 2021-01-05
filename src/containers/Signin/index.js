@@ -9,7 +9,7 @@ import { useToasts } from "react-toast-notifications";
 import FacebookLogin from "react-facebook-login";
 import GoogleLogin from 'react-google-login';
 import { useSelector, useDispatch} from 'react-redux';
-import {authActions} from '../../store/actions/authAction';
+import {authActions} from '../../store/actions/authActions';
 
 
 const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_DEPLOY_APIURL;

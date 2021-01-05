@@ -6,7 +6,7 @@ import {Provider} from 'react-redux';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { PersistGate } from 'redux-persist/integration/react';
-
+//import store from './store/configStore';
 const {store, persistor} = configStore;
 
 ReactDOM.render(

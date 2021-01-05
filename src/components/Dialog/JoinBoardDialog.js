@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import {useSelector, useDispatch} from "react-redux";
 import {useToasts} from 'react-toast-notifications';
-import axios from "axios";
+import axiosInstance from '../../api';
 import {useHistory} from 'react-router-dom';
 
 const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_DEPLOY_APIURL;
@@ -20,10 +20,7 @@ function JoinBoardDialog({show, handleClose,player}) {
     socketID: state.socket.socketID
   }));
 
-  const {jwtToken, userID} = useSelector(state =>({
-    jwtToken: state.auth.jwtToken,
-    userID: state.auth.userID,
-  }))
+  const  userID = useSelector(state => state.auth.userID)
 
   const history = useHistory();
   const denyInvite =()=>{
@@ -37,19 +34,14 @@ function JoinBoardDialog({show, handleClose,player}) {
     handleClose();
     //send joinboard request
     try {
+      console.log(player);
       const boardID = player.boardID;
       const data = {
         boardID: boardID,
         userID: userID,
       }
 
-      const response = await axios.post(`${APIURL}/board/on-join`, data,
-      {
-         headers:
-         {
-             'Authorization': `Bearer ${jwtToken}`,
-         }
-     });
+      const response = await axiosInstance.post(`${APIURL}/board/on-join`, data);
 
       const payload = {
         boardID: player.boardID,

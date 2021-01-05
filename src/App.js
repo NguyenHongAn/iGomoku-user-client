@@ -12,12 +12,12 @@ import SignupPage from './containers/Signup';
 import BoardContainer from './containers/Board/BoardContainer';
 import ProfilePage from './containers/Profile';
 import { ToastProvider } from "react-toast-notifications";
-import setupSocket from './store/actions/socketAction';
+import ReduxAction from './store/actions/';
 
 function App() {
   const dispatch = useDispatch();
 
-  dispatch(setupSocket());
+  dispatch(ReduxAction.socket.setupSocket());
 
   return (
     

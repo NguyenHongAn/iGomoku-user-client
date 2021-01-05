@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {Nav } from "react-bootstrap";
 import {useDispatch, useSelector} from 'react-redux';
-import ListUserActions from '../../store/actions/listOnlUserAction';
+import ReduxAction from '../../store/actions';
 import UserListItem from './UserListItem/UserListItem';
 import './UserList.css';
 import { useToasts } from "react-toast-notifications";
 import axiosInstance from '../../api';
+import { socketActions } from '../../store/actions/socketActions';
 
 function UserList() {
     
@@ -32,27 +33,31 @@ function UserList() {
     
     useEffect(() =>{
         //get online user list 
-        socket.emit("request-list-online-user", {userID});
+        //socket.emit("request-list-online-user", {userID});
 
-        socket.on("response-list-online-user", (listOnlineUser)=>{
-                const newUserList = JSON.parse(listOnlineUser).filter(user => user._id !== userID);
-                //sắp xếp theo thứ tự elo từ cao đến thấp
-                newUserList.sort((a,b) =>{
-                    return b.elo - a.elo;
-                });
-                
-                dispatch(ListUserActions.updateOnlineUserlist(newUserList));
-
-                if (newUserList.length === 0)
+        socket.on("response-online-user", ({user})=>{
+            console.log(user);
+            if(user._id !== userID)
+            {
+                const isExists = onlineUsers.some(onlUser => onlUser._id === user._id);
+                if (!isExists)
                 {
-                    addToast("No other user online", {
-                        appearance: 'info',
-                        autoDismiss: true,
-                    });
+                    dispatch(ReduxAction.users.addNewUserOnline(user));
                 }
-            });
+            }
+        });
+        socket.on("response-user-offline", ({offlineUser}) =>{
+            console.log(offlineUser);
+            const newUsersList = onlineUsers.filter(onlUser => onlUser._id !== offlineUser);
+            dispatch(ReduxAction.users.updateOnlineUserlist(newUsersList));
+        })
+
+        return ()=>{
+            socket.off("response-online-user");
+            socket.on("response-user-offline");
+        }
         // disconnect old socket each time re-render
-    },[addToast, dispatch, socket, userID]);
+    },[addToast, dispatch, onlineUsers, socket, userID]);
 
     useEffect(()=>{
         (async () =>{      
@@ -67,7 +72,7 @@ function UserList() {
                       });
                     if (response.status === 200)
                     {
-                        dispatch(ListUserActions.updateFriendList(response.data));
+                        dispatch(ReduxAction.users.updateFriendList(response.data));
                     } 
                     
                 } catch (error) {

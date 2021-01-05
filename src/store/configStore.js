@@ -7,12 +7,11 @@ import { createTransform } from 'redux-persist';
 import * as Flatted from 'flatted';
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-// sửa lỗi error serializing state
+// // sửa lỗi error serializing state
 export const transformCircular = createTransform(
     (inboundState, key) => Flatted.stringify(inboundState),
     (outboundState, key) => Flatted.parse(outboundState),
 )
-
 
 const persistConfig = {
     key: "igomoku",
@@ -37,3 +36,7 @@ export default {
         store,
         persistor,
 };
+
+// const store = createStore(allReducers, composeEnhancers(applyMiddleware(thunk)));
+
+// export default store;

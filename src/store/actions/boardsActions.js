@@ -15,11 +15,9 @@ const updateBoardList = (boardList) =>{
             payload: boardList,
         })
     };
-} 
+};
 
-
-
-export const boardListActions = {
+export const boardsActions = {
     addNewBoard,
     updateBoardList,
 }
