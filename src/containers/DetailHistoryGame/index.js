@@ -4,7 +4,8 @@ import { useHistory, useParams } from "react-router-dom";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
+import { Typography } from '@material-ui/core';
 // @material-ui/icons
 
 import FacebookIcon from '@material-ui/icons/Facebook';
@@ -17,7 +18,7 @@ import Button from "../../components/CustomButtons/Button.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
 import GridItem from "../../components/Grid/GridItem.js";
 import Parallax from "../../components/Parallax/Parallax.js";
-import profile from "../../assets/img/faces/male_avatar.png";
+import profile from "../../assets/img/faces/battle_logo.png";
 import axiosInstance from '../../api';
 import BoardShow from './BoardShow';
 
@@ -35,6 +36,35 @@ import ListItem from '@material-ui/core/ListItem';
 
 import styles from "../../assets/jss/material-kit-react/views/profilePage.js";
 
+const CustomListItem = withStyles({
+    root: {
+        "&$selected": {
+            backgroundColor: "#5bc0de",
+            color: "white"
+        },
+        "&$selected:hover": {
+            backgroundColor: "#5bc0de",
+            color: "white"
+        },
+        "&$selected:selected": {
+            backgroundColor: "#5bc0de",
+            color: "white"
+        },
+        "&:hover": {
+            backgroundColor: "#5bc0de",
+            color: "white"
+        },
+        "&:active": {
+            backgroundColor: "#5bc0de",
+            color: "white"
+        },
+        '&$focusVisible': {
+            backgroundColor: "#5bc0de",
+            color: "white"
+        },
+    
+    }
+})(ListItem);
 
 const useStyles = makeStyles(styles);
 
@@ -57,8 +87,13 @@ export default function DetailHistoryGame(props) {
     }));
 
     const [data, setData] = useState({});
+    const [historyIndexClick, setHistoryIndexClick] = useState(-1);
     const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
 
+    const onHistoryStepClick = (e, index) => {
+      //  e.preventDefault();
+        setHistoryIndexClick(index);
+    };
 
     useEffect(() => {
         async function fetchData() {
@@ -79,7 +114,46 @@ export default function DetailHistoryGame(props) {
         fetchData();
     }, []);
 
-    // console.log("data ne: " + JSON.stringify(data));
+    const listMessage = data.chats;
+    var messages = null;
+
+    if (listMessage) {
+        messages = listMessage.map((item, index) => (
+            <ListItem key={item._id} style={{ height: '30px' }}>
+                <ListItemText
+                    disableTypography
+                    primary={
+                        <React.Fragment>
+                            <Typography ><span style={{ fontWeight: 'bold', color: item.talker === data.me_fullname ? 'blue' : (item.talker === data.enemy_fullname ? 'red' : 'black') }}>{item.talker}:</span> {item.message}</Typography>
+                        </React.Fragment>
+                    }
+                />
+            </ListItem>
+        ));
+    }
+
+    const listStep = data.stepHistory;
+    var histories = null;
+
+    if (listStep) {
+        histories = listStep.map((item, index) => {
+            var a = 3;
+
+            return (
+                <CustomListItem key={item._id} style={{ height: '30px' }} onClick={(e) => onHistoryStepClick(e, item.index)}>
+                    <ListItemText
+                        disableTypography
+                        primary={
+                            <React.Fragment>
+                                <Typography style={{fontWeight: 'bold'}}><span>{index + 1}. Ô [{Math.floor(item.index/20)}][{item.index % 20}]</span>: <span style={{color: item.player === 1 ? 'red' : 'blue'}}>{item.player === 1 ? 'X' : 'O'}</span></Typography>
+                            </React.Fragment>
+                        }
+                    />
+                </CustomListItem>
+            )
+        });
+    }
+
 
     return (
         <div>
@@ -94,8 +168,8 @@ export default function DetailHistoryGame(props) {
                                         <img src={profile} alt="..." className={imageClasses} />
                                     </div>
                                     <div className={classes.name}>
-                                        <h3 className={classes.title}>DETAIL GAME</h3>
-                                        <h6>---oOo---</h6>
+                                        <h3 className={classes.title}>CHI TIẾT LỊCH SỬ TRẬN ĐẤU</h3>
+                                        <h6>------oOo------</h6>
                                         <Button justIcon link className={classes.margin5}>
                                             <TwitterIcon />
                                         </Button>
@@ -138,33 +212,7 @@ export default function DetailHistoryGame(props) {
                                                     </CardHeader>
                                                     <CardBody>
                                                         <List className={classes.root} style={{ maxHeight: '383px', overflow: 'auto' }}>
-                                                            <ListItem>
-                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
-                                                            </ListItem>
-                                                            <ListItem>
-                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
-                                                            </ListItem>
-                                                            <ListItem>
-                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
-                                                            </ListItem>
-                                                            <ListItem>
-                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
-                                                            </ListItem>
-                                                            <ListItem>
-                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
-                                                            </ListItem>
-                                                            <ListItem>
-                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
-                                                            </ListItem>
-                                                            <ListItem>
-                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
-                                                            </ListItem>
-                                                            <ListItem>
-                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
-                                                            </ListItem>
-                                                            <ListItem>
-                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
-                                                            </ListItem>
+                                                            {messages ? messages : ''}
                                                         </List>
                                                     </CardBody>
                                                     <CardFooter className={classes.cardFooter}>
@@ -181,11 +229,11 @@ export default function DetailHistoryGame(props) {
                             </GridItem> */}
                             <GridItem xs={8} sm={8} md={8} className={classes.navWrapper} style={{ border: "2px solid #5bc0de", marginTop: '-50px', borderRight: "none" }}>
                                 <h5>Bàn cờ</h5>,
-                                <BoardShow></BoardShow>
+                                <BoardShow matrix={data.stepHistory} indexClick={historyIndexClick} winningLine={data.winningLine}></BoardShow>
                                 <h1></h1>
                             </GridItem>
                             <GridItem xs={4} sm={4} md={4} className={classes.navWrapper} style={{ border: "2px solid #5bc0de", marginTop: '-50px' }}>
-                            <div className={classes.container}>
+                                <div className={classes.container}>
                                     <GridContainer justify="center" style={{ marginTop: "30px" }}>
                                         <GridItem xs={12} sm={12} md={12}>
                                             <Card className={classes[cardAnimaton]}>
@@ -198,33 +246,7 @@ export default function DetailHistoryGame(props) {
                                                     </CardHeader>
                                                     <CardBody>
                                                         <List className={classes.root} style={{ maxHeight: '383px', overflow: 'auto' }}>
-                                                            <ListItem>
-                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
-                                                            </ListItem>
-                                                            <ListItem>
-                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
-                                                            </ListItem>
-                                                            <ListItem>
-                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
-                                                            </ListItem>
-                                                            <ListItem>
-                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
-                                                            </ListItem>
-                                                            <ListItem>
-                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
-                                                            </ListItem>
-                                                            <ListItem>
-                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
-                                                            </ListItem>
-                                                            <ListItem>
-                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
-                                                            </ListItem>
-                                                            <ListItem>
-                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
-                                                            </ListItem>
-                                                            <ListItem>
-                                                                <ListItemText primary={'aaaaa'} secondary={'bbbbb'} />
-                                                            </ListItem>
+                                                          {histories}
                                                         </List>
                                                     </CardBody>
                                                     <CardFooter className={classes.cardFooter}>
