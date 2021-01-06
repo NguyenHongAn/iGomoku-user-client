@@ -26,7 +26,7 @@ function AppBar() {
 
 
   function logout() {
-    dispatch(authActions.signOut);
+    dispatch(ReduxAction.auth.signOut);
     dispatch({
       type: "match/restore"
     });

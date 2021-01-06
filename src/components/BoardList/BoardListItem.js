@@ -26,7 +26,7 @@ function BoardListItem({board}) {
                     </FontAwesomeIcon>
                 </div> 
                 <div className="board-players">
-                    <p style={{"paddingRight": "10px"}}>Owner: </p> {board.owner.fullname}
+                    <p style={{"paddingRight": "10px"}}>Owner: {board.owner? board.owner.fullname: null} </p> 
                     {board.player?
                     <p style={{"padding": "0px 10px 0px 10px"}}>Player: {board.player.fullname}</p>
                     :null

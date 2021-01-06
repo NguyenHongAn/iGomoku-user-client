@@ -47,17 +47,23 @@ function Dashboard() {
         });
 
         //Lời mời tham gia ván đấu được chấp nhận
-        socket.on("start-game", async (info)=>{
-           
+        socket.on("start-game", async (info)=>{  
             history.push(`/board/${info}`);
         });
+
+        //create new board
+        socket.on("new-board", async({newBoard})=>{
+            dispatch(ReduxAction.boards.addNewBoard(newBoard));
+            console.log("realtime");
+        })
 
         return ()=>{
             socket.off("invite-player");
             socket.off("start-game");
+            socket.off("new-board");
         }
 
-    },[history, jwtToken, openInviteDialog, socket]);
+    },[dispatch, history, jwtToken, openInviteDialog, socket]);
     
     //get data 
     useEffect(() =>{
@@ -68,6 +74,7 @@ function Dashboard() {
                 let onlineUserList = response.data.users;
                 //update list of playing board
                 dispatch(ReduxAction.boards.updateBoardList(response.data.boards));
+                console.log("featchDAta");
                 // do not display yourself
                 if(jwtToken !=="invalid token :))")
                 {
@@ -76,6 +83,7 @@ function Dashboard() {
                         {
                             return user;
                         }
+                        return null;
                     })
                 }
                 // sort by elo game

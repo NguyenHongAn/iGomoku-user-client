@@ -7,7 +7,7 @@ const boardListReducer = (state= defaultState, action) =>{
     switch (action.type) {
         case "boards/addnew":
         {
-            const tempArray = Array.from(state.boardList);
+            const tempArray = Array.from(state.boards);
             tempArray.push(action.payload);
             return {
                 ...state,
