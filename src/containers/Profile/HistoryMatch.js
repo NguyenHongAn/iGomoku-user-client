@@ -123,7 +123,9 @@ export default function ProfilePage(props) {
     }, [addToast, dispatch, jwtToken, userID]);
 
     const onDetailHistoryGame = function (e, index) {
-        history.push('/detail-game/1');
+        history.push({
+            pathname: `/detail-game/${listHistory[index]['_id']}`
+        });
     };
 
 
