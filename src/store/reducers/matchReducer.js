@@ -1,6 +1,6 @@
 const defaultState = {
     history: [{                 //lịch sử các bước chơi cờ 
-        squares: Array(16*16).fill(null),
+        squares: Array(20*20).fill(null),
         pos:-1,
         }],
                             //bàn cờ hiện tại
@@ -80,7 +80,7 @@ const boardReducer = (state = defaultState, action) =>{
                 owner: {},              //thông tin người tạo
                 player: {},              //thông tin người chơi
                 winner: {},   
-                status: 0,              //-1:deny, 0:not create, 1:watting, 2:playing
+                status: 0,              //-1:deny, 0:not create, 1:waiting, 2:playing
                 eloGot: 0,        
                 isOpen: false,    
             }

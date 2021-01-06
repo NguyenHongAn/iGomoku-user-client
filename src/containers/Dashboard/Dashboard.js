@@ -22,7 +22,7 @@ function Dashboard() {
         jwtToken: state.auth.jwtToken,
         userID: state.auth.userID
     }));
-    const [player, setPlayer] = useState({});
+    const [playerInfo, setPlayerInfo] = useState({});
     const dispatch = useDispatch();
 
     const history = useHistory();
@@ -37,27 +37,31 @@ function Dashboard() {
         if (jwtToken !== "invalid token :))")
         {
             socket.emit("request-online-user", {jwtToken});
+            socket.on("expired-token", ()=>{
+                dispatch(ReduxAction.auth.signOut);
+                dispatch(ReduxAction.match.restoreDefault);
+            });
         }
 
          //Nhận lời mời tham gia ván đấu từ người khác
-         socket.on("invite-player", (info)=>{
-            const dataRecive = JSON.parse(info);
+         socket.on("invite-player", ({player})=>{
             setOpenInviteDialog(!openInviteDialog);
-            setPlayer(dataRecive);
+            setPlayerInfo(player);
         });
 
         //Lời mời tham gia ván đấu được chấp nhận
-        socket.on("start-game", async (info)=>{  
-            history.push(`/board/${info}`);
+        socket.on("start-game", ({boardID})=>{  
+            console.log("goto");
+            history.push(`/board/${boardID}`);
         });
 
         //create new board
-        socket.on("new-board", async({newBoard})=>{
+        socket.on("new-board",({newBoard})=>{
+            //console.log(newBoard);
             dispatch(ReduxAction.boards.addNewBoard(newBoard));
-            console.log("realtime");
         })
 
-        return ()=>{
+        return () =>{
             socket.off("invite-player");
             socket.off("start-game");
             socket.off("new-board");
@@ -74,7 +78,6 @@ function Dashboard() {
                 let onlineUserList = response.data.users;
                 //update list of playing board
                 dispatch(ReduxAction.boards.updateBoardList(response.data.boards));
-                console.log("featchDAta");
                 // do not display yourself
                 if(jwtToken !=="invalid token :))")
                 {
@@ -90,10 +93,8 @@ function Dashboard() {
                 onlineUserList.sort((a,b)=>{
                     return b.elo-a.elo;
                 });
-
                 //update list online users
                 dispatch(ReduxAction.users.updateOnlineUserlist(onlineUserList));
-
                 if (onlineUserList.length === 0)
                 {
                     addToast("No other user online", {
@@ -110,7 +111,6 @@ function Dashboard() {
             }
         }
         fetchData();
-       
     },[addToast, dispatch, jwtToken, userID]);
 
     return (
@@ -118,7 +118,7 @@ function Dashboard() {
         <Container fluid className="h-100 main-container">
             <JoinBoardDialog show={openInviteDialog} 
             handleClose={handleInviteDialog} 
-            player={player}>
+            player={playerInfo}>
             </JoinBoardDialog>
             <CreateBoardDialog show={openCreateDialog} 
             handleClose={handleCreateDialog}>

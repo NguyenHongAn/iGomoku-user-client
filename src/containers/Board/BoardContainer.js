@@ -10,8 +10,8 @@ import Loading from '../../components/Loading';
 import {useHistory} from 'react-router-dom';
 import {useToasts} from 'react-toast-notifications';
 
-import axios from 'axios';
-const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_DEPLOY_APIURL;
+import axiosInstance from '../../api';
+
 
 function BoardContainer() {
     
@@ -43,7 +43,7 @@ function BoardContainer() {
         }
         
         try {
-            const response = await axios.get(`${APIURL}/board/${boardID}`);
+            const response = await axiosInstance.get(`/board/${boardID}`);
             const dataReceive = response.data;
             //console.log({dataReceive});
 

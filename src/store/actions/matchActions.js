@@ -9,15 +9,13 @@ const closeCreateDialog = {
     payload: false,
 }
 
-const createNewBoard = (size = 16, boardID, owner, player) =>{
+const startNewMatch = (size = 20, newMatch) =>{
     return (dispatch) =>{
         dispatch({
             type: 'match/create',
             payload: {
                 size, 
-                boardID,
-                owner, 
-                player
+                newMatch
             },
         });
     }
@@ -47,7 +45,7 @@ const restoreDefault = {
 }
 
 export const matchActions = {
-    createNewBoard,
+    startNewMatch,
     saveHistory,
     winningDisplay,
     restoreDefault,

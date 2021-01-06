@@ -6,19 +6,14 @@ import {useSelector, useDispatch} from "react-redux";
 import {useToasts} from 'react-toast-notifications';
 import axiosInstance from '../../api';
 import {useHistory} from 'react-router-dom';
-
-const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_DEPLOY_APIURL;
-
+import ReduxAction from '../../store/actions';
 
 function JoinBoardDialog({show, handleClose,player}) {
 
   const dispatch = useDispatch();
 
   const {addToast} = useToasts();
-  const {socket, socketID} = useSelector(state => ({
-    socket: state.socket.socket,
-    socketID: state.socket.socketID
-  }));
+  const socket = useSelector(state => state.socket.socket);
 
   const  userID = useSelector(state => state.auth.userID)
 
@@ -34,34 +29,26 @@ function JoinBoardDialog({show, handleClose,player}) {
     handleClose();
     //send joinboard request
     try {
-      console.log(player);
       const boardID = player.boardID;
       const data = {
         boardID: boardID,
         userID: userID,
+        socketID: socket.id,
       }
 
-      const response = await axiosInstance.post(`${APIURL}/board/on-join`, data);
+      const response = await axiosInstance.post(`/board/on-join`, data);
 
-      const payload = {
-        boardID: player.boardID,
-        boardName: player.boardName,
-        owner: player.ownerID, //id người tạo
-        player: userID,       //id người chập nhận lời mời cũng là người chơi
-        status: 2
+      const newMatch = {
+        boardID: response.data._id,
+        boardName: response.data.boardName,
+        owner: response.data.ownerID, //id người tạo
+        player: response.data.player,       //id người chập nhận lời mời cũng là người chơi
+        status: response.data.boardStatus
       };
       
-      dispatch({
-        type: "match/create",
-        payload: payload
-      });
-      
-      if(response.status ===200)
-      { 
-        socket.emit("accept_invite", ({boardID}));
-        history.push(`/board/${boardID}`);
-      }
-     
+      dispatch(ReduxAction.match.startNewMatch(newMatch));
+    
+      history.push(`/board/${response.data._id}`);
     } catch (error) {
       console.log(error);
       addToast(error.response.data.message, {

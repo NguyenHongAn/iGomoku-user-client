@@ -35,18 +35,14 @@ function UserList() {
         //socket.emit("request-list-online-user", {userID});
 
         socket.on("response-online-user", ({user})=>{
-            console.log(user);
+            
             if(user._id !== userID)
             {
-                const isExists = onlineUsers.some(onlUser => onlUser._id === user._id);
-                if (!isExists)
-                {
-                    dispatch(ReduxAction.users.addNewUserOnline(user));
-                }
+                console.log(user);
+                dispatch(ReduxAction.users.addNewUserOnline(user));   
             }
         });
         socket.on("response-user-offline", ({offlineUser}) =>{
-            console.log(offlineUser);
             const newUsersList = onlineUsers.filter(onlUser => onlUser._id !== offlineUser);
             dispatch(ReduxAction.users.updateOnlineUserlist(newUsersList));
         })
