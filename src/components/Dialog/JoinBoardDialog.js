@@ -29,11 +29,9 @@ function JoinBoardDialog({show, handleClose,player}) {
     handleClose();
     //send joinboard request
     try {
-      const boardID = player.boardID;
       const data = {
-        boardID: boardID,
-        userID: userID,
-        socketID: socket.id,
+        boardID: player.boardID,
+        userID: userID
       }
 
       const response = await axiosInstance.post(`/board/on-join`, data);
@@ -41,14 +39,14 @@ function JoinBoardDialog({show, handleClose,player}) {
       const newMatch = {
         boardID: response.data._id,
         boardName: response.data.boardName,
-        owner: response.data.ownerID, //id người tạo
+        owner: response.data.owner, //id người tạo
         player: response.data.player,       //id người chập nhận lời mời cũng là người chơi
         status: response.data.boardStatus
       };
       
       dispatch(ReduxAction.match.startNewMatch(newMatch));
-    
-      history.push(`/board/${response.data._id}`);
+
+      //history.push(`/board/${response.data._id}`);
     } catch (error) {
       console.log(error);
       addToast(error.response.data.message, {

@@ -121,18 +121,4 @@ function UserList() {
     )
 }
 
-
-// const mapState = (state) =>({
-//     listUser: Array.from(state.listOnlUser.users),
-//     socket: state.listOnlUser.socket,
-//   });
-  
-// const mapDispatch = (dispatch) => ({
-//     setupSocket: () =>{
-//         dispatch(UserListActions.setupSocket());
-//     }
-    
-// });
-
-
 export default UserList;

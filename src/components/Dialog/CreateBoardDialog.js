@@ -4,7 +4,7 @@ import {Modal, Form, Button} from 'react-bootstrap';
 import axiosInstance from '../../api';
 import {useSelector, useDispatch} from 'react-redux';
 import {useToasts} from 'react-toast-notifications';
-
+import ReduxAction from '../../store/actions';
 
 function CreateBoardDialog({show, handleClose}) {
 
@@ -56,10 +56,7 @@ function CreateBoardDialog({show, handleClose}) {
             }
 
             //lưu thông tin người tạo ván đấu
-            dispatch({
-                type: "match/create",
-                payload: payload
-            })
+            dispatch(ReduxAction.match.startNewMatch(payload));
             
             //thông báo tới người chơi nếu được mời qua socket ID
             if (typeof player._id !== 'undefined')

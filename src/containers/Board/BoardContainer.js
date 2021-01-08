@@ -2,14 +2,13 @@ import React, {useState, useEffect} from 'react'
 import {Container, Row, Col} from 'react-bootstrap';
 import './BoardContainer.css';
 import Board from '../../components/Board/Board';
-import DropdownHistory from '../../components/DropdownHistory/DropdownHistory';
 import vs from '../../assets/img/vs-image.png';
 import {useSelector, useDispatch} from 'react-redux';
 import ChatFrame from '../../components/ChatFrame/ChatFrame';
 import Loading from '../../components/Loading';
 import {useHistory} from 'react-router-dom';
 import {useToasts} from 'react-toast-notifications';
-
+import ReduxAction from '../../store/actions';
 import axiosInstance from '../../api';
 
 
@@ -24,15 +23,12 @@ function BoardContainer() {
         eloGot: state.match.eloGot
     }))
     const [isLoading, setisLoading] = useState(true);
-    // const [owner,setOwner] = useState({});
-    // const [player, setPlayer] = useState({});
     const {addToast} = useToasts();
     const dispatch = useDispatch();
-
     const history = useHistory();
 
     useEffect(()=>{
-       const fetchData = async ()=>{ 
+       (async ()=>{ 
         if (status === 1)
         {
             setisLoading(true);
@@ -44,21 +40,14 @@ function BoardContainer() {
         
         try {
             const response = await axiosInstance.get(`/board/${boardID}`);
-            const dataReceive = response.data;
-            //console.log({dataReceive});
-
-            dispatch({
-                type: "match/updateInfo",
-                payload: {
-                    owner: dataReceive.owner,
-                    player: dataReceive.player,
-                    eloGot: dataReceive.eloGot,
-                    status: dataReceive.boardStatus,
-                }
-            });
-            // setOwner(dataReceive.owner);
-            // setPlayer(dataReceive.player);
-
+            console.log(response.data);
+            const payload = {
+                    owner: response.data.owner,
+                    player: response.data.player,
+                    eloGot: response.data.eloGot,
+                    status: response.data.boardStatus,
+            }
+            dispatch(ReduxAction.match.updateInfo(payload));
         } catch (error) {
             console.log({error});
             addToast(error.response.data.message,{
@@ -66,9 +55,7 @@ function BoardContainer() {
                 autoDismiss: true,
             });           
         }
-    };
-
-        fetchData();
+    })();
     },[addToast, boardID, dispatch, history, status]);
 
     
@@ -77,14 +64,11 @@ function BoardContainer() {
         {isLoading?
         <Loading></Loading>
         :null}
-        {<Row>
+        {isLoading?
+        <Row>
             <Col sm={8}>
-                <div className="board-container">
-                {isLoading?
-                    <Board></Board>
-                    :<h2>Watting for player </h2>
-                    }
-                    
+                <div className="board-container">    
+                    <Board></Board>   
                 </div>
             </Col>
             <Col sm={4} className="tab-list">
@@ -97,16 +81,17 @@ function BoardContainer() {
                     <img src={vs} alt="VS"/>
                     <div className="username "style={{textAlign: "center"}}>
                         <h1>
-                            {player.fullname}
+                            {player?player.fullname : null}
                         </h1>
                     </div>
-                    <DropdownHistory></DropdownHistory>
+                    {/* <DropdownHistory></DropdownHistory> */}
                 </div>
                 <div className="chat-container"> 
                 <ChatFrame></ChatFrame>
                 </div>
             </Col>
-        </Row>}
+        </Row>
+        :null}
     </Container>
     )
 }

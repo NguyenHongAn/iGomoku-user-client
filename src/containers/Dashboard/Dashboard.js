@@ -50,8 +50,8 @@ function Dashboard() {
         });
 
         //Lời mời tham gia ván đấu được chấp nhận
-        socket.on("start-game", ({boardID})=>{  
-            console.log("goto");
+        socket.on("join-board", ({boardID})=>{  
+            console.log("haha");
             history.push(`/board/${boardID}`);
         });
 
@@ -95,13 +95,6 @@ function Dashboard() {
                 });
                 //update list online users
                 dispatch(ReduxAction.users.updateOnlineUserlist(onlineUserList));
-                if (onlineUserList.length === 0)
-                {
-                    addToast("No other user online", {
-                        appearance: 'info',
-                        autoDismiss: true,
-                    });
-                }
             } catch (error) {
                 console.log(error);
                 addToast(error.respone.data.message, {

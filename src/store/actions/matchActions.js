@@ -9,14 +9,11 @@ const closeCreateDialog = {
     payload: false,
 }
 
-const startNewMatch = (size = 20, newMatch) =>{
+const startNewMatch = (newMatch) =>{
     return (dispatch) =>{
         dispatch({
             type: 'match/create',
-            payload: {
-                size, 
-                newMatch
-            },
+            payload: newMatch
         });
     }
 }
@@ -44,6 +41,15 @@ const restoreDefault = {
     payload: "restore"
 }
 
+const updateInfo = (newInfo) =>{
+    return (dispatch)=>{
+        dispatch({
+            type: "match/updateinfo",
+            payload: newInfo
+        })
+    }
+}
+
 export const matchActions = {
     startNewMatch,
     saveHistory,
@@ -51,4 +57,5 @@ export const matchActions = {
     restoreDefault,
     openCreateDialog,
     closeCreateDialog,
+    updateInfo,
 }
