@@ -22,7 +22,7 @@ function Dashboard() {
         jwtToken: state.auth.jwtToken,
         userID: state.auth.userID
     }));
-    const [player, setPlayer] = useState({});
+    const [playerInfo, setPlayerInfo] = useState({});
     const dispatch = useDispatch();
 
     const history = useHistory();
@@ -37,27 +37,37 @@ function Dashboard() {
         if (jwtToken !== "invalid token :))")
         {
             socket.emit("request-online-user", {jwtToken});
+            socket.on("expired-token", ()=>{
+                dispatch(ReduxAction.auth.signOut);
+                dispatch(ReduxAction.match.restoreDefault);
+            });
         }
 
          //Nhận lời mời tham gia ván đấu từ người khác
-         socket.on("invite-player", (info)=>{
-            const dataRecive = JSON.parse(info);
+         socket.on("invite-player", ({player})=>{
             setOpenInviteDialog(!openInviteDialog);
-            setPlayer(dataRecive);
+            setPlayerInfo(player);
         });
 
         //Lời mời tham gia ván đấu được chấp nhận
-        socket.on("start-game", async (info)=>{
-           
-            history.push(`/board/${info}`);
+        socket.on("join-board", ({boardID})=>{  
+            console.log("haha");
+            history.push(`/board/${boardID}`);
         });
 
-        return ()=>{
+        //create new board
+        socket.on("new-board",({newBoard})=>{
+            //console.log(newBoard);
+            dispatch(ReduxAction.boards.addNewBoard(newBoard));
+        })
+
+        return () =>{
             socket.off("invite-player");
             socket.off("start-game");
+            socket.off("new-board");
         }
 
-    },[history, jwtToken, openInviteDialog, socket]);
+    },[dispatch, history, jwtToken, openInviteDialog, socket]);
     
     //get data 
     useEffect(() =>{
@@ -76,23 +86,15 @@ function Dashboard() {
                         {
                             return user;
                         }
+                        return null;
                     })
                 }
                 // sort by elo game
                 onlineUserList.sort((a,b)=>{
                     return b.elo-a.elo;
                 });
-
                 //update list online users
                 dispatch(ReduxAction.users.updateOnlineUserlist(onlineUserList));
-
-                if (onlineUserList.length === 0)
-                {
-                    addToast("No other user online", {
-                        appearance: 'info',
-                        autoDismiss: true,
-                    });
-                }
             } catch (error) {
                 console.log(error);
                 addToast(error.respone.data.message, {
@@ -102,7 +104,6 @@ function Dashboard() {
             }
         }
         fetchData();
-       
     },[addToast, dispatch, jwtToken, userID]);
 
     return (
@@ -110,7 +111,7 @@ function Dashboard() {
         <Container fluid className="h-100 main-container">
             <JoinBoardDialog show={openInviteDialog} 
             handleClose={handleInviteDialog} 
-            player={player}>
+            player={playerInfo}>
             </JoinBoardDialog>
             <CreateBoardDialog show={openCreateDialog} 
             handleClose={handleCreateDialog}>

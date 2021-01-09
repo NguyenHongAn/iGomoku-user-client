@@ -1,6 +1,6 @@
 const defaultState = {
     history: [{                 //lịch sử các bước chơi cờ 
-        squares: Array(16*16).fill(null),
+        squares: Array(20*20).fill(null),
         pos:-1,
         }],
                             //bàn cờ hiện tại
@@ -13,7 +13,7 @@ const defaultState = {
     isOpen: false,
     status: 0,              //-1:deny, 0:not create, 1:watting, 2:playing
     eloGot: 0,
-
+    watchers: 0,
 }
 
 const boardReducer = (state = defaultState, action) =>{
@@ -32,6 +32,7 @@ const boardReducer = (state = defaultState, action) =>{
                 boardName: action.payload.boardName,
                 player: action.payload.player,
                 status: action.payload.status,
+                watchers: action.payload.watchers
             }
         case "match/storePlayerTemporary":
         return{
@@ -43,12 +44,13 @@ const boardReducer = (state = defaultState, action) =>{
             ...state,
             player: {},
         }
-        case "match/updateInfo":
+        case "match/updateinfo":
             return {
                 ...state,
                 owner: action.payload.owner,
                 player: action.payload.player,
                 eloGot: action.payload.eloGot,
+               
             }
         case 'match/saveHistory':
           {  
@@ -70,7 +72,7 @@ const boardReducer = (state = defaultState, action) =>{
             return {
             
                 history: [{                 //lịch sử các bước chơi cờ 
-                    squares: Array(16*16).fill(null),
+                    squares: Array(20*20).fill(null),
                     pos:-1,
                     }],
                                         //bàn cờ hiện tại
@@ -80,7 +82,7 @@ const boardReducer = (state = defaultState, action) =>{
                 owner: {},              //thông tin người tạo
                 player: {},              //thông tin người chơi
                 winner: {},   
-                status: 0,              //-1:deny, 0:not create, 1:watting, 2:playing
+                status: 0,              //-1:deny, 0:not create, 1:waiting, 2:playing
                 eloGot: 0,        
                 isOpen: false,    
             }

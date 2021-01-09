@@ -27,10 +27,8 @@ function AppBar() {
 
 
   function logout() {
-    dispatch(authActions.signOut);
-    dispatch({
-      type: "match/restore"
-    });
+    dispatch(ReduxAction.auth.signOut);
+    dispatch(ReduxAction.match.restoreDefault);
     socket.emit("sign-out", { userID });
   }
 

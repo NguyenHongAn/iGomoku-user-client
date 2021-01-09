@@ -19,14 +19,9 @@ function Board() {
         boardID: state.match.boardID,
         owner: state.match.owner,
     }));
-
-
     const userID = useSelector(state => state.auth.userID);
     const socket = useSelector(state => state.socket.socket);
-
-    const dispatch = useDispatch();
-
-    
+    const dispatch = useDispatch(); 
     const [currBoard,setCurrBoard] = useState(
         stepNumber===0?historySteps[0].squares :historySteps[stepNumber].squares
         );
@@ -95,7 +90,6 @@ function Board() {
     
     useEffect(() =>{
         let tempBoard = Array.from(currBoard).slice();
-        
         const result = ResultIdentification.calculateWinner(tempBoard,position,boardConst.SIZE_BOARD,boardConst.STEP);
         //ván đấu kết thúc
         if (result)
@@ -144,22 +138,18 @@ function Board() {
         }
 
     },[currBoard, dispatch, firstStep, isXTurn, position, socket]);
-
-    
-
     const setGridDisplay = () =>{
         return {
-  
-            "justifyContent": "center",
+            "width": "70%",
+            "height": "96%",
             "display": "grid",
-            "gridTemplateColumns":`repeat(${boardConst.SIZE_BOARD},2.7em)` ,
-            "gridTemplateRows": `repeat(${boardConst.SIZE_BOARD},2.7em)`,
+            "gridTemplateColumns":`repeat(${boardConst.SIZE_BOARD},${100/boardConst.SIZE_BOARD}%)` ,
+            "gridTemplateRows": `repeat(${boardConst.SIZE_BOARD},${100/boardConst.SIZE_BOARD}%)`,
             "border": "5px solid #34ebeb",
           }
     }
 
-    return (
-        <div>
+    return ( 
         <div style={setGridDisplay()}>
         {
             currBoard.map((square,i)=>{
@@ -178,7 +168,6 @@ function Board() {
             })
         }
         </div>
-      </div>
     )
 }
 

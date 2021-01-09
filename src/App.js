@@ -9,7 +9,7 @@ import Dashboard from './containers/Dashboard/Dashboard';
 import LoginPage from './containers/Signin';
 import SignupPage from './containers/Signup';
 import DetailGamePage from './containers/DetailHistoryGame';
-
+import NotFound from './containers/NotFound';
 import BoardContainer from './containers/Board/BoardContainer';
 import ProfilePage from './containers/Profile';
 import { ToastProvider } from "react-toast-notifications";
@@ -52,7 +52,9 @@ function App() {
           <Route path='/'>
             <Redirect to="/igomoku"></Redirect>
           </Route>
-          
+          <Route>
+            <NotFound></NotFound>
+          </Route>
       </Switch>
       </ToastProvider>
     </BrowserRouter>

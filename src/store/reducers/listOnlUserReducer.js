@@ -19,7 +19,19 @@ const listOnlUserReducer = (state = defaultState, action) =>{
         case "onlineUser/addnew":
             {
                 const newList = Array.from(state.users);
-                newList.push(action.payload);
+                for (let i =0; i<= newList.length ;i++)
+                {
+                    if ( i === newList.length)
+                    {
+                        newList.push(action.payload);
+                        break;
+                    }
+                    if (newList[i]._id === action.payload._id)
+                    {
+                        newList[i] = action.payload;
+                        break;
+                    }
+                }
                 return{
                     ...state,
                     users: newList,

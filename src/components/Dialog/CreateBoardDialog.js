@@ -1,14 +1,14 @@
 import React, {useState} from 'react';
-
+import {useHistory} from "react-router-dom";
 import {Modal, Form, Button} from 'react-bootstrap';
 import axiosInstance from '../../api';
 import {useSelector, useDispatch} from 'react-redux';
 import {useToasts} from 'react-toast-notifications';
-
+import ReduxAction from '../../store/actions';
 
 function CreateBoardDialog({show, handleClose}) {
 
-    const [boardName, setBoardName] = useState("Caro Room");
+    const [boardName, setBoardName] = useState("Caro Board");
     const [usePass, setUsePassword] = useState(false);
     const [password, setPassword] = useState("");
     const {autoMatch,fullname, userID} = useSelector(state => ({
@@ -17,8 +17,8 @@ function CreateBoardDialog({show, handleClose}) {
         userID: state.auth.userID,
     }));
  
-    const socket = useSelector(state => state.socket.socket);
-
+    const socketID = useSelector(state => state.socket.socket.id);
+    const history = useHistory();
     const player = useSelector(state => state.match.player);
     const dispatch = useDispatch();
 
@@ -29,10 +29,12 @@ function CreateBoardDialog({show, handleClose}) {
         try{
             //post dữ liệu tạo ván đấu mới
             const data = {
+                ownerName: fullname,
                 userID: userID,
                 boardName: boardName,
                 isPrivate: usePass,
                 password: password,
+                socketID: socketID,
             }
 
             if (typeof player._id !== 'undefined')
@@ -54,20 +56,21 @@ function CreateBoardDialog({show, handleClose}) {
             }
 
             //lưu thông tin người tạo ván đấu
-            dispatch({
-                type: "match/create",
-                payload: payload
-            })
+            dispatch(ReduxAction.match.startNewMatch(payload));
             
             //thông báo tới người chơi nếu được mời qua socket ID
-            
-            addToast("Create match success, Waitting fo opponent", 
-            { 
-                appearance: 'success',
-                autoDismiss: true,
-                autoDismissTimeout: 10000,
-            });
-
+            if (typeof player._id !== 'undefined')
+            {
+                addToast("Create match success, Waitting fo opponent", 
+                { 
+                    appearance: 'success',
+                    autoDismiss: true,
+                    autoDismissTimeout: 10000,
+                });    
+            }
+            else {
+                history.push(`/board/${response.data._id}`);
+            }
             handleClose();
             
         }

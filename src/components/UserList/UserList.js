@@ -38,16 +38,13 @@ function UserList() {
         //socket.emit("request-list-online-user", {userID});
 
         socket.on("response-online-user", ({ user }) => {
-            console.log(user);
+            
             if (user._id !== userID) {
-                const isExists = onlineUsers.some(onlUser => onlUser._id === user._id);
-                if (!isExists) {
-                    dispatch(ReduxAction.users.addNewUserOnline(user));
-                }
+                console.log(user);
+                dispatch(ReduxAction.users.addNewUserOnline(user));   
             }
         });
         socket.on("response-user-offline", ({ offlineUser }) => {
-            console.log(offlineUser);
             const newUsersList = onlineUsers.filter(onlUser => onlUser._id !== offlineUser);
             dispatch(ReduxAction.users.updateOnlineUserlist(newUsersList));
         })
@@ -118,7 +115,7 @@ function UserList() {
     }
 
     const onProccessingInvitation = async function (e, id, status) {
-        //đăng nhập để process lời mời kết bạn
+        //dang nh?p d? process l?i m?i k?t b?n
         if (userID === "0") {
             // history.push("/auth/signin");
         }
@@ -160,15 +157,15 @@ function UserList() {
         }
     };
 
-    const sendUnFriendRequest = async function (playerId) {
+    const sendUnFriendRequest = async function (e, playerId) {
         if (playerId === -1)
             return;
 
-        if (playerId) {
-            console.log("playerId: " + playerId.toString());
-        }
+        // if (playerId) {
+        //     console.log("playerId: " + playerId.toString());
+        // }
 
-        //đăng nhập để gửi lời mời kết bạn
+        //dang nh?p d? g?i l?i m?i k?t b?n
         if (userID === "0") {
             // history.push("/auth/signin");
         }
@@ -196,10 +193,10 @@ function UserList() {
                 }
 
             } catch (error) {
-                // addToast(error.response.data.message, {
-                //     appearance: 'error',
-                //     autoDismiss: true,
-                // });
+                addToast(error.response.data.message, {
+                    appearance: 'error',
+                    autoDismiss: true,
+                });
             }
 
         }
@@ -245,19 +242,5 @@ function UserList() {
         </div>
     )
 }
-
-
-// const mapState = (state) =>({
-//     listUser: Array.from(state.listOnlUser.users),
-//     socket: state.listOnlUser.socket,
-//   });
-
-// const mapDispatch = (dispatch) => ({
-//     setupSocket: () =>{
-//         dispatch(UserListActions.setupSocket());
-//     }
-
-// });
-
 
 export default UserList;
