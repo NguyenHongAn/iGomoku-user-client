@@ -10,7 +10,7 @@ import {useToasts} from 'react-toast-notifications';
 
 const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_DEPLOY_APIURL;
 
-function UserListItem({user}) {
+function UserListItem({user, type, sendUnFriendRequest}) {
 
     const [isOpen, setIsOpen] = useState(false);
     const {jwtToken, userID} = useSelector(state => ({
@@ -65,7 +65,8 @@ function UserListItem({user}) {
             }
            
         }
-    }
+    };
+
 
     const challenge = () =>{
         dispatch({type: "match/open", payload: true});
@@ -111,9 +112,9 @@ function UserListItem({user}) {
                 <p>wins: {user.winningGame.length}</p>
             </div>
        <div className="bottom-container"> 
-           <Button variant="success" className="buttom-btn"
-            onClick={sendFriendRequest}>Add Friend</Button>
-           <Button variant="info" className="bottm-btn">Challenge</Button>
+           <Button variant={type === "1" ? "success" : "danger"} className="buttom-btn"
+            onClick={type === "1" ? sendFriendRequest : (e) => sendUnFriendRequest(e, user._id)}>{type === "1" ? "Add Friend" : "UnFriend"}</Button>
+           <Button variant={"info"} className="bottm-btn">Challenge</Button>
        </div>
         </div>
        : <div className="table-item" key={user._id}>

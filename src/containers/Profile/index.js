@@ -71,7 +71,7 @@ export default function ProfilePage(props) {
     }
 
     fetchData();
-  }, []);
+  }, [userId]);
 
   return (
     <div>
