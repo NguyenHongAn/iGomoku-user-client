@@ -1,18 +1,37 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // @material-ui/icons
-import Payment from '@material-ui/icons/Payment';
-import HistoryMatch from '@material-ui/icons/History';
-import Friend from '@material-ui/icons/PeopleAlt';
-import FacebookIcon from '@material-ui/icons/Facebook';
-import InstagramIcon from '@material-ui/icons/Instagram';
-import TwitterIcon from '@material-ui/icons/Twitter';
-import EditIcon from '@material-ui/icons/Edit';
-import KeyIcon from '@material-ui/icons/VpnKey';
+import Payment from "@material-ui/icons/Payment";
+import HistoryMatch from "@material-ui/icons/History";
+import Friend from "@material-ui/icons/PeopleAlt";
+import {
+  AccountBox,
+  Email,
+  Today,
+  Subscriptions,
+  StarHalf,
+} from "@material-ui/icons";
+import Tooltip from "@material-ui/core/Tooltip";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faTrophy,
+  faTimes,
+  faCoins,
+  faStar,
+} from "@fortawesome/free-solid-svg-icons";
+import FacebookIcon from "@material-ui/icons/Facebook";
+import InstagramIcon from "@material-ui/icons/Instagram";
+import TwitterIcon from "@material-ui/icons/Twitter";
+import EditIcon from "@material-ui/icons/Edit";
+import KeyIcon from "@material-ui/icons/VpnKey";
 // core components
 import Footer from "../../components/Footer/Footer.js";
 import Button from "../../components/CustomButtons/Button.js";
@@ -21,17 +40,16 @@ import GridItem from "../../components/Grid/GridItem.js";
 import NavPills from "../../components/NavPills/NavPills.js";
 import Parallax from "../../components/Parallax/Parallax.js";
 import profile from "../../assets/img/faces/male_avatar.png";
-import axiosInstance from '../../api';
+import axiosInstance from "../../api";
 
 // subs element
-import ChangePasswordElement from './ChangePassword';
-import EditInfoElement from './EditInfo';
-import ListFriendElement from './ListFriend';
-import PaymentElement from './Payment';
-import HistoryMatchElement from './HistoryMatch';
+import ChangePasswordElement from "./ChangePassword";
+import EditInfoElement from "./EditInfo";
+import ListFriendElement from "./ListFriend";
+import PaymentElement from "./Payment";
+import HistoryMatchElement from "./HistoryMatch";
 
 import styles from "../../assets/jss/material-kit-react/views/profilePage.js";
-
 
 const useStyles = makeStyles(styles);
 
@@ -43,24 +61,22 @@ export default function ProfilePage(props) {
     classes.imgFluid
   );
 
-
   // redux
-  const { userId } = useSelector(state => ({
+  const { userId } = useSelector((state) => ({
     jwtToken: state.auth.jwtToken,
     fullname: state.auth.fullname,
-    userId: state.auth.userID
+    userId: state.auth.userID,
   }));
 
   const [basicInfo, setBasicInfo] = useState({});
-
 
   useEffect(() => {
     async function fetchData() {
       try {
         const response = await axiosInstance.get("/auth/profile/", {
           params: {
-            userId: userId
-          }
+            userId: userId,
+          },
         });
         if (response.status === 200) {
           setBasicInfo(response.data);
@@ -87,14 +103,88 @@ export default function ProfilePage(props) {
                   </div>
                   <div className={classes.name}>
                     <h3 className={classes.title}>{basicInfo.fullname}</h3>
-                    <div style={{textAlign:"left"}}>
-                      <h6>Username: {basicInfo.username}</h6>
-                      <h6>Email: {basicInfo.email}</h6> {basicInfo.accountStatus===-1? (<Button>Verify email</Button>) : <div></div>}
-                      <h6>Coint: {basicInfo.xu}</h6>
-                      <h6>Elo: {basicInfo.elo}</h6>
-                      <h6>Matches: {undefined !== basicInfo.matches ? basicInfo.matches.length : -1}</h6>
-                      <h6>Wins: {undefined !== basicInfo.winningGame ? basicInfo.winningGame.length : -1}</h6>
-                      <h6>Joined date: {(new Date(basicInfo.createdDate)).toLocaleDateString()}</h6>
+                    <div style={{ textAlign: "left" }}>
+                      <List>
+                        <Tooltip title="Username" placement="left">
+                          <ListItem button>
+                            <ListItemIcon>
+                              <AccountBox></AccountBox>
+                            </ListItemIcon>
+                            <ListItemText primary={basicInfo.username} />
+                          </ListItem>
+                        </Tooltip>
+                        <Tooltip title="Email" placement="left">
+                          <ListItem button>
+                            <ListItemIcon>
+                              <Email></Email>
+                            </ListItemIcon>
+                            <ListItemText primary={basicInfo.email} />
+                            {basicInfo.accountStatus === -1 ? (
+                              <Button>Verify email</Button>
+                            ) : (
+                              <div></div>
+                            )}
+                          </ListItem>
+                        </Tooltip>
+                        <Tooltip title="Coins" placement="left">
+                          <ListItem button>
+                            <ListItemIcon>
+                              <FontAwesomeIcon icon={faCoins}></FontAwesomeIcon>
+                            </ListItemIcon>
+                            <ListItemText primary={basicInfo.xu} />
+                          </ListItem>
+                        </Tooltip>
+                        <Tooltip title="Elo" placement="left">
+                          <ListItem button>
+                            <ListItemIcon>
+                              <StarHalf></StarHalf>
+                            </ListItemIcon>
+                            <ListItemText primary={basicInfo.elo} />
+                          </ListItem>
+                        </Tooltip>
+                        <Tooltip title="Total Matches" placement="left">
+                          <ListItem button>
+                            <ListItemIcon>
+                              <Subscriptions></Subscriptions>
+                            </ListItemIcon>
+                            <ListItemText
+                              primary={
+                                undefined !== basicInfo.matches
+                                  ? basicInfo.matches.length
+                                  : -1
+                              }
+                            />
+                          </ListItem>
+                        </Tooltip>
+                        <Tooltip title="Total Wins" placement="left">
+                          <ListItem button>
+                            <ListItemIcon>
+                              <FontAwesomeIcon
+                                icon={faTrophy}
+                              ></FontAwesomeIcon>
+                            </ListItemIcon>
+                            <ListItemText
+                              primary={
+                                undefined !== basicInfo.winningGame
+                                  ? basicInfo.winningGame.length
+                                  : -1
+                              }
+                            />
+                          </ListItem>
+                        </Tooltip>
+                        <Tooltip title="Joined Date" placement="left">
+                          <ListItem button>
+                            <ListItemIcon>
+                              <Today></Today>
+                            </ListItemIcon>
+                            <ListItemText
+                              primary={new Date(
+                                basicInfo.createdDate
+                              ).toLocaleDateString()}
+                            />
+                          </ListItem>
+                        </Tooltip>
+                      </List>
                     </div>
                     {/* <Button justIcon link className={classes.margin5}>
                       <TwitterIcon />
@@ -126,29 +216,34 @@ export default function ProfilePage(props) {
                     {
                       tabButton: "History",
                       tabIcon: HistoryMatch,
-                      tabContent: (<HistoryMatchElement></HistoryMatchElement>)
+                      tabContent: <HistoryMatchElement></HistoryMatchElement>,
                     },
                     {
                       tabButton: "Payment",
                       tabIcon: Payment,
-                      tabContent: (<PaymentElement></PaymentElement>)
+                      tabContent: <PaymentElement></PaymentElement>,
                     },
                     {
                       tabButton: "Friends",
                       tabIcon: Friend,
-                      tabContent: (<ListFriendElement></ListFriendElement>)
+                      tabContent: <ListFriendElement></ListFriendElement>,
                     },
                     {
                       tabButton: "Edit",
                       tabIcon: EditIcon,
-                      tabContent: (<EditInfoElement userInfo={basicInfo}> </EditInfoElement>)
+                      tabContent: (
+                        <EditInfoElement userInfo={basicInfo}>
+                          {" "}
+                        </EditInfoElement>
+                      ),
                     },
                     {
                       tabButton: "RePassword",
                       tabIcon: KeyIcon,
-                      tabContent: (<ChangePasswordElement> </ChangePasswordElement>)
-
-                    }
+                      tabContent: (
+                        <ChangePasswordElement> </ChangePasswordElement>
+                      ),
+                    },
                   ]}
                 />
               </GridItem>
