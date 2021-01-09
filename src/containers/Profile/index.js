@@ -87,8 +87,16 @@ export default function ProfilePage(props) {
                   </div>
                   <div className={classes.name}>
                     <h3 className={classes.title}>{basicInfo.fullname}</h3>
-                    <h6>{basicInfo.email}</h6>
-                    <Button justIcon link className={classes.margin5}>
+                    <div style={{textAlign:"left"}}>
+                      <h6>Username: {basicInfo.username}</h6>
+                      <h6>Email: {basicInfo.email}</h6> {basicInfo.accountStatus===-1? (<Button>Verify email</Button>) : <div></div>}
+                      <h6>Coint: {basicInfo.xu}</h6>
+                      <h6>Elo: {basicInfo.elo}</h6>
+                      <h6>Matches: {undefined !== basicInfo.matches ? basicInfo.matches.length : -1}</h6>
+                      <h6>Wins: {undefined !== basicInfo.winningGame ? basicInfo.winningGame.length : -1}</h6>
+                      <h6>Joined date: {(new Date(basicInfo.createdDate)).toLocaleDateString()}</h6>
+                    </div>
+                    {/* <Button justIcon link className={classes.margin5}>
                       <TwitterIcon />
                     </Button>
                     <Button justIcon link className={classes.margin5}>
@@ -96,19 +104,19 @@ export default function ProfilePage(props) {
                     </Button>
                     <Button justIcon link className={classes.margin5}>
                       <FacebookIcon />
-                    </Button>
+                    </Button> */}
                   </div>
                 </div>
               </GridItem>
             </GridContainer>
-            <div className={classes.description}>
+            {/* <div className={classes.description}>
               <p>
                 An artist of considerable range, Chet Faker — the name taken by
                 Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs
                 and records all of his own music, giving it a warm, intimate
                 feel with a solid groove structure.{" "}
               </p>
-            </div>
+            </div> */}
             <GridContainer justify="center">
               <GridItem xs={12} sm={12} md={9} className={classes.navWrapper}>
                 <NavPills
