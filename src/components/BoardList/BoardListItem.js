@@ -38,14 +38,12 @@ function BoardListItem({board}) {
             const newMatch = {
                 boardID: response.data._id,
                 boardName: response.data.boardName,
-                owner: response.data.owner, //id người tạo
+                owner: response.data.owner,         //id người tạo
                 player: response.data.player,       //id người chập nhận lời mời cũng là người chơi
-                status: response.data.boardStatus,
-                watchers: response.data.watchers.length 
+                role: response.data.role
               };
 
               dispatch(ReduxAction.match.startNewMatch(newMatch));
-              //history.push(`/board/${response.data._id}`);
         } catch (error) {
             console.error(error);
         }

@@ -41,7 +41,7 @@ function JoinBoardDialog({show, handleClose,player}) {
         boardName: response.data.boardName,
         owner: response.data.owner, //id người tạo
         player: response.data.player,       //id người chập nhận lời mời cũng là người chơi
-        status: response.data.boardStatus
+        role: response.data.role
       };
       
       dispatch(ReduxAction.match.startNewMatch(newMatch));

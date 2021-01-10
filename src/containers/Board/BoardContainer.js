@@ -5,39 +5,47 @@ import Board from '../../components/Board/Board';
 import vs from '../../assets/img/vs-image.png';
 import {useSelector, useDispatch} from 'react-redux';
 import ChatFrame from '../../components/ChatFrame/ChatFrame';
-import Loading from '../../components/Loading';
 import {useHistory} from 'react-router-dom';
 import {useToasts} from 'react-toast-notifications';
 import ReduxAction from '../../store/actions';
 import axiosInstance from '../../api';
-
+import StartDialog from '../../components/Dialog/StartDialog';
+import BoardInfo from '../../components/BoardInfo';
 
 function BoardContainer() {
     
-    const {winner,owner, player, status, boardID} = useSelector(state => ({
+    const {winner,owner, player, boardID} = useSelector(state => ({
         winner: state.match.winner,
-        status: state.match.status,
+        //status: state.match.status,
         boardID: state.match.boardID,
         owner: state.match.owner,
         player: state.match.player,
         eloGot: state.match.eloGot
-    }))
-    const [isLoading, setisLoading] = useState(true);
+    }));
+    const userID = useSelector(state => state.auth.userID);
+    const socket = useSelector(state => state.socket.socket);
+    const [status, setStatus] = useState(1);
+    const [isWaiting, setisWaiting] = useState(true);
+    const [password, setPassword] = useState("");
     const {addToast} = useToasts();
     const dispatch = useDispatch();
     const history = useHistory();
 
     useEffect(()=>{
-       (async ()=>{ 
-        if (status === 1)
-        {
-            setisLoading(true);
+        socket.on("start-game", ({status})=>{
+            console.log("start game");
+            setStatus(status);
+            setisWaiting(false);
+        });
+
+        return ()=>{
+            socket.off("start-game");
         }
-        else if(status === -1)
-        {
-            history.push('/igmoku');
-        }
-        
+    }, [socket]);
+
+
+    useEffect(()=>{
+       const fetchData = async ()=>{
         try {
             const response = await axiosInstance.get(`/board/${boardID}`);
             console.log(response.data);
@@ -46,52 +54,47 @@ function BoardContainer() {
                     player: response.data.player,
                     eloGot: response.data.eloGot,
                     status: response.data.boardStatus,
+                    password: response.data.password,
             }
+            
+            socket.emit("join-board", {boardID});
+
+            if (response.data.boardStatus === 2) //inGame && do not require password
+            {
+                socket.emit('start-game', {boardID: response.data._id}); 
+            }
+
+            setPassword(response.data.password);
+
             dispatch(ReduxAction.match.updateInfo(payload));
         } catch (error) {
-            console.log({error});
-            addToast(error.response.data.message,{
-                appearance: "error",
-                autoDismiss: true,
-            });           
+            console.log({error});   
         }
-    })();
-    },[addToast, boardID, dispatch, history, status]);
+    }
+    fetchData();
+    },[addToast, boardID, dispatch, socket]);
 
-    
     return (
         <Container fluid className="h-100 main-container">
-        {isLoading?
-        <Loading></Loading>
-        :null}
-        {isLoading?
-        <Row>
+        <Row>     
             <Col sm={8}>
                 <div className="board-container">    
-                    <Board></Board>   
+                {isWaiting?
+                <StartDialog password={password} boardID={boardID}></StartDialog>           //change
+                : <Board></Board>   
+                }
                 </div>
             </Col>
             <Col sm={4} className="tab-list">
-                <div className="record-dropdown"> 
-                    <div className="username" style={{color: "red", textAlign: "center"}}>
-                        <h1>
-                        {owner.fullname}
-                        </h1>
-                    </div>
-                    <img src={vs} alt="VS"/>
-                    <div className="username "style={{textAlign: "center"}}>
-                        <h1>
-                            {player?player.fullname : null}
-                        </h1>
-                    </div>
-                    {/* <DropdownHistory></DropdownHistory> */}
-                </div>
+                
+                <BoardInfo></BoardInfo>
+            
                 <div className="chat-container"> 
                 <ChatFrame></ChatFrame>
                 </div>
             </Col>
         </Row>
-        :null}
+        
     </Container>
     )
 }

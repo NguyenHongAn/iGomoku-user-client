@@ -52,7 +52,7 @@ function CreateBoardDialog({show, handleClose}) {
                     userID
                 },
                 player: player, 
-                status: 1,
+                role: response.data.role,
             }
 
             //lưu thông tin người tạo ván đấu

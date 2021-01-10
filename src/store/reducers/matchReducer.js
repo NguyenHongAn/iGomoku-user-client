@@ -11,9 +11,10 @@ const defaultState = {
     player: {},              //thông tin người chơi
     winner: {},
     isOpen: false,
+    password: "",
     status: 0,              //-1:deny, 0:not create, 1:watting, 2:playing
     eloGot: 0,
-    watchers: 0,
+    role: 0,
 }
 
 const boardReducer = (state = defaultState, action) =>{
@@ -32,7 +33,7 @@ const boardReducer = (state = defaultState, action) =>{
                 boardName: action.payload.boardName,
                 player: action.payload.player,
                 status: action.payload.status,
-                watchers: action.payload.watchers
+                role: action.payload.role,
             }
         case "match/storePlayerTemporary":
         return{
@@ -50,7 +51,8 @@ const boardReducer = (state = defaultState, action) =>{
                 owner: action.payload.owner,
                 player: action.payload.player,
                 eloGot: action.payload.eloGot,
-               
+                status: action.payload.status,
+                password: action.payload.password,
             }
         case 'match/saveHistory':
           {  

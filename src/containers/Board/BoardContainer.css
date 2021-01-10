@@ -36,6 +36,22 @@
     margin: 10px;
 }
 
+.password-dialog
+{
+    width: 100%;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+
+.password-form
+{
+    width: 70%;
+    background-color:  #1a1b20;
+    padding: 30px 20px 20px 20px;
+    border:  rgb(52, 235, 235) 1px solid;
+}
+
 .loading {
     display: flex;
     align-items: center;
