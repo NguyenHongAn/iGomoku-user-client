@@ -17,7 +17,6 @@ import MuiListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
-import UnFriendIcon from '@material-ui/icons/BackspaceOutlined';
 import axiosInstance from '../../api';
 
 
@@ -35,7 +34,6 @@ import { Typography } from '@material-ui/core';
 import profile from "../../assets/img/faces/male_avatar.png";
 import styles from "../../assets/jss/material-kit-react/views/profilePage.js";
 
-const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_API_DEPLOY_URL;
 
 const useStyles = makeStyles(styles);
 
