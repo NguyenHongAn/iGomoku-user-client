@@ -14,6 +14,8 @@ import BoardContainer from './containers/Board/BoardContainer';
 import ProfilePage from './containers/Profile';
 import { ToastProvider } from "react-toast-notifications";
 import ReduxAction from './store/actions/';
+import VerifyMailPage from './containers/OtherPages/VerifyMailPage';
+
 
 function App() {
   const dispatch = useDispatch();
@@ -44,6 +46,9 @@ function App() {
           </Route>
           <Route path='/detail-game/:gameID'>
             <DetailGamePage></DetailGamePage>
+          </Route>
+          <Route path='/verify-email/:decodekey'>
+            <VerifyMailPage></VerifyMailPage>
           </Route>
 
           <Route exact path='/igomoku'>

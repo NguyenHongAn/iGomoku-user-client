@@ -65,7 +65,7 @@ export default function ProfilePage(props) {
   );
 
   // redux
-  const { userId } = useSelector((state) => ({
+  const { userId, jwtToken } = useSelector((state) => ({
     jwtToken: state.auth.jwtToken,
     fullname: state.auth.fullname,
     userId: state.auth.userID,
@@ -77,10 +77,11 @@ export default function ProfilePage(props) {
     axiosInstance
     .post(`/auth/send-verify-email`, {
         userId: userId,
+        jwtToken: jwtToken,
       })
       .then(function (response) {
         if (response.status === 200) {
-          addToast("An email was send, please check your mail box", {
+          addToast("An email was sent, please check your mail box", {
             appearance: "success",
             autoDismiss: true,
           });
