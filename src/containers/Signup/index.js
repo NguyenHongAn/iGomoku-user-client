@@ -84,6 +84,7 @@ export default function SignupPage() {
         <FormGroup controlId="email">
           <FormLabel>Email</FormLabel>
           <FormControl
+            required
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}

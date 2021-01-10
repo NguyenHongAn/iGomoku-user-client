@@ -41,6 +41,7 @@ import NavPills from "../../components/NavPills/NavPills.js";
 import Parallax from "../../components/Parallax/Parallax.js";
 import profile from "../../assets/img/faces/male_avatar.png";
 import axiosInstance from "../../api";
+import { useToasts } from "react-toast-notifications";
 
 // subs element
 import ChangePasswordElement from "./ChangePassword";
@@ -48,12 +49,14 @@ import EditInfoElement from "./EditInfo";
 import ListFriendElement from "./ListFriend";
 import PaymentElement from "./Payment";
 import HistoryMatchElement from "./HistoryMatch";
+import { Confirm } from 'react-st-modal';
 
 import styles from "../../assets/jss/material-kit-react/views/profilePage.js";
 
 const useStyles = makeStyles(styles);
 
 export default function ProfilePage(props) {
+  const { addToast } = useToasts();
   const classes = useStyles();
   const imageClasses = classNames(
     classes.imgRaised,
@@ -69,6 +72,28 @@ export default function ProfilePage(props) {
   }));
 
   const [basicInfo, setBasicInfo] = useState({});
+
+  const handleVerifyEmail = () => {
+    axiosInstance
+    .post(`/auth/send-verify-email`, {
+        userId: userId,
+      })
+      .then(function (response) {
+        if (response.status === 200) {
+          addToast("An email was send, please check your mail box", {
+            appearance: "success",
+            autoDismiss: true,
+          });
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+        addToast(error.response.data.message, {//
+          appearance: "error",
+          autoDismiss: true,
+        });
+      });
+  }
 
   useEffect(() => {
     async function fetchData() {
@@ -120,7 +145,15 @@ export default function ProfilePage(props) {
                             </ListItemIcon>
                             <ListItemText primary={basicInfo.email} />
                             {basicInfo.accountStatus === -1 ? (
-                              <Button>Verify email</Button>
+                              <Button onClick={async () => {
+                                const confirm = await Confirm(
+                                  `We will send an email to  ${basicInfo.email} for verification`,
+                                  "Verify email"
+                                );
+                                if (confirm) {
+                                  handleVerifyEmail();
+                                }
+                              }}>Verify email</Button>
                             ) : (
                               <div></div>
                             )}

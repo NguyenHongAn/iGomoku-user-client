@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import ReduxAction from "../../store/actions";
 import DropdownIcon from '../DropdownIcon/DropdownIcon';
 import { authActions } from "../../store/actions/authActions";
+import logoIGomoku from "../../assets/img/logo-igomoku-dark.png";
 
 
 function AppBar() {
@@ -38,7 +39,8 @@ function AppBar() {
     <header className="AppBar" >
       <Navbar className="bar-bg" expand="md">
         <Link className="navbar-brand " to="/">
-          <b style={{ color: 'red', marginLeft: "10px", marginRight: "10px", fontSize: "20px" }}>iGomoku</b>
+          {/* <b style={{ color: 'red', marginLeft: "10px", marginRight: "10px", fontSize: "20px" }}>iGomoku</b> */}
+          <img src={logoIGomoku} className="img-fluid profile-image" width="200px" />
         </Link>
         {jwtToken !== "invalid token :))" ?
           <Form.Check
