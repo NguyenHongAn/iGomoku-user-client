@@ -208,15 +208,15 @@ function UserList() {
             <Nav color='dark' variant="tabs" className="tabs-header">
                 <Nav.Item>
                     <Nav.Link className={activeTab === '1' ? 'active active-link' : ''} onClick={() => toggle('1')}>
-                        Trực tuyến
+                        Online
                     </Nav.Link>
                 </Nav.Item>
                 {userID !== "0" ? <Nav.Item>
                     <Nav.Link className={activeTab === '2' ? 'active active-link' : ''} onClick={() => toggle('2')}>
-                        Bạn bè
+                        Friend
                     </Nav.Link>
                     <Nav.Link className={activeTab === '3' ? 'active active-link' : ''} onClick={() => toggle('3')}>
-                        Lời mời kết bạn
+                        Friend Request
                     </Nav.Link>
                 </Nav.Item>
                     : null}

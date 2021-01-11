@@ -31,6 +31,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import profile from "../../assets/img/faces/male_avatar.png";
 import styles from "../../assets/jss/material-kit-react/views/profilePage.js";
 
+import {useHistory} from 'react-router-dom';
 
 const useStyles = makeStyles(styles);
 
@@ -62,7 +63,7 @@ export default function ProfilePage(props) {
 
     //use History để điều hướng URL
     const dispatch = useDispatch();
-
+    const history = useHistory();
 
     const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
     const [listPayment, setListPayment] = useState([]);
@@ -89,6 +90,10 @@ export default function ProfilePage(props) {
 
                 } catch (error) {
                     console.log(error);
+                    if(error.response.status === 401)
+                    {
+                    history.push("/auth/signin");
+                    }
                     addToast(error.response.data.message, {
                         appearance: "error",
                         autoDismiss: true,
@@ -97,7 +102,7 @@ export default function ProfilePage(props) {
             }
 
         })();
-    }, [addToast, dispatch, jwtToken, userID]);
+    }, [addToast, dispatch, history, jwtToken, userID]);
 
 
     const payments = listPayment.map((item, index) => (

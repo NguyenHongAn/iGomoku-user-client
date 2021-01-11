@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react'
 import {Container, Row, Col} from 'react-bootstrap';
 import './BoardContainer.css';
 import Board from '../../components/Board/Board';
-import vs from '../../assets/img/vs-image.png';
 import {useSelector, useDispatch} from 'react-redux';
 import ChatFrame from '../../components/ChatFrame/ChatFrame';
 import {useHistory} from 'react-router-dom';
@@ -68,11 +67,15 @@ function BoardContainer() {
 
             dispatch(ReduxAction.match.updateInfo(payload));
         } catch (error) {
-            console.log({error});   
+            console.log({error});  
+            if(error.response.status ===401)
+            {
+                history.push("/auth/signin");
+            }  
         }
     }
     fetchData();
-    },[addToast, boardID, dispatch, socket]);
+    },[addToast, boardID, dispatch, history, socket]);
 
     return (
         <Container fluid className="h-100 main-container">
