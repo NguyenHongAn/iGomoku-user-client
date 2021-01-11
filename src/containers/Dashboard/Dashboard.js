@@ -7,7 +7,7 @@ import {Row, Col, Container} from 'react-bootstrap';
 import {useToasts} from 'react-toast-notifications';
 import JoinBoardDialog from '../../components/Dialog/JoinBoardDialog';
 import CreateBoardDialog from '../../components/Dialog/CreateBoardDialog';
-import SearchBar from '../../components/SearchBar/Searchbar';
+import SearchBar from '../../components/SearchBar/SearchBar';
 import BoardList from "../../components/BoardList/BoardList";
 import axiosInstance from '../../api';
 import ReduxAction from '../../store/actions';
