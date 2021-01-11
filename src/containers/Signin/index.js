@@ -202,6 +202,10 @@ export default function LoginPage() {
             {isLoading ? "Logging in..." : "Login"}
           </Button>
         </div>
+        <div className="btn-container">
+        <Link to="/auth/forgotPassword">
+          <i>Forgot password?</i>
+        </Link></div>
         <hr></hr>
         <div className="btn-container">
           <Link to="/auth/signup">

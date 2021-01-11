@@ -38,7 +38,7 @@ function AppBar() {
   return (
     <header className="AppBar" >
       <Navbar className="bar-bg" expand="md">
-        <Link className="navbar-brand " to="/">
+        <Link className="navbar-brand " to="/" style={{ backgroundColor: 'transparent' }}>
           {/* <b style={{ color: 'red', marginLeft: "10px", marginRight: "10px", fontSize: "20px" }}>iGomoku</b> */}
           <img src={logoIGomoku} className="img-fluid profile-image" width="200px" />
         </Link>

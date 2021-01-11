@@ -14,6 +14,7 @@ import {
   Today,
   Subscriptions,
   StarHalf,
+  VerifiedUser,
 } from "@material-ui/icons";
 import Tooltip from "@material-ui/core/Tooltip";
 import List from "@material-ui/core/List";
@@ -156,7 +157,7 @@ export default function ProfilePage(props) {
                                 }
                               }}>Verify email</Button>
                             ) : (
-                              <div></div>
+                              <VerifiedUser></VerifiedUser>
                             )}
                           </ListItem>
                         </Tooltip>
