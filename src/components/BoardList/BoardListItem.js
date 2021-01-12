@@ -8,7 +8,7 @@ import ReduxAction from '../../store/actions';
 import {useHistory} from 'react-router-dom';
 
 function BoardListItem({board}) {
-    
+    const shortBoardID = board._id.slice(board._id.length-5, board._id.length);
     const userID = useSelector(state => state.auth.userID);
     const dispatch = useDispatch();
     const history = useHistory();
@@ -51,8 +51,8 @@ function BoardListItem({board}) {
     return (
         <Card className="board-card">
         <Card.Body>
-            <Card.Title><b>Board Name: </b> {board.boardName}</Card.Title>
-            <Card.Subtitle className="mb-2 text-muted"><b>Board ID: </b>{board._id}</Card.Subtitle>
+            <Card.Title><b>{board.boardName} </b> </Card.Title>
+            <Card.Subtitle className="mb-2 text-muted"><b>Board ID: </b>{shortBoardID}</Card.Subtitle>
             <Card.Text className="board-info">
                 <div className="board-status">
                     <p>Status:</p>

@@ -17,7 +17,17 @@ const updateBoardList = (boardList) =>{
     };
 };
 
+const filterBoardList = (filterString) =>{
+    return (dispatch) =>{
+        dispatch({
+            type: 'boards/filter',
+            payload: filterString,
+        })
+    };
+};
+
 export const boardsActions = {
     addNewBoard,
     updateBoardList,
+    filterBoardList,
 }
