@@ -132,7 +132,7 @@ export default function ProfilePage(props) {
 
 
     const histories = listHistory.map((item, index) => (
-        <ListItem key={item._id} style={{ border: "1px solid black", marginTop: '1px' }}>
+        <ListItem key={item._id}>
             <ListItemAvatar>
                 <Avatar>
                     <div>
@@ -142,11 +142,11 @@ export default function ProfilePage(props) {
             </ListItemAvatar>
             <ListItemText
                 disableTypography
-                primary={<Typography type="body2" style={{ color: item.result === 1 ? 'blue' : 'red', fontWeight: 'bold' }}>{item.result === 1 ? "Chiến thắng" : "Thất bại"}</Typography>}
+                primary={<Typography type="body2" style={{ color: item.result === 1 ? 'blue' : 'red', fontWeight: 'bold' }}>{item.result === 1 ? "Victory" : "Lose"}</Typography>}
                 secondary={
                     <React.Fragment>
-                        <Typography type="body2" style={{ color: 'black' }}>{"Đối thủ: " + item.enemy_fullname} </Typography>
-                        Thời gian: {item.time}
+                        <Typography type="body2" style={{ color: 'black' }}>{"Enemy: " + item.enemy_fullname} </Typography>
+                        Time: {item.time}
                     </React.Fragment>
                 }
             />

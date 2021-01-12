@@ -127,7 +127,7 @@ export default function ProfilePage(props) {
     const onListFriendClick = function (e, index) {
         e.preventDefault();
 
-        if (!window.confirm('Are you sure you wish to unfriend?')) {
+        if (!window.confirm('Are you sure to unfriend this user?')) {
             return;
         }
 
@@ -158,7 +158,7 @@ export default function ProfilePage(props) {
     };
 
     const list_friend = listFriend.map((item, index) => (
-        <ListItem key={item._id} style={{ border: "1px solid black", marginTop: '1px' }}>
+        <ListItem key={item._id}>
             <ListItemAvatar>
                 <Avatar>
                     <div>

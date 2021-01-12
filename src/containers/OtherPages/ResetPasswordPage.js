@@ -15,6 +15,7 @@ import CardHeader from "../../components/Card/CardHeader.js";
 import CardFooter from "../../components/Card/CardFooter.js";
 import CustomInput from "../../components/CustomInput/CustomInput.js";
 import styles from "../../assets/jss/material-kit-react/views/profilePage.js";
+import { Confirm } from 'react-st-modal';
 const useStyles = makeStyles(styles);
 
 function ResetPasswordPage() {
@@ -24,6 +25,7 @@ function ResetPasswordPage() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [isVerified, setIsVerified] = useState(false);
+  const [disabledBtn, setDisabledBtn] = useState(false);
   useEffect(() => {}, []);
 
   function validateEmail(email) {
@@ -31,6 +33,8 @@ function ResetPasswordPage() {
     return re.test(String(email).toLowerCase());
   }
   const validateInfo = () => {
+    setDisabledBtn(true);
+    setTimeout(() => setDisabledBtn(false), 5000);
     if (username === "" || email === "" || !validateEmail(email)) {
       addToast("Invalid information, please double check username and email.", {
         appearance: "error",
@@ -107,12 +111,21 @@ function ResetPasswordPage() {
                   </CardBody>
                   <CardFooter className={classes.cardFooter}>
                     <Button
+                      disabled={disabledBtn}
                       simple
                       color="info"
                       size="lg"
-                      onClick={() => validateInfo()}
+                      onClick={async () => {
+                        const confirm = await Confirm(
+                          `We will reset your password and send authentication info to ${email}`,
+                          "Reset password"
+                        );
+                        if (confirm) {
+                          validateInfo();
+                        }
+                      }}
                     >
-                      Send Email to Reset Password
+                      {disabledBtn? <div>Waiting...</div> : <div>Send Email to Reset Password</div>}
                     </Button>
                   </CardFooter>
                 </form>
