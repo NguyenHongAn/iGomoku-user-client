@@ -30,9 +30,8 @@ const boardListReducer = (state= defaultState, action) =>{
             if (filterString !== "" && filterString !== undefined) {
                 // thực hiện filter boards gắn vào filteredBoards
                 const filteredBoards = fullBoards.filter(board => 
-                    board._id.toLowerCase().indexOf(filterString.toLowerCase()) !== -1
-                    //board.name.toLowerCase().indexOf(filterString.toLowerCase()) !== -1
-                    //&& board.isActive == true
+                    board._id.slice(board._id.length-5, board._id.length).toLowerCase().indexOf(filterString.toLowerCase()) !== -1
+                    //board._id.toLowerCase().indexOf(filterString.toLowerCase()) !== -1
                 );
                 //setBoards(filteredBoards);
                 return {
