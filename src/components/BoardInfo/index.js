@@ -27,14 +27,14 @@ function BoardInfo({isXTurn}) {
         </div>
         <div class="line"></div>
         <div className="seft-info">
-            <p>Player: {player.fullname}</p>
+            <p>Player: {player?player.fullname: "???"}</p>
             <span className="amount">
-                <FontAwesomeIcon icon={faTrophy}></FontAwesomeIcon>
-                    {player.elo}
+            <FontAwesomeIcon icon={faTrophy}></FontAwesomeIcon>
+                {player?player.elo: "???"}
             </span>
             <div style={{fontSize: "20px"}}>
-                Elo Got :playerWinElo
-            </div>
+            Elo Got :playerWinElo
+        </div>           
         </div>
     </div>
     <div style={{

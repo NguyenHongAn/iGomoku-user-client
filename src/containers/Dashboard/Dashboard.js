@@ -51,7 +51,7 @@ function Dashboard() {
 
         //Lời mời tham gia ván đấu được chấp nhận
         socket.on("join-board", ({boardID})=>{  
-            //console.log("haha");
+            console.log("haha");
             history.push(`/board/${boardID}`);
         });
 
