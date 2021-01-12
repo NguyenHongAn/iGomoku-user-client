@@ -1,5 +1,6 @@
 const defaultState ={
   boards: [],
+  filteredBoards: [],
   length: 0,
 }
 
@@ -12,14 +13,40 @@ const boardListReducer = (state= defaultState, action) =>{
             return {
                 ...state,
                 boards: tempArray,
+                filteredBoards: tempArray,
                 length: state.length +1,
             }
         }
         case "boards/update":
             return {
                 boards: Array.from(action.payload),
+                filteredBoards: Array.from(action.payload),
                 length: action.payload.length,
             }
+        case "boards/filter":
+        {
+            const filterString = action.payload;
+            const fullBoards = Array.from(state.boards);
+            if (filterString !== "" && filterString !== undefined) {
+                // thực hiện filter boards gắn vào filteredBoards
+                const filteredBoards = fullBoards.filter(board => 
+                    board._id.toLowerCase().indexOf(filterString.toLowerCase()) !== -1
+                    //board.name.toLowerCase().indexOf(filterString.toLowerCase()) !== -1
+                    //&& board.isActive == true
+                );
+                //setBoards(filteredBoards);
+                return {
+                    ...state,
+                    filteredBoards: filteredBoards,
+                }
+            }
+            else {  // trả về đầy đủ danh sách board
+                return {
+                    ...state,
+                    filteredBoards: fullBoards,
+                }
+            }
+        }
         default:
             return state;
     }

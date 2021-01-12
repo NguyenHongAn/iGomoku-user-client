@@ -17,7 +17,7 @@ function Dashboard() {
     const [openInviteDialog, setOpenInviteDialog] = useState(false);
     const openCreateDialog= useSelector(state => state.match.isOpen);
     const socket = useSelector(state => state.socket.socket);
-    const boardList = useSelector(state => state.boardList.boards);
+    const boardList = useSelector(state => state.boardList.filteredBoards);
     const {jwtToken, userID} = useSelector(state=>({
         jwtToken: state.auth.jwtToken,
         userID: state.auth.userID

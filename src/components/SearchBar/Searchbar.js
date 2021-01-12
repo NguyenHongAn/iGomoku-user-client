@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch,faPlus } from "@fortawesome/free-solid-svg-icons";
 import {useSelector, useDispatch} from 'react-redux';
 import {useHistory} from 'react-router-dom';
+import ReduxAction from '../../store/actions';
 
 function SearchBar() {
     const openCreateDialog = useSelector(state => state.match.isOpen);
@@ -19,9 +20,21 @@ function SearchBar() {
         dispatch({type: "match/open", payload: !openCreateDialog});
     };
 
+    const checkFiltering = function(e) {
+        console.log(e.target.value);
+        dispatch(ReduxAction.boards.filterBoardList(e.target.value));
+    }
+
     return (
         <Form inline style={{"marginTop": "10px"}}>
-        <FormControl type="text" placeholder="Find board by board ID...." className="search-bar"/>
+        {/* <FormControl type="text" placeholder="Find board by board ID...." className="search-bar"/> */}
+        <FormControl
+            type="text"
+            placeholder="Find board by board ID...."
+            className="search-bar"
+            id="filter-input"
+            onChange={(e) => {checkFiltering(e);}}
+          />
         <Button variant="info" className="search-btn">
             <FontAwesomeIcon icon={faSearch}></FontAwesomeIcon>
             <span> Join Board</span>
@@ -29,7 +42,7 @@ function SearchBar() {
         <Button variant="warning" className="search-btn"
         onClick={handleCreateDialog}>
             <FontAwesomeIcon icon={faPlus}></FontAwesomeIcon>
-            <span> Play</span>
+            <span> New Board</span>
         </Button>
         </Form>
     )
