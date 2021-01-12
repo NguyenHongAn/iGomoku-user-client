@@ -107,7 +107,6 @@ function Dashboard() {
     },[addToast, dispatch, jwtToken, userID]);
 
     return (
-        
         <Container fluid className="h-100 main-container">
             <JoinBoardDialog show={openInviteDialog} 
             handleClose={handleInviteDialog} 

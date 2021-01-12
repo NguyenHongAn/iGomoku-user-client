@@ -9,10 +9,9 @@ const defaultState = {
     boardName: "",
     owner: {},              //thông tin người tạo
     player: {},              //thông tin người chơi
-    winner: {},
     isOpen: false,
     password: "",
-    status: 0,              //-1:deny, 0:not create, 1:watting, 2:playing
+    //status: 0,              //-1:deny, 0:not create, 1:watting, 2:playing
     eloGot: 0,
     role: 0,
 }
@@ -84,6 +83,7 @@ const boardReducer = (state = defaultState, action) =>{
                 owner: {},              //thông tin người tạo
                 player: {},              //thông tin người chơi
                 winner: {},   
+                password: "",
                 status: 0,              //-1:deny, 0:not create, 1:waiting, 2:playing
                 eloGot: 0,        
                 isOpen: false,    

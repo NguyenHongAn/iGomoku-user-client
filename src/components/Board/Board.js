@@ -11,7 +11,8 @@ import {boardConst} from './board.Cfg';
 
 import {useToasts} from 'react-toast-notifications';
 
-function Board() {
+function Board({
+}) {
 
     const {stepNumber, historySteps,boardID,owner} = useSelector(state => ({
         stepNumber: state.match.stepNumber,

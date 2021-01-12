@@ -4,11 +4,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrophy, faTimes, faCoins } from "@fortawesome/free-solid-svg-icons";
 import '../UserList.css';
-import axios from "axios";
+import axiosInstance from "../../../api";
 import { useHistory } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
-
-const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_DEPLOY_APIURL;
 
 function UserListItem({ user, type, sendUnFriendRequest }) {
 
@@ -40,7 +38,7 @@ function UserListItem({ user, type, sendUnFriendRequest }) {
                 }
 
 
-                const response = await axios.post(`${APIURL}/user/send-friend-invitation`, data,
+                const response = await axiosInstance.post(`/user/send-friend-invitation`, data,
                     {
                         headers:
                         {

@@ -23,8 +23,9 @@ function BoardContainer() {
     }));
     const userID = useSelector(state => state.auth.userID);
     const socket = useSelector(state => state.socket.socket);
-    const [status, setStatus] = useState(1);
+    //const [status, setStatus] = useState(1);
     const [isWaiting, setisWaiting] = useState(true);
+    const [isPrivate, setIsPrivate] = useState(false);
     const [password, setPassword] = useState("");
     const {addToast} = useToasts();
     const dispatch = useDispatch();
@@ -33,7 +34,6 @@ function BoardContainer() {
     useEffect(()=>{
         socket.on("start-game", ({status})=>{
             console.log("start game");
-            setStatus(status);
             setisWaiting(false);
         });
 
@@ -47,6 +47,7 @@ function BoardContainer() {
        const fetchData = async ()=>{
         try {
             const response = await axiosInstance.get(`/board/${boardID}`);
+         
             console.log(response.data);
             const payload = {
                     owner: response.data.owner,
@@ -61,6 +62,10 @@ function BoardContainer() {
             if (response.data.boardStatus === 2) //inGame && do not require password
             {
                 socket.emit('start-game', {boardID: response.data._id}); 
+            }
+            if (!response.data.isPrivate)
+            {
+                setIsPrivate(false);
             }
 
             setPassword(response.data.password);
@@ -83,15 +88,17 @@ function BoardContainer() {
             <Col sm={8}>
                 <div className="board-container">    
                 {isWaiting?
-                <StartDialog password={password} boardID={boardID}></StartDialog>           //change
-                : <Board></Board>   
+                <StartDialog isOpen={isPrivate} password={password} boardID={boardID}></StartDialog>           //change
+                : 
+                <Board
+                ></Board>   
                 }
                 </div>
             </Col>
             <Col sm={4} className="tab-list">
-                
-                <BoardInfo></BoardInfo>
-            
+                <BoardInfo
+                >
+                </BoardInfo>
                 <div className="chat-container"> 
                 <ChatFrame></ChatFrame>
                 </div>
