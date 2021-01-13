@@ -36,7 +36,7 @@ function Dashboard() {
     useEffect(()=>{
         if (jwtToken !== "invalid token :))")
         {
-            socket.emit("request-online-user", {jwtToken});
+            socket.emit("request-online-user", {jwtToken, status: 1});
             socket.on("expired-token", ()=>{
                 dispatch(ReduxAction.auth.signOut);
                 dispatch(ReduxAction.match.restoreDefault);

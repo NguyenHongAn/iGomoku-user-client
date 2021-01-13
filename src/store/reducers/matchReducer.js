@@ -1,11 +1,7 @@
 const defaultState = {
-    history: [{                 //lịch sử các bước chơi cờ 
-        squares: Array(20*20).fill(null),
-        pos:-1,
-        }],
                             //bàn cờ hiện tại
     stepNumber: 0,          //các bước đã thực hiện     
-    boardID: "",            //Id của ván cờ 
+    boardID: null,            //Id của ván cờ 
     boardName: "",
     owner: {},              //thông tin người tạo
     player: {},              //thông tin người chơi
@@ -82,7 +78,6 @@ const boardReducer = (state = defaultState, action) =>{
                 boardName: "",
                 owner: {},              //thông tin người tạo
                 player: {},              //thông tin người chơi
-                winner: {},   
                 password: "",
                 status: 0,              //-1:deny, 0:not create, 1:waiting, 2:playing
                 eloGot: 0,        

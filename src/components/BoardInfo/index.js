@@ -5,13 +5,13 @@ import { faTrophy,faTimes} from "@fortawesome/free-solid-svg-icons";
 import {faCircle} from "@fortawesome/free-regular-svg-icons";
 import {Button } from 'react-bootstrap';
 
-function BoardInfo({isXTurn}) {
+function BoardInfo({current}) {
     const {owner, player, eloGot} = useSelector(state =>({
         owner: state.match.owner,
         player: state.match.player,
         eloGot: state.match.eloGot
     }));
-
+    const userID = useSelector(state=> state.auth.userID);
     return (
     <div className="record-dropdown"> 
     <div className="player-info">
@@ -45,7 +45,7 @@ function BoardInfo({isXTurn}) {
         width: "40%"
         }}>
         <span>Turn: </span>
-        {isXTurn?
+        {current ===owner._id?
         <FontAwesomeIcon icon={faTimes} color="red" size="xl"></FontAwesomeIcon>
         :<FontAwesomeIcon icon={faCircle} size="xl"></FontAwesomeIcon>
         }
