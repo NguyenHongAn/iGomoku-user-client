@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react';
 import {useSelector} from "react-redux";
 import {Button} from 'react-bootstrap';
  
-function ChatFrame() {
+function ChatFrame({message}) {
 
     const {fullname} = useSelector(state => ({
         fullname: state.auth.fullname
@@ -12,8 +12,7 @@ function ChatFrame() {
 
     const boardID = useSelector(state=> state.match.boardID);
 
-    const [messages, setMessages] = useState([]);
-
+    const [messages, setMessages] = useState(message);
     const [inputText, setinputText] = useState("");
 
      useEffect(()=>{

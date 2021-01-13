@@ -108,11 +108,15 @@ export default function DetailHistoryGame(props) {
                 }
             } catch (error) {
                 console.log(error);
+                if (error.response.status === 401)
+                {
+                    history.push("/auth/signin");
+                }
             }
         }
 
         fetchData();
-    }, []);
+    }, [history, params.gameID]);
 
     const listMessage = data.chats;
     var messages = null;

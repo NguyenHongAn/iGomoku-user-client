@@ -17,7 +17,7 @@ function Dashboard() {
     const [openInviteDialog, setOpenInviteDialog] = useState(false);
     const openCreateDialog= useSelector(state => state.match.isOpen);
     const socket = useSelector(state => state.socket.socket);
-    const boardList = useSelector(state => state.boardList.boards);
+    const boardList = useSelector(state => state.boardList.filteredBoards);
     const {jwtToken, userID} = useSelector(state=>({
         jwtToken: state.auth.jwtToken,
         userID: state.auth.userID
@@ -51,7 +51,7 @@ function Dashboard() {
 
         //Lời mời tham gia ván đấu được chấp nhận
         socket.on("join-board", ({boardID})=>{  
-            //console.log("haha");
+            console.log("haha");
             history.push(`/board/${boardID}`);
         });
 
@@ -107,7 +107,6 @@ function Dashboard() {
     },[addToast, dispatch, jwtToken, userID]);
 
     return (
-        
         <Container fluid className="h-100 main-container">
             <JoinBoardDialog show={openInviteDialog} 
             handleClose={handleInviteDialog} 

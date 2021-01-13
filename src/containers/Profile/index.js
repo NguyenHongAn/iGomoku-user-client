@@ -49,7 +49,7 @@ import ListFriendElement from "./ListFriend";
 import PaymentElement from "./Payment";
 import HistoryMatchElement from "./HistoryMatch";
 import { Confirm } from 'react-st-modal';
-
+import {useHistory} from 'react-router-dom';
 import styles from "../../assets/jss/material-kit-react/views/profilePage.js";
 
 const useStyles = makeStyles(styles);
@@ -69,7 +69,7 @@ export default function ProfilePage(props) {
     fullname: state.auth.fullname,
     userId: state.auth.userID,
   }));
-
+  const history = useHistory();
   const [basicInfo, setBasicInfo] = useState({});
   const [winrate, setWinrate] = useState(0);
 
@@ -89,6 +89,10 @@ export default function ProfilePage(props) {
       })
       .catch(function (error) {
         console.log(error);
+        if(error.response.status === 401)
+        {
+          history.push("/auth/signin");
+        }
         addToast(error.response.data.message, {//
           appearance: "error",
           autoDismiss: true,
@@ -99,7 +103,7 @@ export default function ProfilePage(props) {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axiosInstance.get("/auth/profile/", {
+        const response = await axiosInstance.get("/auth/profile", {
           params: {
             userId: userId,
           },
@@ -109,12 +113,15 @@ export default function ProfilePage(props) {
           setWinrate(response.data.winrate);
         }
       } catch (error) {
-        console.log(error);
+        if(error.response.status === 401)
+        {
+          history.push("/auth/signin");
+        }
       }
     }
 
     fetchData();
-  }, [userId]);
+  }, [history, userId]);
 
   return (
     <div>
