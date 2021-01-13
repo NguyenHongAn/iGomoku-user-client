@@ -9,6 +9,7 @@ import Payment from "@material-ui/icons/Payment";
 import HistoryMatch from "@material-ui/icons/History";
 import Friend from "@material-ui/icons/PeopleAlt";
 import {
+  Grade,
   AccountBox,
   Email,
   Today,
@@ -28,9 +29,6 @@ import {
   faCoins,
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
-import FacebookIcon from "@material-ui/icons/Facebook";
-import InstagramIcon from "@material-ui/icons/Instagram";
-import TwitterIcon from "@material-ui/icons/Twitter";
 import EditIcon from "@material-ui/icons/Edit";
 import KeyIcon from "@material-ui/icons/VpnKey";
 // core components
@@ -73,6 +71,7 @@ export default function ProfilePage(props) {
   }));
 
   const [basicInfo, setBasicInfo] = useState({});
+  const [winrate, setWinrate] = useState(0);
 
   const handleVerifyEmail = () => {
     axiosInstance
@@ -106,7 +105,8 @@ export default function ProfilePage(props) {
           },
         });
         if (response.status === 200) {
-          setBasicInfo(response.data);
+          setBasicInfo(response.data.profile);
+          setWinrate(response.data.winrate);
         }
       } catch (error) {
         console.log(error);
@@ -161,20 +161,29 @@ export default function ProfilePage(props) {
                             )}
                           </ListItem>
                         </Tooltip>
-                        <Tooltip title="Coins" placement="left">
+                        <Tooltip title="Winrate" placement="left">
                           <ListItem button>
                             <ListItemIcon>
-                              <FontAwesomeIcon icon={faCoins}></FontAwesomeIcon>
+                              <Grade></Grade>
                             </ListItemIcon>
-                            <ListItemText primary={basicInfo.xu} />
+                            <ListItemText primary={winrate + " %"} />
                           </ListItem>
                         </Tooltip>
+                 
                         <Tooltip title="Elo" placement="left">
                           <ListItem button>
                             <ListItemIcon>
                               <StarHalf></StarHalf>
                             </ListItemIcon>
                             <ListItemText primary={basicInfo.elo} />
+                          </ListItem>
+                        </Tooltip>
+                        <Tooltip title="Coins" placement="left">
+                          <ListItem button>
+                            <ListItemIcon>
+                              <FontAwesomeIcon icon={faCoins}></FontAwesomeIcon>
+                            </ListItemIcon>
+                            <ListItemText primary={basicInfo.xu} />
                           </ListItem>
                         </Tooltip>
                         <Tooltip title="Total Matches" placement="left">

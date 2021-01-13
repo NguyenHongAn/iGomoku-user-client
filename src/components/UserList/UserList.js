@@ -3,6 +3,7 @@ import { Nav } from "react-bootstrap";
 import { useDispatch, useSelector } from 'react-redux';
 import ReduxAction from '../../store/actions';
 import UserListItem from './UserListItem/UserListItem';
+import UserBXHItem from './UserListItem/UserBXHItem';
 import FriendInvitation from './UserListItem/FriendInvitation';
 import './UserList.css';
 import { useToasts } from "react-toast-notifications";
@@ -27,6 +28,7 @@ function UserList() {
     }));
 
     const [listFriendInvitation, setListFriendInvitaion] = useState([]);
+    const [bxh, setBXH] = useState([]);
 
     const dispatch = useDispatch();
 
@@ -38,10 +40,10 @@ function UserList() {
         //socket.emit("request-list-online-user", {userID});
 
         socket.on("response-online-user", ({ user }) => {
-            
+
             if (user._id !== userID) {
                 console.log(user);
-                dispatch(ReduxAction.users.addNewUserOnline(user));   
+                dispatch(ReduxAction.users.addNewUserOnline(user));
             }
         });
         socket.on("response-user-offline", ({ offlineUser }) => {
@@ -94,6 +96,32 @@ function UserList() {
                     });
                     if (response.status === 200) {
                         setListFriendInvitaion(response.data);
+                    }
+
+                } catch (error) {
+                    console.log(error);
+                    addToast(error.response.data.message, {
+                        appearance: "error",
+                        autoDismiss: true,
+                    });
+                }
+            }
+
+        })();
+    }, [addToast, jwtToken, userID]);
+
+    useEffect(() => {
+        (async () => {
+            // get bxh with GET method
+            if (userID !== "0") {
+                try {
+                    const response = await axiosInstance.get(`/user/bxh`, {
+                        params: {
+                            userId: userID
+                        }
+                    });
+                    if (response.status === 200) {
+                        setBXH(response.data);
                     }
 
                 } catch (error) {
@@ -216,7 +244,10 @@ function UserList() {
                         Bạn bè
                     </Nav.Link>
                     <Nav.Link className={activeTab === '3' ? 'active active-link' : ''} onClick={() => toggle('3')}>
-                        Lời mời kết bạn
+                        Mời kết bạn{listFriendInvitation.length === 0 ? (<span></span>) : (<span style={{ height: 15, width: 15, backgroundColor: "#ff0000", borderRadius: "50%", display: "inline-block" }}></span>)}
+                    </Nav.Link>
+                    <Nav.Link className={activeTab === '4' ? 'active active-link' : ''} onClick={() => toggle('4')}>
+                        BXH
                     </Nav.Link>
                 </Nav.Item>
                     : null}
@@ -230,10 +261,15 @@ function UserList() {
                         return (
                             <UserListItem user={user} type={"1"} sendUnFriendRequest={sendUnFriendRequest} key={user._id}></UserListItem>
                         )
-                    }) :
-                        listFriendInvitation.map(invitation => {
-                            return <FriendInvitation invitation={invitation} onProccessingInvitation={onProccessingInvitation} key={invitation._id}></FriendInvitation>
-                        })
+                    }) : activeTab === "3" ? listFriendInvitation.map(invitation => {
+                        return (
+                            <FriendInvitation invitation={invitation} onProccessingInvitation={onProccessingInvitation} key={invitation._id}></FriendInvitation>
+                        )
+                    }) : bxh.map((user, index) => {
+                        return (
+                            <UserBXHItem user={user} ranking={index + 1}  sendUnFriendRequest={sendUnFriendRequest} key={user._id}></UserBXHItem>
+                        )
+                    })
                     )
                 }
             </div>
