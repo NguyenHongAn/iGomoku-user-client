@@ -83,6 +83,7 @@ function UserListItem({ user, type, sendUnFriendRequest }) {
                         <div className="ml-3">
                             <h5 className="name">{user.fullname}</h5>
                             <p className="mail">{user.email}</p>
+                            <p>Winrate: {user.winrate} %</p>
                             <p>Join Date: {createdDate.toLocaleDateString()}</p>
                         </div>
                     </div>
