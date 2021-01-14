@@ -171,16 +171,15 @@ export default function ProfilePage(props) {
                         <Tooltip title="Winrate" placement="left">
                           <ListItem button>
                             <ListItemIcon>
-                              <Grade></Grade>
+                            <StarHalf></StarHalf>
                             </ListItemIcon>
                             <ListItemText primary={winrate + " %"} />
                           </ListItem>
                         </Tooltip>
-                 
                         <Tooltip title="Elo" placement="left">
                           <ListItem button>
                             <ListItemIcon>
-                              <StarHalf></StarHalf>
+                            <Grade></Grade>
                             </ListItemIcon>
                             <ListItemText primary={basicInfo.elo} />
                           </ListItem>
