@@ -4,11 +4,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrophy, faTimes, faCoins } from "@fortawesome/free-solid-svg-icons";
 import '../UserList.css';
-import axiosInstance from "../../../api";
+import axios from "axios";
 import { useHistory } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
 
-function UserListItem({ user, type, sendUnFriendRequest }) {
+const APIURL = process.env.REACT_APP_ENV === "dev" ? process.env.REACT_APP_APIURL : process.env.REACT_APP_DEPLOY_APIURL;
+
+function UserBXHItem({ user, type, ranking, sendUnFriendRequest }) {
 
     const [isOpen, setIsOpen] = useState(false);
     const { jwtToken, userID } = useSelector(state => ({
@@ -38,7 +40,7 @@ function UserListItem({ user, type, sendUnFriendRequest }) {
                 }
 
 
-                const response = await axiosInstance.post(`/user/send-friend-invitation`, data,
+                const response = await axios.post(`${APIURL}/user/send-friend-invitation`, data,
                     {
                         headers:
                         {
@@ -64,16 +66,38 @@ function UserListItem({ user, type, sendUnFriendRequest }) {
 
 
     const challenge = () => {
-        if (user.isFree === 1)
-        {
-            dispatch({ type: "match/open", payload: true });
-            dispatch({
-                type: "match/storePlayerTemporary",
-                payload: user
-            });
-        }
-       
+        dispatch({ type: "match/open", payload: true });
+        dispatch({
+            type: "match/storePlayerTemporary",
+            payload: user
+        });
     }
+
+    var rankingColor = "white";
+    switch (ranking) {
+        case 1:
+            rankingColor = "red";
+            break;
+        case 2:
+            rankingColor = "orange";
+            break;
+        case 3:
+            rankingColor = "yellow";
+            break;
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+        case 10:
+            rankingColor = "skyblue";
+            break;
+        default:
+            rankingColor = "white";
+            break;
+    }
+
 
     return (
         <>
@@ -112,19 +136,22 @@ function UserListItem({ user, type, sendUnFriendRequest }) {
                         <p>wins: {user.winningGame.length}</p>
                     </div>
                     <div className="bottom-container">
-                        <Button variant={type === "1" ? "success" : "danger"} className="buttom-btn"
-                            onClick={type === "1" ? sendFriendRequest : (e) => sendUnFriendRequest(e, user._id)}>{type === "1" ? "Add Friend" : "UnFriend"}</Button>
+                        <Button variant="success" className="buttom-btn"
+                            onClick={sendFriendRequest}>Add Friend</Button>
                         <Button variant={"info"} className="bottm-btn">Challenge</Button>
                     </div>
                 </div>
                 : <div className="table-item" key={user._id}>
                     <div className="username">
-                        <Button variant="link" onClick={handleOpenDetail}>
-                            {user.fullname}
+                        <Button variant="link" onClick={handleOpenDetail} style={{ fontWeight: 'bold', color: rankingColor }}>
+                            <span style={{ fontWeight: 'bold', color: rankingColor }}>
+                                <span >{ranking}. &nbsp;</span>
+                                <span >{user.fullname}</span>
+                            </span>
                         </Button>
 
                     </div>
-                    <div className="elo-display"><FontAwesomeIcon color="yellow" icon={faTrophy}></FontAwesomeIcon> {user.elo}</div>
+                    <div className="elo-display"> {user.elo}&nbsp; <FontAwesomeIcon color="yellow" icon={faTrophy}></FontAwesomeIcon></div>
                     <div>
                         <Button className="btn-friend-request" variant="info" size='sm'
                             onClick={challenge}>Challenge</Button>
@@ -134,4 +161,4 @@ function UserListItem({ user, type, sendUnFriendRequest }) {
     )
 }
 
-export default UserListItem;
+export default UserBXHItem;
