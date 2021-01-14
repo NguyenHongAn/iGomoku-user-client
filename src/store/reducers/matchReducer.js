@@ -1,5 +1,5 @@
 const defaultState = {
-                            //bàn cờ hiện tại
+
     stepNumber: 0,          //các bước đã thực hiện     
     boardID: null,            //Id của ván cờ 
     boardName: "",
@@ -7,7 +7,7 @@ const defaultState = {
     player: {},              //thông tin người chơi
     isOpen: false,
     password: "",
-    //status: 0,              //-1:deny, 0:not create, 1:watting, 2:playing
+    boardStatus: 0,              //-1:deny, 0:not create, 1:watting, 2:playing
     eloGot: 0,
     role: 0,
 }
@@ -59,7 +59,11 @@ const boardReducer = (state = defaultState, action) =>{
                 stepNumber: state.history.length,
             }
         }
-        
+        case "match/updateStatus":
+        return {
+            ...state,
+            boardStatus: action.payload,
+        }
         case "match/finnishMatch":
             return {
                 ...state,
@@ -67,19 +71,13 @@ const boardReducer = (state = defaultState, action) =>{
             }
         case "match/restore":
             return {
-            
-                history: [{                 //lịch sử các bước chơi cờ 
-                    squares: Array(20*20).fill(null),
-                    pos:-1,
-                    }],
-                                        //bàn cờ hiện tại
                 stepNumber: 0,          //các bước đã thực hiện     
-                boardID: "",            //Id của ván cờ 
+                boardID: null,            //Id của ván cờ 
                 boardName: "",
                 owner: {},              //thông tin người tạo
                 player: {},              //thông tin người chơi
                 password: "",
-                status: 0,              //-1:deny, 0:not create, 1:waiting, 2:playing
+                boardStatus: 0,           //-1:deny, 0:not create, 1:waiting, 2:playing
                 eloGot: 0,        
                 isOpen: false,    
             }

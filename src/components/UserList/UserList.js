@@ -38,7 +38,7 @@ function UserList() {
         //socket.emit("request-list-online-user", {userID});
 
         socket.on("response-online-user", ({ user }) => {
-            
+            //console.log(user);
             if (user._id !== userID) {
                 console.log(user);
                 dispatch(ReduxAction.users.addNewUserOnline(user));   
@@ -51,7 +51,7 @@ function UserList() {
 
         return () => {
             socket.off("response-online-user");
-            socket.on("response-user-offline");
+            socket.off("response-user-offline");
         }
         // disconnect old socket each time re-render
     }, [addToast, dispatch, onlineUsers, socket, userID]);
@@ -128,13 +128,7 @@ function UserList() {
                 }
 
 
-                const response = await axiosInstance.post(`/user/on-processing-friend-invitation`, data,
-                    {
-                        headers:
-                        {
-                            'Authorization': `Bearer ${jwtToken}`,
-                        }
-                    });
+                const response = await axiosInstance.post(`/user/on-processing-friend-invitation`, data);
                 if (response.status === 200) {
                     const message = status === true ? 'Chấp nhận lời mời kết bạn thành công' : 'Bỏ qua lời mời kết bạn thành công';
                     addToast(message, {
@@ -177,13 +171,7 @@ function UserList() {
                 }
 
 
-                const response = await axiosInstance.post(`/user/unfriend`, data,
-                    {
-                        headers:
-                        {
-                            'Authorization': `Bearer ${jwtToken}`,
-                        }
-                    });
+                const response = await axiosInstance.post(`/user/unfriend`, data);
                 if (response.status === 200) {
                     addToast("Hủy kết bạn thành công", {
                         appearance: 'success',

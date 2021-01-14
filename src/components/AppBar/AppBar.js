@@ -23,13 +23,14 @@ function AppBar() {
   //const location = useLocation();
 
   useEffect(() => {
-
+    
   });
 
 
   function logout() {
     dispatch(ReduxAction.auth.signOut);
     dispatch(ReduxAction.match.restoreDefault);
+    localStorage.removeItem("game-start");
     socket.emit("sign-out", { userID });
   }
 

@@ -57,7 +57,7 @@ function Dashboard() {
 
         //create new board
         socket.on("new-board",({newBoard})=>{
-            //console.log(newBoard);
+            console.log(newBoard);
             dispatch(ReduxAction.boards.addNewBoard(newBoard));
         })
 
