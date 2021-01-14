@@ -1,20 +1,41 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrophy,faTimes} from "@fortawesome/free-solid-svg-icons";
 import {faCircle} from "@fortawesome/free-regular-svg-icons";
 import {Button } from 'react-bootstrap';
+import axiosInstance from "../../api";
+import {useHistory} from "react-router-dom";
+import ReduxAction from '../../store/actions';
+import {useDispatch} from 'react-redux';
 
-function BoardInfo({current, status, owner, player}) {
-    // const {owner, player, eloGot} = useSelector(state =>({
-    //     owner: state.match.owner,
-    //     player: state.match.player,
-    //     eloGot: state.match.eloGot
-    // }));
+function BoardInfo({current, status, owner, player, time, winner}) {
+    
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const leaveBoard =()=>{
+        if (owner.fullname === "???" || player.fullname === "???")
+        {
 
+        }
+    }
+    const gotoDashboard = ()=>{
+        dispatch(ReduxAction.match.restoreDefault);
+        history.push("/iGomoku");
+    }
     let Buttoncontroll ;
     switch(status)
     {
+        case "Waiting":
+            Buttoncontroll = (
+                <div style={{width: "100%"}}>
+                <Button variant="danger"
+                style={{
+                    margin:"0px 10px 10px 10px",
+                    width: "96%"
+                }}>Quit Game</Button>
+                </div>
+            )
+        break;
         case "Playing":
             Buttoncontroll = (
                 <>
@@ -23,11 +44,12 @@ function BoardInfo({current, status, owner, player}) {
                     display: "flex",
                     justifyContent: "space-around",
                     alignItems: "center",
-                    width: "40%"
+                    width: "80%"
                     }}>
+                    <span>{time} </span>
                     <span>Turn: </span>
                     {current === owner._id?
-                    <FontAwesomeIcon icon={faTimes} color="red" size="xl"></FontAwesomeIcon>
+                    <FontAwesomeIcon icon={faTimes} color="red" size="lg"></FontAwesomeIcon>
                     :<FontAwesomeIcon icon={faCircle} size="xl"></FontAwesomeIcon>
                     }
                 </div>
@@ -53,6 +75,28 @@ function BoardInfo({current, status, owner, player}) {
                 </>
             );
             break;
+        case "Winning":
+            Buttoncontroll =(
+                <>
+                <div style={{
+                    fontSize: "30px",
+                    display: "flex",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                    width: "40%"
+                    }}>
+                    {winner}
+                </div>
+                <div style={{width: "100%"}}>
+                <Button variant="danger"
+                onClick={gotoDashboard}
+                style={{
+                    margin:"0px 10px 10px 10px",
+                    width: "96%"
+                }}>Leave Board</Button>
+                </div>
+                </>
+            )
         default:
             break;
     }

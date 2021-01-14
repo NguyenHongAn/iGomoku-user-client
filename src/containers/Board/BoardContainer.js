@@ -37,10 +37,11 @@ function BoardContainer() {
     const [historySteps, setHistorySteps] = useState([]);
     const [winner, setWinner] = useState("");
     const [winningLine, setWinningLine] = useState([]);
-   const [status, setStatus] = useState("");
-   const {addToast} = useToasts();
-   const dispatch = useDispatch();
-   const history = useHistory();
+    const [time, setTime] = useState(0);
+    const [status, setStatus] = useState("Waiting");
+    const {addToast} = useToasts();
+    const dispatch = useDispatch();
+    const history = useHistory();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const notifyStartGame = ()=>{
         addToast("Game Start",{
@@ -92,25 +93,41 @@ function BoardContainer() {
         socket.on("receive-position", ({board, index, playerInfo, stepNumber}) =>{
             const newHistory = Array.from(historySteps);
             newHistory.push({index: index, player: playerInfo});
-            console.log(board);
+            //console.log(board);
             //setCurrentBoardBaseOnHistory(newHistory);
             setCurrentBoard(board);
             setHistorySteps(newHistory);
             setcurrPlayer(stepNumber %2 ===0? owner._id:player._id);
         });
 
+        socket.on("response-time", ({time})=>{
+            console.log(time);
+            setTime(time);
+        });
+
         socket.on("response-winner", ({line, winner})=>{
             setWinner(winner);
             setWinningLine(line);
+            setStatus("Winning");
             console.log("WINNER: ", winner);
+        });
+
+        socket.on("response-time-out",({winner})=>{
+            setWinner(winner);
+            setWinningLine([]);
+            setStatus("Winning");
+            console.log("TIME-OUT-WINNER: ", winner);
         })
         return ()=>{
             socket.off("start-game");
             socket.off("reponse-reconnect");
             socket.off("receive-position");
             socket.off("response-update-user-info");
+            socket.off("response-winner");
+            socket.off("response-time-out");
+            socket.off("response-time");
         }
-    }, [boardID, dispatch, historySteps, jwtToken, notifyStartGame, owner, player, socket]);
+    }, [notifyStartGame, owner, player, socket]);
 
 
     useEffect(()=>{
@@ -171,7 +188,7 @@ function BoardContainer() {
         }
     }
     fetchData();
-    },[boardID, boardStatus, dispatch, history, socket, userID]);
+    },[boardID, dispatch, history, socket, userID]);
 
     const setCurrentBoardBaseOnHistory=(historySteps)=>
     {
@@ -183,7 +200,6 @@ function BoardContainer() {
             {
                 tempBoard[i]= historySteps[k].player;
                 k++;
-                //console.log({Step: tempBoard[i]});
             }
         }
         setCurrentBoard(tempBoard);
@@ -195,6 +211,19 @@ function BoardContainer() {
             console.log(`${currPlayer === owner._id?"owner ": "Player "}Make move`);
 
             socket.emit("send-position", {index});
+        }
+    }
+
+    let winningMsg = "";
+    if (winner !== "")
+    {
+        if (winner === owner._id)
+        {
+            winningMsg = `${owner.fullname} is a Winner`;
+        }
+        else
+        {
+            winningMsg = `${player.fullname} is a Winner`;
         }
     }
 
@@ -210,6 +239,7 @@ function BoardContainer() {
                 board={currentBoard}
                 handleClick={handleClick}
                 winningLine={winningLine}
+               
                 ></Board>                
                 }
                 </div>
@@ -219,7 +249,9 @@ function BoardContainer() {
                 owner={owner}
                 player={player}
                 current={currPlayer}
-                status={status}>
+                status={status}
+                time={time}
+                winner={winningMsg}>
                 </BoardInfo>
                 <div className="chat-container"> 
                 <ChatFrame message={messages}></ChatFrame>
