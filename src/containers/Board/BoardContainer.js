@@ -63,9 +63,14 @@ function BoardContainer() {
             console.log("START GAME");
             //dispatch(ReduxAction.match.updateStatus(2));
             setcurrPlayer(stepNumber %2 ===0? owner._id:player._id);
-            localStorage.setItem("game-start", true);
+            //localStorage.setItem("game-start", true);
             setisWaiting(false);
             notifyStartGame();
+        });
+
+        socket.on("response-current-player", ({stepNumber})=>{
+            console.log(stepNumber);
+            setcurrPlayer(stepNumber %2 ===0? owner._id:player._id);
         });
 
         socket.on("response-status", ({status}) =>{
@@ -82,11 +87,12 @@ function BoardContainer() {
             setisWaiting(false);
         });
 
-        socket.on("receive-position", ({index, playerInfo, stepNumber}) =>{
+        socket.on("receive-position", ({board, index, playerInfo, stepNumber}) =>{
             const newHistory = Array.from(historySteps);
             newHistory.push({index: index, player: playerInfo});
-            console.log(newHistory);
-            setCurrentBoardBaseOnHistory(newHistory);
+            console.log(board);
+            //setCurrentBoardBaseOnHistory(newHistory);
+            setCurrentBoard(board);
             setHistorySteps(newHistory);
             setcurrPlayer(stepNumber %2 ===0? owner._id:player._id);
         })
@@ -116,8 +122,10 @@ function BoardContainer() {
             setOwner(response.data.owner);
             if (response.data.player !== null)
             {
+                console.log("update user info");
+                setPlayer(response.data.player);
                 socket.emit("request-update-user-info", {
-                        boardID,
+                        boardID: response.data._id,
                         owner: response.data.owner,
                         player: response.data.player,
                 });
@@ -126,7 +134,7 @@ function BoardContainer() {
             setMessages(response.data.history.messages);
             setHistorySteps(response.data.history.history);
             setCurrentBoardBaseOnHistory(response.data.history.history);
-            socket.emit("join-board", {boardID:response.data._id});
+            socket.emit("join-board", {boardID: response.data._id, userID: userID});
 
             if (response.data.player !== null) //inGame && do not require password
             {
@@ -155,7 +163,7 @@ function BoardContainer() {
         }
     }
     fetchData();
-    },[boardID, boardStatus, dispatch, history, socket]);
+    },[boardID, boardStatus, dispatch, history, socket, userID]);
 
     const setCurrentBoardBaseOnHistory=(historySteps)=>
     {
@@ -167,13 +175,14 @@ function BoardContainer() {
             {
                 tempBoard[i]= historySteps[k].player;
                 k++;
-                console.log({Step: k});
+                //console.log({Step: tempBoard[i]});
             }
         }
         setCurrentBoard(tempBoard);
     }
 
     const handleClick = (index) =>{
+        console.log(currPlayer);
         if(currPlayer === userID && currentBoard[index] === null){
             console.log(`${currPlayer === owner._id?"owner ": "Player "}Make move`);
 

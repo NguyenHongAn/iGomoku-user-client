@@ -163,7 +163,7 @@ function Board({
                     >   
                     {square === "X"?
                         <FontAwesomeIcon icon={faTimes} color="red"></FontAwesomeIcon>
-                    :(square === "0"?
+                    :(square === "O"?
                         <FontAwesomeIcon icon={faCircle}></FontAwesomeIcon>
                     :null)}
                 </Square>
