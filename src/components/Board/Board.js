@@ -13,7 +13,8 @@ import {useToasts} from 'react-toast-notifications';
 
 function Board({
     board,
-    handleClick
+    handleClick,
+    winningLine
 }) {
 
     const { boardID, owner} = useSelector(state => ({     
@@ -157,7 +158,7 @@ function Board({
             board.map((square,i)=>{
                 return <Square position={i} handleClick={handleClick}
                     winningLine={                    
-                        (winner && winner.line && winner.line.includes(i))?
+                        (winningLine.length !== 0 && winningLine.includes(i))?
                         "active":null
                        }
                     >   

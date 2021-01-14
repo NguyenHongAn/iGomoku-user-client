@@ -35,6 +35,8 @@ function BoardContainer() {
     const [currentBoard, setCurrentBoard] = useState([]);
     const [messages, setMessages] = useState([]);
     const [historySteps, setHistorySteps] = useState([]);
+    const [winner, setWinner] = useState("");
+    const [winningLine, setWinningLine] = useState([]);
    const [status, setStatus] = useState("");
    const {addToast} = useToasts();
    const dispatch = useDispatch();
@@ -95,6 +97,12 @@ function BoardContainer() {
             setCurrentBoard(board);
             setHistorySteps(newHistory);
             setcurrPlayer(stepNumber %2 ===0? owner._id:player._id);
+        });
+
+        socket.on("response-winner", ({line, winner})=>{
+            setWinner(winner);
+            setWinningLine(line);
+            console.log("WINNER: ", winner);
         })
         return ()=>{
             socket.off("start-game");
@@ -201,6 +209,7 @@ function BoardContainer() {
                 <Board
                 board={currentBoard}
                 handleClick={handleClick}
+                winningLine={winningLine}
                 ></Board>                
                 }
                 </div>
