@@ -1,5 +1,4 @@
 import React from 'react';
-import ChatMessage from '../ChatMessage/ChatMessage';
 
 function ChatMessageHistory({messages}) {   
     const createMessage = (message, index) => {
@@ -9,13 +8,15 @@ function ChatMessageHistory({messages}) {
            borderBottom: '1px solid #ddd',
            color: 'black'
         };  
-        let name = message.fullname;
-        if (message.fullname.indexOf(" ")!==-1)
+        let name = message.talker;
+        if (message.talker.indexOf(" ")!==-1)
         {
-            name = message.fullname.substring(message.fullname.indexOf(" "));
+            name = message.talker.substring(message.talker.indexOf(" "));
         }
         
-        return <li style={liStyles}><ChatMessage message={message.message} name={name} /></li>
+        return (<li style={liStyles}>
+            <p style={{marginBottom: 0}}>{`${name}: ${message.message}`}</p>
+            </li>)
      };
         
      const ulStyles = {

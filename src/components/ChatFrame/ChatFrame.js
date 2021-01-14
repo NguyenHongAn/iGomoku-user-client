@@ -17,13 +17,12 @@ function ChatFrame({message}) {
 
      useEffect(()=>{
        
-        socket.on("receive_message", (dataReveive)=>{
+        socket.on("receive-message", ({message, talker})=>{
 
-            const messageRevcive = JSON.parse(dataReveive);
             //console.log(messageRevcive);
             const nextMessages = messages.concat({
-                message: messageRevcive.inputText, 
-                fullname: messageRevcive.fullname,
+                message,
+                talker,
             });
             setMessages(nextMessages);
         })
@@ -31,10 +30,10 @@ function ChatFrame({message}) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const nextMessages = messages.concat([{ message: inputText, fullname }]);
+        const nextMessages = messages.concat([{ message: inputText, talker: fullname }]);
         const nextInputText = '';
         //real time to another player in board
-        socket.emit("send_message", JSON.stringify({boardID, fullname, inputText}));
+        socket.emit("send-message", ({boardID, message: inputText, talker: fullname}));
         setMessages(nextMessages);
         setinputText(nextInputText);
      };
