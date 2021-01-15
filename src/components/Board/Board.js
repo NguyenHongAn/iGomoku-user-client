@@ -12,7 +12,9 @@ import {boardConst} from './board.Cfg';
 import {useToasts} from 'react-toast-notifications';
 
 function Board({
-    board
+    board,
+    handleClick,
+    winningLine
 }) {
 
     const { boardID, owner} = useSelector(state => ({     
@@ -154,15 +156,15 @@ function Board({
         <div style={setGridDisplay()}>
         {
             board.map((square,i)=>{
-                return <Square position={i}
+                return <Square position={i} handleClick={handleClick}
                     winningLine={                    
-                        (winner && winner.line && winner.line.includes(i))?
+                        (winningLine.length !== 0 && winningLine.includes(i))?
                         "active":null
                        }
                     >   
-                    {square === 1?
+                    {square === "X"?
                         <FontAwesomeIcon icon={faTimes} color="red"></FontAwesomeIcon>
-                    :(square === 2?
+                    :(square === "O"?
                         <FontAwesomeIcon icon={faCircle}></FontAwesomeIcon>
                     :null)}
                 </Square>

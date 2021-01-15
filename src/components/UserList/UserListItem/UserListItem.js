@@ -64,11 +64,15 @@ function UserListItem({ user, type, sendUnFriendRequest }) {
 
 
     const challenge = () => {
-        dispatch({ type: "match/open", payload: true });
-        dispatch({
-            type: "match/storePlayerTemporary",
-            payload: user
-        });
+        if (user.isFree === 1)
+        {
+            dispatch({ type: "match/open", payload: true });
+            dispatch({
+                type: "match/storePlayerTemporary",
+                payload: user
+            });
+        }
+       
     }
 
     return (

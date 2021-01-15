@@ -50,6 +50,16 @@ const updateInfo = (newInfo) =>{
     }
 }
 
+
+const updateStatus= (status) =>{
+    return (dispatch)=>{
+        dispatch({
+            type: "match/updateStatus",
+            payload: status
+        })
+    }
+}
+
 export const matchActions = {
     startNewMatch,
     saveHistory,
@@ -58,4 +68,5 @@ export const matchActions = {
     openCreateDialog,
     closeCreateDialog,
     updateInfo,
+    updateStatus,
 }

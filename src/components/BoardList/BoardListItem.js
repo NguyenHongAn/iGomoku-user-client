@@ -35,7 +35,7 @@ function BoardListItem({board}) {
             }
             //get response 
             const response = await axiosInstance.post('/board/on-join', data);
-            const newMatch = {
+            const newMatch = await {
                 boardID: response.data._id,
                 boardName: response.data.boardName,
                 owner: response.data.owner,         //id người tạo
