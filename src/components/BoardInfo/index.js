@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrophy,faTimes} from "@fortawesome/free-solid-svg-icons";
 import {faCircle} from "@fortawesome/free-regular-svg-icons";
 import {Button } from 'react-bootstrap';
+import {useSelector} from 'react-redux';
+import RequestDrawDialog from '../../components/Dialog/RequestDrawDialog';
 import axiosInstance from "../../api";
 import {useHistory} from "react-router-dom";
 import ReduxAction from '../../store/actions';
@@ -12,6 +14,8 @@ function BoardInfo({current, status, owner, player, time, winner}) {
     
     const dispatch = useDispatch();
     const history = useHistory();
+    const socket = useSelector(state=> state.socket.socket);
+
     const leaveBoard =()=>{
         if (owner.fullname === "???" || player.fullname === "???")
         {
@@ -21,6 +25,22 @@ function BoardInfo({current, status, owner, player, time, winner}) {
     const gotoDashboard = ()=>{
         dispatch(ReduxAction.match.restoreDefault);
         history.push("/iGomoku");
+    }
+
+    const [openDrawDialog, setOpenDrawDialog] = useState(false);
+    const [userRequestDrawName, setUserRequestDrawName] = useState("");
+    useEffect(()=>{
+        socket.on("resquest-draw", ({userID, fullname})=>{
+            setUserRequestDrawName(fullname);
+            setOpenDrawDialog(true);
+        });
+        return ()=>{
+            socket.off("resquest-draw");
+        }
+    },[socket]);
+    
+    const handleRequestDraw = ()=>{
+        socket.emit("resquest-draw", ({agree: null}));
     }
     let Buttoncontroll ;
     switch(status)
@@ -59,7 +79,9 @@ function BoardInfo({current, status, owner, player, time, winner}) {
                             width: "47%",
                             margin : "5px 5px 5px 10px",
                             }}>I'm lost</Button>
-                        <Button variant="success" style={{
+                        <Button variant="success" 
+                        onClick={handleRequestDraw}
+                        style={{
                             width: "47%",
                             margin : "5px",
                             }}>Draw</Button>
@@ -97,11 +119,17 @@ function BoardInfo({current, status, owner, player, time, winner}) {
                 </div>
                 </>
             )
+            break;
         default:
             break;
     }
     return (
     <div className="record-dropdown"> 
+    <RequestDrawDialog 
+    show={openDrawDialog} 
+    handleClose={setOpenDrawDialog}
+    fullname={userRequestDrawName}
+    ></RequestDrawDialog>
     <div className="player-info">
         <div className="seft-info">
             <p>Owner: {owner.fullname}</p>

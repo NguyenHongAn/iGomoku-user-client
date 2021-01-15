@@ -2,7 +2,7 @@ import React,{useState} from 'react';
 import {Form, Row,Col, Button} from 'react-bootstrap';
 import {useSelector} from 'react-redux';
 
-function StartDialog({isShow, password, boardID}) {
+function StartDialog({isShow, isOpen, password, boardID}) {
 
     const [input, setInput] = useState("");
     const socket = useSelector(state => state.socket.socket);
@@ -11,12 +11,15 @@ function StartDialog({isShow, password, boardID}) {
         {
             console.log(password);
             socket.emit("start-game", {boardID});
+            isOpen(false);
         }
     }
+    console.log("password dialog");
     return (
         <>
-        {isShow?
-        <div className="password-dialog">
+        {isShow?(
+           
+            <div className="password-dialog">
             <Form className="password-form">
                 <Form.Group as={Row} controlId="formPlaintextPassword">
                     <Form.Label column md="2">
@@ -33,8 +36,10 @@ function StartDialog({isShow, password, boardID}) {
                     </Col>
              </Form.Group>
             </Form>
-        </div>
-        :null}
+            </div>)
+            :null
+
+        }
         </>
     )
 }

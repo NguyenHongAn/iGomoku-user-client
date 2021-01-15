@@ -28,7 +28,7 @@ function BoardContainer() {
     const [currPlayer, setcurrPlayer] = useState("");
     const socket = useSelector(state => state.socket.socket);
     const [isWaiting, setisWaiting] = useState(true);
-    const [isPrivate, setIsPrivate] = useState(false);
+    const [isShow, setIsShow] = useState(false);
     const [password, setPassword] = useState("");
     const [owner, setOwner]  = useState({fullname: "???", elo: "????"});
     const [player, setPlayer]  = useState({fullname: "???", elo: "????"});
@@ -161,14 +161,18 @@ function BoardContainer() {
             setCurrentBoardBaseOnHistory(response.data.history.history);
             socket.emit("join-board", {boardID: response.data._id, userID: userID});
 
-            if (response.data.player !== null) //inGame && do not require password
+            if (response.data.player !== null && !response.data.isPrivate) //inGame && do not require password
             {
+                console.log("Non pass");
                 socket.emit('start-game', {boardID: response.data._id}); 
             }
-            if (!response.data.isPrivate)
+            else if (response.data.isPrivate && response.data.owner._id !== userID)
             {
-                setIsPrivate(false);
+                setIsShow(true);
+                setisWaiting(true);
+                console.log("Password");
             }
+            
 
             // if (localStorage.getItem('game-start') === "true") {       
             //     console.log("request-reconnect");       
@@ -214,7 +218,7 @@ function BoardContainer() {
         }
     }
 
-    let winningMsg = "";
+    let winningMsg = "Draw";
     if (winner !== "")
     {
         if (winner === owner._id)
@@ -233,7 +237,11 @@ function BoardContainer() {
             <Col sm={8}>
                 <div className="board-container"> 
                 {isWaiting?
-                <StartDialog isOpen={isPrivate} password={password} boardID={boardID}></StartDialog>           //change
+                <StartDialog 
+                isOpen={setisWaiting}
+                isShow={isShow} 
+                password={password} 
+                boardID={boardID}></StartDialog>           //change
                 :            
                 <Board
                 board={currentBoard}
